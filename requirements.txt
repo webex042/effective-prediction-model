@@ -1,0 +1,54 @@
+# =============================================================================
+# EPM — Efficient Predictive Multimodal Generative Model
+# Requirements (Staged Installation)
+# =============================================================================
+# Install: pip install -r requirements.txt
+#
+# Only Stage 0 (foundation) dependencies are active initially.
+# Uncomment later stages as you progress through the project.
+# =============================================================================
+
+# --- Stage 0: Foundation ---
+numpy>=1.24.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+pyyaml>=6.0
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# --- Stage 1: Mathematical Foundation ---
+scipy>=1.10.0
+sympy>=1.12
+
+# --- Stage 2: Classical Machine Learning ---
+scikit-learn>=1.3.0
+xgboost>=2.0.0
+
+# --- Stage 3: Neural Networks (PyTorch) ---
+torch>=2.0.0
+
+# --- Stage 4: NLP ---
+# nltk>=3.8.0
+# tokenizers>=0.15.0
+
+# --- Stage 5-6: Time Series & Multimodal ---
+# tqdm>=4.65.0
+
+# --- Stage 7-10: Generative Models ---
+# torchsde>=0.2.5
+# torchdiffeq>=0.2.3
+
+# --- Stage 11-12: Efficiency & Compression ---
+# torch-pruning>=1.3.0
+# onnx>=1.14.0
+# onnxruntime>=1.15.0
+
+# --- Stage 13: Dashboard & Visualization ---
+# streamlit>=1.28.0
+# plotly>=5.15.0
+# seaborn>=0.12.0
+
+# --- Development Tools ---
+# black>=23.0.0
+# isort>=5.12.0
+# mypy>=1.5.0

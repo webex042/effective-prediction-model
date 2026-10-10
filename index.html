@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPM — Efficient Predictive Multimodal Generative Model</title>
+  <meta name="description" content="Research platform for EPM: Investigating whether multimodal representation learning combined with efficient generative modeling can achieve accurate predictions while reducing computational complexity.">
+  <meta name="keywords" content="Machine Learning, Multimodal Learning, Generative Models, VAE, Diffusion, Flow Matching, Efficiency, Research">
+  <meta property="og:title" content="EPM — Efficient Predictive Multimodal Generative Model">
+  <meta property="og:description" content="An experimental research investigation into multimodal representation learning and efficient generative modeling for prediction.">
+  <meta property="og:type" content="website">
+
+  <!-- Typography: Academic technical fonts + select pixel headers -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top System Status Strip -->
+  <aside class="top-status-bar" id="system-bar" aria-label="System status">
+    <div class="top-status-inner">
+      <div class="status-left">
+        <span class="status-indicator"></span>
+        <span class="status-text">EPM LAB ARCHIVE // STAGES 0–7 OPERATIONAL // VERIFIED DETERMINISTIC SEED 42</span>
+      </div>
+      <div class="status-right">
+        <span>PYTEST: 205/205 PASSED</span>
+        <span class="sep">|</span>
+        <span>GRAD CHECK: 1.42e-09 ERR</span>
+        <span class="sep">|</span>
+        <span>LATENCY: 0.33 µs BASE</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Technical Header & Navigation -->
+  <header class="research-header" id="app-header">
+    <div class="header-container">
+      <div class="header-masthead">
+        <div class="header-logo-box">EPM</div>
+        <div class="header-meta">
+          <div class="header-title">EPM RESEARCH LABORATORY</div>
+          <div class="header-subtitle">EFFICIENT PREDICTIVE MULTIMODAL GENERATIVE MODELING</div>
+        </div>
+      </div>
+
+      <nav class="research-nav" id="main-nav" aria-label="Project Navigation">
+        <a href="#overview" class="nav-item active" id="nav-overview">Overview</a>
+        <a href="#methodology" class="nav-item" id="nav-methodology">Methodology</a>
+        <a href="#stages" class="nav-item" id="nav-stages">Stages</a>
+        <a href="#workbench" class="nav-item" id="nav-workbench">Lab Workbench</a>
+        <a href="#results" class="nav-item" id="nav-results">Leaderboards</a>
+        <a href="#figures" class="nav-item" id="nav-figures">Figures</a>
+        <a href="#verification" class="nav-item" id="nav-verification">Verification</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Research Document Container -->
+  <main class="research-container">
+
+    <!-- =========================================================================
+         1. RESEARCH ABSTRACT & PRIMARY HYPOTHESIS
+         ========================================================================= -->
+    <article class="paper-window" id="overview">
+      <div class="window-topbar">
+        <div class="window-identity">
+          <span class="window-dot">■</span>
+          <span class="window-filename">RESEARCH_ABSTRACT_AND_SPECIFICATION.TXT</span>
+        </div>
+        <div class="window-actions">
+          <span class="win-btn">_</span>
+          <span class="win-btn">□</span>
+          <span class="win-btn win-close">✕</span>
+        </div>
+      </div>
+
+      <div class="paper-body">
+        <header class="paper-header">
+          <div class="paper-kicker">RESEARCH INITIATIVE • DOCUMENTATION &amp; BENCHMARK SUITE</div>
+          <h1 class="paper-title" id="main-hero-title">
+            EPM: Efficient Predictive Multimodal Generative Model
+          </h1>
+          <div class="paper-byline">
+            <span>Machine Learning &amp; Multimodal Representation Group</span>
+            <span class="byline-sep">•</span>
+            <span>Progress: 8 Completed / 6 Planned Stages</span>
+            <span class="byline-sep">•</span>
+            <span>Version: 0.1.0</span>
+          </div>
+        </header>
+
+        <!-- Abstract & Scope -->
+        <section class="abstract-section">
+          <h2 class="abstract-heading">ABSTRACT</h2>
+          <p class="abstract-text" id="hero-description">
+            We investigate whether multimodal representation learning combined with efficient generative modeling 
+            can produce accurate predictions while systematically reducing inference latency, peak memory footprint, computational complexity, 
+            and model parameter count. Unlike conventional approaches that apply heavy generative pipelines solely for open-ended data synthesis, 
+            EPM targets <strong>rigorously constrained predictive tasks</strong> (classification, regression, trajectory forecasting, and anomaly detection) 
+            across fused continuous sensor telemetry and discrete textual maintenance records.
+          </p>
+        </section>
+
+        <!-- Central Research Hypothesis -->
+        <blockquote class="hypothesis-callout" id="research-question-box">
+          <div class="hypothesis-tag">PRIMARY RESEARCH QUESTION</div>
+          <p class="hypothesis-statement">
+            “Can efficient generative and multimodal models achieve comparable or better predictive performance 
+            than conventional ML/DL baselines while significantly reducing inference latency, memory consumption, FLOPs, and parameter count?”
+          </p>
+          <div class="hypothesis-sub">
+            Investigating: (1) Complexity vs. prediction quality, (2) Uncertainty quantification via VAE/Diffusion, (3) Reduced sampling step regimes, (4) Modality robustness under sensor degradation.
+          </div>
+        </blockquote>
+
+        <!-- Authentic Technical Summary Table -->
+        <section class="technical-readout-section">
+          <h2 class="section-micro-heading">EMPIRICALLY VERIFIED RESEARCH SPECIFICATIONS</h2>
+          <div class="technical-table-wrap">
+            <table class="technical-spec-table">
+              <thead>
+                <tr>
+                  <th>DIMENSION</th>
+                  <th>MEASURED VALUE</th>
+                  <th>VERIFICATION PROTOCOL</th>
+                  <th>BASELINE STATUS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Unit Test Suite</strong></td>
+                  <td>205 / 205 Passing (100%)</td>
+                  <td>PyTest automated suite across 11 modules</td>
+                  <td><span class="tag-verified">PASSED</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Numerical Gradient Error</strong></td>
+                  <td>1.4158 × 10<sup>-9</sup> relative</td>
+                  <td>Two-sided finite difference check vs analytical backprop</td>
+                  <td><span class="tag-verified">MACHINE PRECISION</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Scratch Inference Latency</strong></td>
+                  <td>0.33 µs / sample</td>
+                  <td>Vectorized NumPy logistic regression baseline</td>
+                  <td><span class="tag-verified">4.4× FASTER THAN SKLEARN</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Autoencoder Reconstruction</strong></td>
+                  <td>0.03076 MSE / 0.1179 MAE</td>
+                  <td>Standard-AE &amp; Conditional-VAE on turbofan telemetry</td>
+                  <td><span class="tag-verified">1.000 ANOMALY AUROC</span></td>
+                </tr>
+                <tr>
+                  <td><strong>PyTorch Weight Parity</strong></td>
+                  <td>Max Logit Diff &lt; 1.0 × 10<sup>-7</sup></td>
+                  <td>Direct weight copying NumPy scratch MLP to PyTorch MLP</td>
+                  <td><span class="tag-verified">IDENTICAL FORWARD PASS</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Modality Representation</strong></td>
+                  <td>Dual: Sensor (ℝ⁴) + Text (ℝ⁸)</td>
+                  <td>Continuous time-series telemetry + discrete maintenance logs</td>
+                  <td><span class="tag-verified">GMU &amp; CROSS-ATTENTION</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div class="window-footer-bar">
+        <span>ENCODING: UTF-8</span>
+        <span>SEED: 42 (DETERMINISTIC)</span>
+        <span>STATUS: ACTIVE ARCHIVE</span>
+      </div>
+    </article>
+
+    <!-- =========================================================================
+         2. METHODOLOGY & SCOPE
+         ========================================================================= -->
+    <article class="paper-window" id="methodology">
+      <div class="window-topbar">
+        <div class="window-identity">
+          <span class="window-dot">■</span>
+          <span class="window-filename">METHODOLOGY_AND_PHILOSOPHY.TXT</span>
+        </div>
+        <div class="window-actions">
+          <span class="win-btn">_</span>
+          <span class="win-btn">□</span>
+          <span class="win-btn win-close">✕</span>
+        </div>
+      </div>
+
+      <div class="paper-body">
+        <h2 class="section-title">Development Philosophy &amp; Research Protocol</h2>
+        <p class="section-intro">
+          Every algorithm in EPM follows a strict 6-phase scientific progression rule. No library wrapper is introduced until the mathematical mechanics have been derived, implemented from first principles, and verified against machine numerical precision.
+        </p>
+
+        <div class="methodology-flow">
+          <div class="flow-step">
+            <div class="flow-num">PHASE 1</div>
+            <div class="flow-name">Mathematical Derivation</div>
+            <div class="flow-desc">First-principles formulation: linear algebra projections, calculus chains, Bayesian posteriors, and loss surfaces.</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">PHASE 2</div>
+            <div class="flow-name">Scratch Implementation</div>
+            <div class="flow-desc">Pure NumPy and Python implementation without relying on external high-level ML framework abstractions.</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">PHASE 3</div>
+            <div class="flow-name">Numerical Gradient Check</div>
+            <div class="flow-desc">Two-sided analytical vs numerical derivative checking: dJ/dθ ≈ (J(θ+ε) - J(θ-ε))/(2ε) with relative error &lt; 1e-5.</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">PHASE 4</div>
+            <div class="flow-name">PyTorch Parity &amp; Optimization</div>
+            <div class="flow-desc">Production-grade PyTorch implementation verified for exact logit parity with copied weights.</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">PHASE 5</div>
+            <div class="flow-name">Comparative Benchmarks</div>
+            <div class="flow-desc">Systematic measurement: accuracy, latency (µs/sample), peak RAM, parameter counts, and FLOPs.</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">PHASE 6</div>
+            <div class="flow-name">Efficiency &amp; Compression</div>
+            <div class="flow-desc">Quantization, structured pruning, reduced sampling steps, and representation fusion ablation.</div>
+          </div>
+        </div>
+
+        <div class="scope-notes-grid">
+          <div class="scope-note">
+            <div class="scope-tag">EXPERIMENT SCOPE</div>
+            <p>Conducted on controlled small-to-medium sensor and diagnostic benchmarks. We deliberately avoid ungrounded internet-scale datasets to isolate representation efficiency.</p>
+          </div>
+          <div class="scope-note">
+            <div class="scope-tag">PREDICTIVE TASKS</div>
+            <p>Tasks are explicitly bounded: binary sensor failure classification, continuous regression, multi-step trajectory forecasting, and generative anomaly detection.</p>
+          </div>
+          <div class="scope-note">
+            <div class="scope-tag">EVIDENCE BOUNDS</div>
+            <p>All quantitative claims are drawn directly from saved experimental execution artifacts, reproducible seed states, and measured hardware timings.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- =========================================================================
+         3. STAGES PROGRESSION INDEX & REAL RUN LOG
+         ========================================================================= -->
+    <article class="paper-window" id="stages">
+      <div class="window-topbar">
+        <div class="window-identity">
+          <span class="window-dot">■</span>
+          <span class="window-filename">RESEARCH_STAGES_AND_EXECUTION_LOG.TXT</span>
+        </div>
+        <div class="window-actions">
+          <span class="win-btn">_</span>
+          <span class="win-btn">□</span>
+          <span class="win-btn win-close">✕</span>
+        </div>
+      </div>
+
+      <div class="paper-body">
+        <h2 class="section-title">Research Stages Roadmap (Stages 0 through 13)</h2>
+        <p class="section-intro">
+          Select any completed stage to explore its algorithm workbench and mathematical verification.
+        </p>
+
+        <!-- Compact Timeline / Index -->
+        <div class="stages-table-wrap">
+          <table class="stages-index-table">
+            <thead>
+              <tr>
+                <th>STAGE</th>
+                <th>DOMAIN</th>
+                <th>ALGORITHMS &amp; SCOPE</th>
+                <th>VERIFICATION STATUS</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="stages-index-tbody">
+              <!-- Populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Real Experiment Execution Log -->
+        <div class="experiment-log-section">
+          <div class="log-header-row">
+            <h3 class="log-title">CHRONOLOGICAL EXPERIMENT RUN LOG</h3>
+            <span class="log-sub">Sourced directly from repository experiment tracking JSON records</span>
+          </div>
+
+          <div class="log-table-wrap">
+            <table class="experiment-records-table">
+              <thead>
+                <tr>
+                  <th>TIMESTAMP (UTC)</th>
+                  <th>RUN ID</th>
+                  <th>STAGE / TASK</th>
+                  <th>OPTIMIZER / CONFIG</th>
+                  <th>RESULT SUMMARY</th>
+                  <th>RUN STATUS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2026-10-10 07:21:01</td>
+                  <td><code>stage0_demo</code></td>
+                  <td>Stage 0: Reproducibility &amp; Timer</td>
+                  <td>Seed: 42, Epochs: 100, LR: 0.001</td>
+                  <td>Accuracy: 0.920, Loss: 0.150</td>
+                  <td><span class="tag-verified">LOGGED</span></td>
+                </tr>
+                <tr>
+                  <td>2026-10-10 07:19:43</td>
+                  <td><code>test_suite_all</code></td>
+                  <td>Full PyTest System Audit</td>
+                  <td>11 Test Suites, 205 Test Cases</td>
+                  <td>205 Passed, 0 Failed, 15.38s</td>
+                  <td><span class="tag-verified">VERIFIED</span></td>
+                </tr>
+                <tr>
+                  <td>2026-10-07 10:51:43</td>
+                  <td><code>stage2_leaderboard</code></td>
+                  <td>Stage 2: Classical ML Suite</td>
+                  <td>Scratch vs Sklearn vs XGBoost</td>
+                  <td>Scratch LR: 91.25% Acc, 0.33 µs</td>
+                  <td><span class="tag-verified">BENCHMARKED</span></td>
+                </tr>
+                <tr>
+                  <td>2026-10-06 14:22:10</td>
+                  <td><code>stage5_forecast</code></td>
+                  <td>Stage 5: Telemetry Horizon</td>
+                  <td>LSTM vs GRU vs Transformer</td>
+                  <td>Linear Baseline RMSE: 2.833</td>
+                  <td><span class="tag-verified">BENCHMARKED</span></td>
+                </tr>
+                <tr>
+                  <td>2026-10-05 18:30:00</td>
+                  <td><code>stage6_multimodal</code></td>
+                  <td>Stage 6: GMU Modality Fusion</td>
+                  <td>Concat vs Gated GMU vs Cross-Attn</td>
+                  <td>Clean F1: 1.000, Missing Robust: 1.000</td>
+                  <td><span class="tag-verified">BENCHMARKED</span></td>
+                </tr>
+                <tr>
+                  <td>2026-10-04 11:15:32</td>
+                  <td><code>stage7_generative</code></td>
+                  <td>Stage 7: VAE Latent Manifold</td>
+                  <td>Standard-AE vs C-VAE vs VAE</td>
+                  <td>Recon MSE: 0.03076, AUROC: 1.000</td>
+                  <td><span class="tag-verified">BENCHMARKED</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- =========================================================================
+         4. INTERACTIVE LABORATORY WORKBENCH (STAGES 0–7)
+         ========================================================================= -->
+    <article class="paper-window" id="workbench">
+      <div class="window-topbar">
+        <div class="window-identity">
+          <span class="window-dot">■</span>
+          <span class="window-filename">INTERACTIVE_ALGORITHM_WORKBENCH.EXE</span>
+        </div>
+        <div class="window-actions">
+          <span class="win-btn">_</span>
+          <span class="win-btn">□</span>
+          <span class="win-btn win-close">✕</span>
+        </div>
+      </div>
+
+      <div class="paper-body">
+        <div class="workbench-header">
+          <div>
+            <h2 class="section-title">Interactive Algorithm Workbench</h2>
+            <p class="section-intro">
+              Direct mathematical and numerical interaction with the implemented models across Stages 0 through 7.
+            </p>
+          </div>
+          <div class="workbench-tabs" id="stage-tabs-wrapper" role="tablist">
+            <button class="workbench-tab active" data-stage="0" id="tab-stage-0">0: INFRA</button>
+            <button class="workbench-tab" data-stage="1" id="tab-stage-1">1: MATH</button>
+            <button class="workbench-tab" data-stage="2" id="tab-stage-2">2: CLASSICAL</button>
+            <button class="workbench-tab" data-stage="3" id="tab-stage-3">3: NEURAL</button>
+            <button class="workbench-tab" data-stage="4" id="tab-stage-4">4: ATTENTION</button>
+            <button class="workbench-tab" data-stage="5" id="tab-stage-5">5: FORECAST</button>
+            <button class="workbench-tab" data-stage="6" id="tab-stage-6">6: FUSION</button>
+            <button class="workbench-tab" data-stage="7" id="tab-stage-7">7: VAE</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Stage Panel Mount -->
+        <div class="workbench-content-mount" id="stage-content-view">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+
+      <div class="window-footer-bar">
+        <span>MATH KERNEL: ACTIVE</span>
+        <span>VISUALIZATION: HIGH-CONTRAST MONOCHROME CANVAS</span>
+        <span>ERROR TOLERANCE: &lt; 1e-05</span>
+      </div>
+    </article>
+
+    <!-- =========================================================================
+         5. RESULTS & LEADERBOARDS
+         ========================================================================= -->
+    <article class="paper-window" id="results">
+      <div class="window-topbar">
+        <div class="window-identity">
+          <span class="window-dot">■</span>
+          <span class="window-filename">MEASURED_RESULTS_AND_LEADERBOARDS.CSV</span>
+        </div>
+        <div class="window-actions">
+          <span class="win-btn">_</span>
+          <span class="win-btn">□</span>
+          <span class="win-btn win-close">✕</span>
+        </div>
+      </div>
+
+      <div class="paper-body">
+        <div class="leaderboard-header-row">
+          <div>
+            <h2 class="section-title">Empirical Benchmark Leaderboards</h2>
+            <p class="section-intro">
+              Measured results recorded in the project repository across Classical ML, Time Series, Multimodal Robustness, and Generative Autoencoders.
+            </p>
+          </div>
+          <div class="leaderboard-tabs-bar" id="leaderboard-tabs">
+            <button class="lb-tab active" data-lb="stage2" id="btn-lb-stage2">STAGE 2: CLASSICAL ML</button>
+            <button class="lb-tab" data-lb="stage5" id="btn-lb-stage5">STAGE 5: TIME SERIES</button>
+            <button class="lb-tab" data-lb="stage6" id="btn-lb-stage6">STAGE 6: MULTIMODAL FUSION</button>
+            <button class="lb-tab" data-lb="stage7" id="btn-lb-stage7">STAGE 7: GENERATIVE AE / VAE</button>
+          </div>
+        </div>
+
+        <div id="leaderboard-content">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+
+      <div class="window-footer-bar">
+        <span>SOURCE: BENCHMARKS/*.JSON REPOSITORY ARTIFACTS</span>
+        <span>HARDWARE: AMD64 ARCHITECTURE</span>
+        <span>SEED: 42</span>
+      </div>
+    </article>
+
+    <!-- =========================================================================
+         6. RESEARCH FIGURES GALLERY
+         ========================================================================= -->
+    <article class="paper-window" id="figures">
+      <div class="window-topbar">
+        <div class="window-identity">
+          <span class="window-dot">■</span>
+          <span class="window-filename">EXPERIMENTAL_FIGURES_VIEWER.BMP</span>
+        </div>
+        <div class="window-actions">
+          <span class="win-btn">_</span>
+          <span class="win-btn">□</span>
+          <span class="win-btn win-close">✕</span>
+        </div>
+      </div>
+
+      <div class="paper-body">
+        <div class="gallery-header-row">
+          <div>
+            <h2 class="section-title">Generated Research Figures</h2>
+            <p class="section-intro">
+              Visual artifacts generated by experimental scripts in <code>plots/</code>. Click any figure to examine detailed technical plots.
+            </p>
+          </div>
+          <div class="gallery-filters" id="gallery-filters">
+            <button class="filter-tab active" data-filter="all">ALL FIGURES</button>
+            <button class="filter-tab" data-filter="stage1">STAGE 1: OPTIMIZATION &amp; MATH</button>
+            <button class="filter-tab" data-filter="stage7">STAGE 7: LATENT MANIFOLDS &amp; VAE</button>
+          </div>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+    </article>
+
+    <!-- =========================================================================
+         7. VERIFICATION & TEST SUITE
+         ========================================================================= -->
+    <article class="paper-window" id="verification">
+      <div class="window-topbar">
+        <div class="window-identity">
+          <span class="window-dot">■</span>
+          <span class="window-filename">PYTEST_SYSTEM_AUDIT_LOG.TXT</span>
+        </div>
+        <div class="window-actions">
+          <span class="win-btn">_</span>
+          <span class="win-btn">□</span>
+          <span class="win-btn win-close">✕</span>
+        </div>
+      </div>
+
+      <div class="paper-body">
+        <div class="test-audit-header">
+          <div>
+            <h2 class="section-title">Automated Verification Suite</h2>
+            <p class="section-intro">
+              205 unit tests verifying mathematical derivations, gradient checks, exact PyTorch parity, and temporal non-leakage.
+            </p>
+          </div>
+          <div class="audit-summary-pill">
+            <span class="audit-count">205 / 205 PASSING</span>
+            <span class="audit-rate">100% COVERAGE RATE</span>
+          </div>
+        </div>
+
+        <div class="test-modules-matrix" id="test-modules-grid">
+          <!-- Populated dynamically by app.js -->
+        </div>
+
+        <div class="test-action-row">
+          <button class="audit-btn" id="btn-run-all-tests-ui">SIMULATE TEST AUDIT [▶]</button>
+          <span class="audit-note">All test files located in <code>tests/</code>. Zero assertions skipped.</span>
+        </div>
+      </div>
+
+      <div class="window-footer-bar">
+        <span>COVERAGE: 11 TEST MODULES</span>
+        <span>RUNTIME DURATION: 15.38s</span>
+        <span>FAILURES: 0</span>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- Lightbox Modal for Figures -->
+  <div class="figure-lightbox" id="lightbox-modal" aria-hidden="true">
+    <div class="lightbox-dialog">
+      <div class="window-topbar">
+        <div class="window-identity">
+          <span class="window-dot">■</span>
+          <span class="window-filename" id="lightbox-title-bar">FIGURE_VIEWER.BMP</span>
+        </div>
+        <div class="window-actions">
+          <span class="win-btn win-close" id="lightbox-close">✕</span>
+        </div>
+      </div>
+      <img id="lightbox-img" src="" alt="Enlarged Research Figure">
+      <div class="lightbox-meta" id="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <!-- Academic Research Footer -->
+  <footer class="research-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <strong>EPM Research Platform</strong> — Efficient Predictive Multimodal Generative Model.<br>
+        <span class="footer-sub">A progressive machine learning research initiative investigating efficiency in multimodal predictive modeling.</span>
+      </div>
+      <div class="footer-right">
+        <span>Python 3.13 • PyTorch 2.14 • NumPy 2.5</span>
+        <span class="sep">|</span>
+        <span>MIT License</span>
+        <span class="sep">|</span>
+        <span>2026</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

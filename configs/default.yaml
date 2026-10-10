@@ -1,0 +1,78 @@
+# =============================================================================
+# EPM — Default Configuration
+# =============================================================================
+# This file contains all default hyperparameters and settings.
+# Override by creating a new YAML file and passing it to load_config().
+# =============================================================================
+
+# --- Project ---
+project:
+  name: "EPM"
+  version: "0.1.0"
+  description: "Efficient Predictive Multimodal Generative Model"
+  stage: 7  # Current development stage (0-13)
+
+# --- Reproducibility ---
+reproducibility:
+  seed: 42
+  deterministic: true  # Use deterministic algorithms where possible
+
+# --- Logging ---
+logging:
+  level: "INFO"           # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  console: true           # Print to console
+  file: true              # Write to log file
+  log_dir: "logs"         # Directory for log files
+  format: "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
+
+# --- Paths ---
+paths:
+  data_raw: "data/raw"
+  data_processed: "data/processed"
+  models: "models"
+  experiments: "experiments"
+  benchmarks: "benchmarks"
+
+# --- Data ---
+data:
+  test_size: 0.2
+  validation_size: 0.1
+  shuffle: true                # For non-temporal data
+  time_series_split: true      # Use chronological splits for time-series
+
+# --- Training Defaults ---
+training:
+  batch_size: 32
+  learning_rate: 0.001
+  epochs: 100
+  early_stopping:
+    enabled: true
+    patience: 10
+    min_delta: 0.0001
+  optimizer: "adam"             # sgd, adam, adamw
+
+# --- Evaluation ---
+evaluation:
+  metrics:
+    classification:
+      - accuracy
+      - precision
+      - recall
+      - f1
+      - auroc
+    regression:
+      - mae
+      - mse
+      - rmse
+    computational:
+      - training_time
+      - inference_time
+      - peak_memory_mb
+      - parameter_count
+
+# --- Experiment Tracking ---
+experiment:
+  auto_save: true
+  save_dir: "experiments"
+  save_predictions: false     # Save raw predictions (can be large)
+  save_model: true            # Save model checkpoints

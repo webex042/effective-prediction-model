@@ -1,0 +1,77 @@
+# =============================================================================
+# EPM .gitignore
+# =============================================================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# --- Virtual Environments ---
+venv/
+env/
+.venv/
+.env/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# --- Data (large files) ---
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/README.md
+
+# --- Models (large files) ---
+models/*
+!models/.gitkeep
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.joblib
+*.h5
+
+# --- Experiment outputs ---
+experiments/*
+!experiments/.gitkeep
+benchmarks/*
+!benchmarks/.gitkeep
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Coverage ---
+.coverage
+htmlcov/
+.pytest_cache/
+
+# --- MyPy ---
+.mypy_cache/
+
+# --- Distribution ---
+*.tar.gz
+*.whl

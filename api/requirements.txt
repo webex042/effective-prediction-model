@@ -1,0 +1,3 @@
+# Vercel Serverless Function Dependencies
+# Using Python standard library for ultra-fast, zero-dependency deployment
+# Keeps uncompressed serverless bundle far below Vercel's 250MB limit.

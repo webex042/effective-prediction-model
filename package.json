@@ -1,0 +1,23 @@
+{
+  "name": "epm-research-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EPM: Efficient Predictive Multimodal Generative Model - Interactive Research & Experimentation Dashboard",
+  "scripts": {
+    "start": "python run.py --serve",
+    "serve": "python run.py --serve",
+    "test": "pytest tests/ -v"
+  },
+  "keywords": [
+    "machine-learning",
+    "deep-learning",
+    "multimodal",
+    "generative-models",
+    "diffusion",
+    "transformers",
+    "research",
+    "vercel"
+  ],
+  "author": "EPM Research",
+  "license": "MIT"
+}
