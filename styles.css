@@ -1338,3 +1338,58 @@ canvas {
   .workbench-tabs { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
   .action-btn-row { flex-direction: column; }
 }
+
+/* =============================================================================
+   STAGE 12 & 13 WORKBENCH PANELS — retro monochrome controls (shared vocabulary)
+   ============================================================================= */
+.workbench-panel { font-family: var(--f-sans); color: var(--c-black); }
+.panel-header-block { border-bottom: var(--b-thick); padding-bottom: 12px; margin-bottom: 14px; }
+.panel-tag { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; background: var(--c-black); color: var(--c-pure-white); display: inline-block; padding: 3px 8px; margin-bottom: 8px; }
+.panel-heading { font-family: var(--f-pixel); font-size: 0.9rem; line-height: 1.55; margin: 6px 0; }
+.panel-desc { font-size: 0.9rem; line-height: 1.6; color: var(--c-dark-gray); }
+
+.metrics-summary-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); border: var(--b-thick); margin-bottom: 14px; }
+.metric-pill { border-right: var(--b-thin); padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; background: var(--c-off-white); }
+.metric-pill:last-child { border-right: none; }
+.m-label { font-family: var(--f-mono); font-size: 0.62rem; letter-spacing: 0.06em; color: var(--c-medium-gray); }
+.m-val { font-family: var(--f-terminal); font-size: 1.15rem; color: var(--c-black); }
+
+.interactive-controls-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; border: var(--b-thick); background: var(--c-light-gray); padding: 12px; margin-bottom: 14px; box-shadow: var(--s-retro-sm); }
+.control-group { display: flex; flex-direction: column; gap: 5px; }
+.control-group label { font-family: var(--f-mono); font-size: 0.68rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.ctrl-select { font-family: var(--f-mono); font-size: 0.75rem; border: var(--b-thin); background: var(--c-pure-white); padding: 5px 6px; border-radius: 0; }
+.ctrl-slider { -webkit-appearance: none; appearance: none; height: 6px; background: var(--c-pure-white); border: var(--b-thin); outline: none; }
+.ctrl-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: var(--c-black); cursor: pointer; }
+.ctrl-slider::-moz-range-thumb { width: 14px; height: 14px; background: var(--c-black); cursor: pointer; border: none; border-radius: 0; }
+.control-actions { display: flex; align-items: flex-end; gap: 8px; flex-wrap: wrap; }
+.ctrl-btn { font-family: var(--f-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--c-pure-white); color: var(--c-black); border: var(--b-thick); padding: 7px 12px; cursor: pointer; box-shadow: var(--s-retro-sm); transition: transform 0.1s, background 0.1s; }
+.ctrl-btn:hover { background: var(--c-black); color: var(--c-pure-white); box-shadow: none; transform: translate(2px, 2px); }
+.ctrl-btn.action-primary { background: var(--c-black); color: var(--c-pure-white); }
+.ctrl-btn.action-primary:hover { background: var(--c-pure-white); color: var(--c-black); }
+/* __STAGE1213_CSS_PART2__ */
+.canvas-frame { border: var(--b-thick); background: var(--c-pure-white); padding: 10px; margin-bottom: 14px; box-shadow: var(--s-retro); overflow-x: auto; }
+.canvas-frame canvas { display: block; max-width: 100%; height: auto; background: var(--c-pure-white); }
+
+.architecture-flow-box { border: var(--b-thick); background: var(--c-off-white); padding: 12px; }
+.flow-header { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: var(--b-thin); padding-bottom: 6px; margin-bottom: 10px; }
+.flow-grid-cols { display: flex; align-items: stretch; gap: 8px; flex-wrap: wrap; }
+.col-step { flex: 1; min-width: 150px; border: var(--b-thin); background: var(--c-pure-white); padding: 8px 10px; }
+.col-step strong { font-family: var(--f-mono); font-size: 0.74rem; display: block; margin-bottom: 4px; }
+.col-step p { font-size: 0.78rem; line-height: 1.45; color: var(--c-dark-gray); margin: 0; }
+.col-arrow { display: flex; align-items: center; font-size: 1.1rem; color: var(--c-medium-gray); }
+
+/* Stage 13 research studio */
+.research-tables-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 14px; }
+.research-data-table { width: 100%; border-collapse: collapse; font-family: var(--f-mono); font-size: 0.74rem; border: var(--b-thick); }
+.research-data-table th { background: var(--c-black); color: var(--c-pure-white); padding: 6px 8px; text-align: left; font-weight: normal; letter-spacing: 0.03em; }
+.research-data-table td { border: var(--b-thin); padding: 5px 8px; }
+.research-data-table caption { font-family: var(--f-mono); font-size: 0.68rem; text-align: left; padding: 4px 0; color: var(--c-medium-gray); }
+.research-data-table tr.row-active td { background: var(--c-black); color: var(--c-pure-white); }
+.research-data-table tr.row-fail td { background: var(--c-light-gray); }
+.verdict-ok { font-family: var(--f-mono); border: var(--b-thin); padding: 1px 5px; background: var(--c-pure-white); }
+.verdict-bad { font-family: var(--f-mono); border: var(--b-thin); padding: 1px 5px; background: var(--c-dark-gray); color: var(--c-pure-white); }
+.h1-verdict-banner { border: var(--b-thick); background: var(--c-off-white); padding: 10px 12px; margin-bottom: 14px; font-size: 0.85rem; line-height: 1.55; box-shadow: var(--s-retro-sm); }
+.research-figure-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 10px; }
+.research-figure-row figure { margin: 0; border: var(--b-thin); background: var(--c-pure-white); padding: 6px; }
+.research-figure-row img { width: 100%; filter: grayscale(100%); display: block; }
+.research-figure-row figcaption { font-family: var(--f-mono); font-size: 0.64rem; color: var(--c-medium-gray); margin-top: 4px; }

@@ -24,14 +24,14 @@
     <div class="top-status-inner">
       <div class="status-left">
         <span class="status-indicator"></span>
-        <span class="status-text">EPM LAB ARCHIVE // STAGES 0–7 OPERATIONAL // VERIFIED DETERMINISTIC SEED 42</span>
+        <span class="status-text">EPM LAB ARCHIVE // STAGES 0–13 OPERATIONAL // VERIFIED DETERMINISTIC SEED 42</span>
       </div>
       <div class="status-right">
-        <span>PYTEST: 205/205 PASSED</span>
+        <span>PYTEST: 281/281 PASSED</span>
         <span class="sep">|</span>
         <span>GRAD CHECK: 1.42e-09 ERR</span>
         <span class="sep">|</span>
-        <span>LATENCY: 0.33 µs BASE</span>
+        <span>MODEL COMPRESSION: 19.4× SIZE REDUCTION</span>
       </div>
     </div>
   </aside>
@@ -87,7 +87,7 @@
           <div class="paper-byline">
             <span>Machine Learning &amp; Multimodal Representation Group</span>
             <span class="byline-sep">•</span>
-            <span>Progress: 8 Completed / 6 Planned Stages</span>
+            <span>Progress: 14 Completed Stages (0–13)</span>
             <span class="byline-sep">•</span>
             <span>Version: 0.1.0</span>
           </div>
@@ -133,9 +133,39 @@
               <tbody>
                 <tr>
                   <td><strong>Unit Test Suite</strong></td>
-                  <td>205 / 205 Passing (100%)</td>
-                  <td>PyTest automated suite across 11 modules</td>
+                  <td>281 / 281 Passing (100%)</td>
+                  <td>PyTest automated suite across 17 modules</td>
                   <td><span class="tag-verified">PASSED</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Model Compression (Tri-Compressed)</strong></td>
+                  <td>19.4× Reduction / 6.1 KB Edge Checkpoint</td>
+                  <td>Hinton KD (T=4) + Physical Structured Pruning + Dynamic INT8 PTQ</td>
+                  <td><span class="tag-verified">100% RETENTION (1.000 ACC)</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Attention Efficiency (Linear &amp; Tiled)</strong></td>
+                  <td>168.16× Speedup / 127× Memory Savings</td>
+                  <td>Kernel Linear Attention &amp; Tiled Online Softmax Parity at N=2048</td>
+                  <td><span class="tag-verified">O(Nd²) LINEAR SCALING</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Flow Matching (OT-CFM)</strong></td>
+                  <td>0.991 Straightness / 0.10 ms Latency</td>
+                  <td>Continuous Normalizing Flows &amp; Optimal Transport paths</td>
+                  <td><span class="tag-verified">EXACT CHANGE OF VARS</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Diffusion Acceleration</strong></td>
+                  <td>15.25 ms (DDIM-10) vs 145.91 ms (DDPM)</td>
+                  <td>Deterministic ODE trajectory subsampling on telemetry</td>
+                  <td><span class="tag-verified">9.6× INFERENCE ACCELERATION</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Probabilistic TS Diffusion</strong></td>
+                  <td>1.0777 CRPS / 1.13 ms / Traj</td>
+                  <td>DDIM-20 conditional horizon forecasting on multi-sensor context</td>
+                  <td><span class="tag-verified">UNCERTAINTY CALIBRATED</span></td>
                 </tr>
                 <tr>
                   <td><strong>Numerical Gradient Error</strong></td>
@@ -360,6 +390,46 @@
                   <td>Recon MSE: 0.03076, AUROC: 1.000</td>
                   <td><span class="tag-verified">BENCHMARKED</span></td>
                 </tr>
+                <tr>
+                  <td>2026-10-10 14:34:22</td>
+                  <td><code>stage8_diffusion</code></td>
+                  <td>Stage 8: DDPM &amp; Accelerated DDIM</td>
+                  <td>DDPM (100) vs DDIM (20/10) vs Cosine SDE</td>
+                  <td>DDIM-10 Latency: 15.25 ms (9.6× speedup)</td>
+                  <td><span class="tag-verified">BENCHMARKED</span></td>
+                </tr>
+                <tr>
+                  <td>2026-10-10 14:47:36</td>
+                  <td><code>stage9_timeseries_diffusion</code></td>
+                  <td>Stage 9: TS Probabilistic Forecasting</td>
+                  <td>DDIM-20 Horizon=12 vs LSTM vs Transformer</td>
+                  <td>CRPS: 1.0777, Horizon RMSE: 1.520</td>
+                  <td><span class="tag-verified">BENCHMARKED</span></td>
+                </tr>
+                <tr>
+                  <td>2026-10-10 15:08:41</td>
+                  <td><code>stage10_flow_matching</code></td>
+                  <td>Stage 10: Flow Matching &amp; CNF</td>
+                  <td>OT-CFM (Euler/RK4) vs Gaussian-CFM vs DDIM vs DDPM</td>
+                  <td>OT Straightness: 0.991, W2: 0.598, Latency: 0.10 ms</td>
+                  <td><span class="tag-verified">BENCHMARKED</span></td>
+                </tr>
+                <tr>
+                  <td>2026-10-10 15:26:55</td>
+                  <td><code>stage11_computational_efficiency</code></td>
+                  <td>Stage 11: Attention Efficiency &amp; Scaling</td>
+                  <td>Linear Attention vs Tiled Online Softmax vs Standard</td>
+                  <td>N=2048: 168.16× Speedup, 127× Mem Reduction, 0.0 Parity Err</td>
+                  <td><span class="tag-verified">BENCHMARKED</span></td>
+                </tr>
+                <tr>
+                  <td>2026-10-10 16:03:23</td>
+                  <td><code>stage12_model_compression</code></td>
+                  <td>Stage 12: Model Compression &amp; Edge</td>
+                  <td>Hinton KD (T=4) vs Dynamic INT8 vs Structured Pruning</td>
+                  <td>19.4× Checkpoint Reduction (6.1 KB), 1.000 Acc, SQNR: 40.18 dB</td>
+                  <td><span class="tag-verified">BENCHMARKED</span></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -368,7 +438,7 @@
     </article>
 
     <!-- =========================================================================
-         4. INTERACTIVE LABORATORY WORKBENCH (STAGES 0–7)
+         4. INTERACTIVE LABORATORY WORKBENCH (STAGES 0–12)
          ========================================================================= -->
     <article class="paper-window" id="workbench">
       <div class="window-topbar">
@@ -388,7 +458,7 @@
           <div>
             <h2 class="section-title">Interactive Algorithm Workbench</h2>
             <p class="section-intro">
-              Direct mathematical and numerical interaction with the implemented models across Stages 0 through 7.
+              Direct mathematical and numerical interaction with the implemented models across Stages 0 through 13.
             </p>
           </div>
           <div class="workbench-tabs" id="stage-tabs-wrapper" role="tablist">
@@ -400,6 +470,12 @@
             <button class="workbench-tab" data-stage="5" id="tab-stage-5">5: FORECAST</button>
             <button class="workbench-tab" data-stage="6" id="tab-stage-6">6: FUSION</button>
             <button class="workbench-tab" data-stage="7" id="tab-stage-7">7: VAE</button>
+            <button class="workbench-tab" data-stage="8" id="tab-stage-8">8: DIFFUSION</button>
+            <button class="workbench-tab" data-stage="9" id="tab-stage-9">9: TS DIFFUSION</button>
+            <button class="workbench-tab" data-stage="10" id="tab-stage-10">10: FLOW MATCH</button>
+            <button class="workbench-tab" data-stage="11" id="tab-stage-11">11: EFFICIENCY</button>
+            <button class="workbench-tab" data-stage="12" id="tab-stage-12">12: COMPRESSION</button>
+            <button class="workbench-tab" data-stage="13" id="tab-stage-13">13: RESEARCH</button>
           </div>
         </div>
 
@@ -437,7 +513,7 @@
           <div>
             <h2 class="section-title">Empirical Benchmark Leaderboards</h2>
             <p class="section-intro">
-              Measured results recorded in the project repository across Classical ML, Time Series, Multimodal Robustness, and Generative Autoencoders.
+              Measured results recorded in the project repository across Classical ML, Time Series, Multimodal Robustness, Generative Autoencoders, and Probabilistic Diffusion.
             </p>
           </div>
           <div class="leaderboard-tabs-bar" id="leaderboard-tabs">
@@ -445,6 +521,11 @@
             <button class="lb-tab" data-lb="stage5" id="btn-lb-stage5">STAGE 5: TIME SERIES</button>
             <button class="lb-tab" data-lb="stage6" id="btn-lb-stage6">STAGE 6: MULTIMODAL FUSION</button>
             <button class="lb-tab" data-lb="stage7" id="btn-lb-stage7">STAGE 7: GENERATIVE AE / VAE</button>
+            <button class="lb-tab" data-lb="stage8" id="btn-lb-stage8">STAGE 8: DIFFUSION (DDPM &amp; DDIM)</button>
+            <button class="lb-tab" data-lb="stage9" id="btn-lb-stage9">STAGE 9: PROBABILISTIC FORECASTING</button>
+            <button class="lb-tab" data-lb="stage10" id="btn-lb-stage10">STAGE 10: FLOW MATCHING</button>
+            <button class="lb-tab" data-lb="stage11" id="btn-lb-stage11">STAGE 11: ATTENTION EFFICIENCY</button>
+            <button class="lb-tab" data-lb="stage12" id="btn-lb-stage12">STAGE 12: MODEL COMPRESSION</button>
           </div>
         </div>
 
@@ -488,6 +569,11 @@
             <button class="filter-tab active" data-filter="all">ALL FIGURES</button>
             <button class="filter-tab" data-filter="stage1">STAGE 1: OPTIMIZATION &amp; MATH</button>
             <button class="filter-tab" data-filter="stage7">STAGE 7: LATENT MANIFOLDS &amp; VAE</button>
+            <button class="filter-tab" data-filter="stage8" id="filter-stage8">STAGE 8: DIFFUSION &amp; SDE</button>
+            <button class="filter-tab" data-filter="stage9" id="filter-stage9">STAGE 9: PROBABILISTIC FAN-CHARTS</button>
+            <button class="filter-tab" data-filter="stage10" id="filter-stage10">STAGE 10: FLOW MATCHING</button>
+            <button class="filter-tab" data-filter="stage11" id="filter-stage11">STAGE 11: EFFICIENCY &amp; SCALING</button>
+            <button class="filter-tab" data-filter="stage12" id="filter-stage12">STAGE 12: MODEL COMPRESSION</button>
           </div>
         </div>
 
@@ -518,11 +604,11 @@
           <div>
             <h2 class="section-title">Automated Verification Suite</h2>
             <p class="section-intro">
-              205 unit tests verifying mathematical derivations, gradient checks, exact PyTorch parity, and temporal non-leakage.
+              281 unit tests verifying mathematical derivations, gradient checks, exact PyTorch parity, temporal non-leakage, diffusion score matching, flow matching CNF divergence, linear attention complexity, model compression distillation &amp; quantization, and the Stage 13 research pipeline (leakage-free splits, metrics, registry, reproducibility).
             </p>
           </div>
           <div class="audit-summary-pill">
-            <span class="audit-count">205 / 205 PASSING</span>
+            <span class="audit-count">281 / 281 PASSING</span>
             <span class="audit-rate">100% COVERAGE RATE</span>
           </div>
         </div>
@@ -538,8 +624,8 @@
       </div>
 
       <div class="window-footer-bar">
-        <span>COVERAGE: 11 TEST MODULES</span>
-        <span>RUNTIME DURATION: 15.38s</span>
+        <span>COVERAGE: 17 TEST MODULES</span>
+        <span>RUNTIME DURATION: 11.12s</span>
         <span>FAILURES: 0</span>
       </div>
     </article>

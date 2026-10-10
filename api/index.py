@@ -1,164 +1,208 @@
 """
 Vercel Serverless Function Handler for EPM
 ==========================================
-Provides lightweight, zero-dependency REST endpoints for the EPM
-Interactive Research Dashboard. Fully compatible with Vercel Serverless
-Python Runtime (@vercel/python).
+Lightweight, zero-dependency REST endpoints for the EPM research dashboard.
+
+INTEGRITY NOTE
+--------------
+Every number served here is read from real artifacts committed to the repo
+(``benchmarks/*.json`` produced by the stage demos, the Stage 12/13 experiment
+registry in ``experiments/registry/``, and a real pytest status snapshot in
+``benchmarks/test_status.json``). Nothing is hard-coded or fabricated; if an
+artifact is missing the endpoint reports an explicit empty/unavailable state
+instead of inventing values. On the serverless runtime these files are read
+only (training must be run locally via ``demo_stage*.py`` / ``run.py``).
 """
 
 from http.server import BaseHTTPRequestHandler
 import json
 import time
-import math
 import random
 import sys
+import glob
 import os
 
-# Project Metadata
-PROJECT_INFO = {
-    "name": "EPM — Efficient Predictive Multimodal Generative Model",
-    "version": "0.1.0",
-    "status": "operational",
-    "stages_completed": 8,
-    "stages_total": 14,
-    "unit_tests_passing": 205,
-    "numerical_gradient_error": 1.4158e-09,
-    "research_question": "Can efficient generative and multimodal models achieve comparable or better predictive performance than conventional ML/DL models while reducing inference latency and memory?",
-}
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-BENCHMARK_DATA = {
-    "stage2_classification": [
-        {"model": "Logistic Regression (Scratch)", "accuracy": 0.9125, "f1": 0.8293, "auroc": 0.9667, "latency_us": 0.33, "params": "Linear"},
-        {"model": "Logistic Regression (Scikit)", "accuracy": 0.9125, "f1": 0.8293, "auroc": 0.9664, "latency_us": 1.45, "params": "Linear"},
-        {"model": "SVC (RBF)", "accuracy": 0.8917, "f1": 0.7797, "auroc": 0.9541, "latency_us": 36.35, "params": "Kernel"},
-        {"model": "XGBoost", "accuracy": 0.8792, "f1": 0.7680, "auroc": 0.9353, "latency_us": 10.29, "params": "Ensemble"},
-        {"model": "KNN (k=5)", "accuracy": 0.8750, "f1": 0.7619, "auroc": 0.9348, "latency_us": 27.60, "params": "Non-parametric"},
-        {"model": "Decision Tree", "accuracy": 0.8542, "f1": 0.7250, "auroc": 0.8279, "latency_us": 0.35, "params": "Tree (depth=5)"}
-    ],
-    "stage5_timeseries": [
-        {"model": "Linear Regression", "rmse": 2.833, "mae": 2.246, "r2": 0.926, "latency_us": 12.38, "parameters": 726},
-        {"model": "Random Forest", "rmse": 6.719, "mae": 4.835, "r2": 0.584, "latency_us": 41.45, "parameters": 25000},
-        {"model": "XGBoost", "rmse": 7.970, "mae": 5.927, "r2": 0.414, "latency_us": 26.89, "parameters": 18000},
-        {"model": "Transformer Forecaster", "rmse": 8.973, "mae": 6.908, "r2": 0.257, "latency_us": 64.47, "parameters": 17478}
-    ],
-    "stage6_multimodal": [
-        {"model": "Sensor-Only", "parameters": 136003, "clean_f1": 1.0, "noisy_sensor_f1": 0.5631, "missing_text_f1": 1.0, "missing_sensor_f1": 0.1728},
-        {"model": "Text-Only", "parameters": 69315, "clean_f1": 1.0, "noisy_sensor_f1": 1.0, "missing_text_f1": 0.1667, "missing_sensor_f1": 1.0},
-        {"model": "Multimodal-Concat", "parameters": 215811, "clean_f1": 1.0, "noisy_sensor_f1": 0.5654, "missing_text_f1": 1.0, "missing_sensor_f1": 1.0},
-        {"model": "Multimodal-Gated (GMU)", "parameters": 219843, "clean_f1": 1.0, "noisy_sensor_f1": 0.5420, "missing_text_f1": 1.0, "missing_sensor_f1": 1.0},
-        {"model": "Multimodal-CrossAttn", "parameters": 249347, "clean_f1": 1.0, "noisy_sensor_f1": 0.5401, "missing_text_f1": 1.0, "missing_sensor_f1": 1.0}
-    ],
-    "stage7_generative": [
-        {"model": "Standard-AE", "recon_mse": 0.03076, "recon_mae": 0.11798, "auroc": 1.0, "latency_ms": 4.68, "parameters": 20672},
-        {"model": "Conditional-VAE", "recon_mse": 0.03265, "recon_mae": 0.12435, "auroc": 1.0, "latency_ms": 3.02, "parameters": 21224},
-        {"model": "Variational-VAE", "recon_mse": 0.16204, "recon_mae": 0.34906, "auroc": 0.927, "latency_ms": 4.55, "parameters": 20936}
-    ]
-}
 
-STAGES_INFO = [
-    {"stage": 0, "title": "Environment & Infrastructure", "status": "Completed", "desc": "Config system, deterministic seed control, reproducible logging, scratch metrics"},
-    {"stage": 1, "title": "Mathematical Foundations", "status": "Completed", "desc": "Linear algebra, calculus, probability distributions, GD, Momentum, Adam from scratch"},
-    {"stage": 2, "title": "Classical Machine Learning", "status": "Completed", "desc": "Linear/Logistic Regression, KNN, Decision Trees from scratch vs Scikit/XGBoost baseline"},
-    {"stage": 3, "title": "Neural Networks from Scratch", "status": "Completed", "desc": "Forward/backprop, custom activations, XOR non-linear decision boundary, PyTorch parity"},
-    {"stage": 4, "title": "NLP, Embeddings & Transformers", "status": "Completed", "desc": "Text preprocessing, vocabulary, scratch embeddings, Scaled Dot-Product Attention"},
-    {"stage": 5, "title": "Time Series Prediction", "status": "Completed", "desc": "Multivariate telemetry, sliding windows, LSTM, GRU, Temporal Transformer forecasting"},
-    {"stage": 6, "title": "Multimodal Representation & Fusion", "status": "Completed", "desc": "Continuous telemetry + discrete text, Concat, GMU gating, Cross-Attention fusion"},
-    {"stage": 7, "title": "Generative Modeling & Latent Space", "status": "Completed", "desc": "AE, VAE, Conditional-VAE, ELBO derivation, epistemic uncertainty quantification"},
-    {"stage": 8, "title": "Diffusion Models (DDPM)", "status": "In Development", "desc": "Forward/reverse SDE diffusion process on controlled datasets"},
-    {"stage": 9, "title": "Diffusion for Time Series", "status": "Planned", "desc": "Probabilistic trajectory forecasting with conditional noise schedule"},
-    {"stage": 10, "title": "Flow Matching", "status": "Planned", "desc": "Continuous normalizing flows and optimal transport velocity fields"},
-    {"stage": 11, "title": "Efficiency Optimization", "status": "Planned", "desc": "Linear attention, FlashAttention benchmarks, computational complexity profiling"},
-    {"stage": 12, "title": "Model Compression", "status": "Planned", "desc": "Knowledge distillation, INT8/INT4 quantization, structured pruning"},
-    {"stage": 13, "title": "Research Synthesis & Paper", "status": "Planned", "desc": "Hypothesis testing, statistical ablation study, empirical paper"}
+def _read_json(rel_path, default=None):
+    """Safely read a JSON artifact relative to the project root."""
+    try:
+        with open(os.path.join(ROOT, rel_path), "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return default
+
+
+def load_all_benchmarks():
+    """Load every benchmarks/*.json keyed by filename stem (real artifacts)."""
+    out = {}
+    for path in sorted(glob.glob(os.path.join(ROOT, "benchmarks", "*.json"))):
+        stem = os.path.splitext(os.path.basename(path))[0]
+        data = _read_json(os.path.join("benchmarks", os.path.basename(path)))
+        if data is not None:
+            out[stem] = data
+    return out
+
+
+def load_registry_index():
+    """Return the list of recorded experiments (Stage 12/13 registry), or []."""
+    idx = _read_json(os.path.join("experiments", "registry", "index.json"), default=[])
+    return idx if isinstance(idx, list) else []
+
+
+def load_test_status():
+    """Real pytest snapshot written by tooling; explicit unavailable state if absent."""
+    return _read_json(
+        os.path.join("benchmarks", "test_status.json"),
+        default={"available": False, "note": "Run pytest locally to generate benchmarks/test_status.json"},
+    )
+
+RESEARCH_QUESTION = (
+    "Can efficient generative and multimodal models achieve comparable or better "
+    "predictive performance than conventional ML/DL models while reducing inference "
+    "latency, memory, FLOPs, and parameter count?"
+)
+
+# Descriptive stage metadata (titles/descriptions are documentation, not metrics).
+STAGE_META = [
+    {"stage": 0, "title": "Environment & Infrastructure", "status": "Completed", "desc": "Config, deterministic seeds, reproducible logging, experiment tracking"},
+    {"stage": 1, "title": "Mathematical Foundations", "status": "Completed", "desc": "Linear algebra, calculus, probability, GD/Momentum/Adam from scratch"},
+    {"stage": 2, "title": "Classical Machine Learning", "status": "Completed", "desc": "Scratch Linear/Logistic/KNN/Trees vs scikit-learn & XGBoost baselines"},
+    {"stage": 3, "title": "Neural Networks from Scratch", "status": "Completed", "desc": "Forward/backprop, gradient checking, PyTorch parity"},
+    {"stage": 4, "title": "NLP, Embeddings & Transformers", "status": "Completed", "desc": "Preprocessing, embeddings, scaled dot-product self-attention"},
+    {"stage": 5, "title": "Time Series Prediction", "status": "Completed", "desc": "Sliding windows, LSTM/GRU/Temporal Transformer forecasting"},
+    {"stage": 6, "title": "Multimodal Representation & Fusion", "status": "Completed", "desc": "Sensor+text; concat, GMU gating, cross-attention fusion"},
+    {"stage": 7, "title": "Generative Modeling & Latent Space", "status": "Completed", "desc": "AE, VAE, Conditional-VAE, ELBO, uncertainty"},
+    {"stage": 8, "title": "Diffusion Models (DDPM & DDIM)", "status": "Completed", "desc": "Forward/reverse diffusion and accelerated deterministic sampling"},
+    {"stage": 9, "title": "Diffusion for Time Series", "status": "Completed", "desc": "Probabilistic trajectory forecasting, CRPS, interval coverage"},
+    {"stage": 10, "title": "Flow Matching & CNFs", "status": "Completed", "desc": "Continuous normalizing flows, optimal-transport velocity fields"},
+    {"stage": 11, "title": "Attention Efficiency & Complexity", "status": "Completed", "desc": "Linear & tiled attention, sequence-length scaling"},
+    {"stage": 12, "title": "Model Compression", "status": "Completed", "desc": "Knowledge distillation, INT8 quantization, structured/unstructured pruning"},
+    {"stage": 13, "title": "Research Experiment (H1)", "status": "Completed", "desc": "Reproducible reduced-step generative forecasting study with real baselines"},
 ]
 
-class handler(BaseHTTPRequestHandler):
-    """Vercel Serverless Function Handler"""
 
-    def _set_headers(self, status=200, content_type="application/json"):
+def _h1_headline(stage13):
+    """Extract an honest one-line H1 headline from the Stage 13 summary, if present."""
+    try:
+        comps = stage13["h1_analysis"]["comparisons"]
+        competitive = [c for c in comps if c.get("rmse_within_full_ci")]
+        if competitive:
+            best = max(competitive, key=lambda c: c["speedup_vs_full"])
+            return {
+                "supported": True,
+                "best_steps": best["sampling_steps"],
+                "speedup_vs_full": best["speedup_vs_full"],
+                "rmse_change_pct": best["rmse_change_pct"],
+            }
+        return {"supported": False, "note": "No reduced-step setting stayed within the full-step RMSE CI."}
+    except Exception:
+        return None
+
+
+def build_project_info():
+    """Assemble project metadata entirely from real artifacts (no fabrication)."""
+    tests = load_test_status()
+    registry = load_registry_index()
+    benches = load_all_benchmarks()
+
+    info = {
+        "name": "EPM — Efficient Predictive Multimodal Generative Model",
+        "version": "0.1.0",
+        "status": "operational",
+        "stages_completed": sum(1 for s in STAGE_META if s["status"] == "Completed"),
+        "stages_total": len(STAGE_META),
+        "experiments_recorded": len(registry),
+        "research_question": RESEARCH_QUESTION,
+    }
+    if isinstance(tests, dict) and tests.get("available"):
+        info["unit_tests_passing"] = tests.get("passed")
+        info["unit_tests_total"] = tests.get("collected")
+        info["test_pass_rate_pct"] = tests.get("pass_rate_pct")
+
+    s12 = benches.get("stage12_model_compression")
+    if isinstance(s12, dict):
+        if s12.get("max_size_reduction"):
+            info["model_size_reduction"] = s12["max_size_reduction"]
+        if s12.get("max_speedup"):
+            info["compression_max_speedup"] = s12["max_speedup"]
+
+    s13 = benches.get("stage13_research")
+    headline = _h1_headline(s13) if isinstance(s13, dict) else None
+    if headline is not None:
+        info["h1_result"] = headline
+
+    return info
+
+class handler(BaseHTTPRequestHandler):
+    """Vercel-compatible serverless handler serving real artifact-derived data."""
+
+    def _send(self, payload, status=200):
         self.send_response(status)
-        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Type", "application/json")
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
         self.end_headers()
+        self.wfile.write(json.dumps(payload, indent=2, default=str).encode("utf-8"))
 
     def do_OPTIONS(self):
-        self._set_headers(200)
+        self._send({}, 200)
 
     def do_GET(self):
-        path = self.path.split("?")[0].rstrip("/")
-        
-        if path in ("", "/api", "/api/health"):
-            data = {
-                **PROJECT_INFO,
+        raw = self.path.split("?")[0].rstrip("/")
+        query = {}
+        if "?" in self.path:
+            for part in self.path.split("?", 1)[1].split("&"):
+                if "=" in part:
+                    k, v = part.split("=", 1)
+                    query[k] = v
+
+        if raw in ("", "/api", "/api/health"):
+            data = dict(build_project_info())
+            data.update({
                 "server_time": time.time(),
                 "python_runtime": f"Python {sys.version.split()[0]}",
-                "platform": sys.platform
-            }
-            self._set_headers(200)
-            self.wfile.write(json.dumps(data, indent=2).encode("utf-8"))
-
-        elif path == "/api/benchmarks":
-            self._set_headers(200)
-            self.wfile.write(json.dumps(BENCHMARK_DATA, indent=2).encode("utf-8"))
-
-        elif path == "/api/stages":
-            self._set_headers(200)
-            self.wfile.write(json.dumps(STAGES_INFO, indent=2).encode("utf-8"))
-
-        elif path == "/api/test-status":
-            test_summary = {
-                "total_collected": 205,
-                "passed": 205,
-                "failed": 0,
-                "skipped": 0,
-                "pass_rate_pct": 100.0,
-                "modules": [
-                    {"name": "test_math_foundations.py", "tests": 74, "status": "PASSED"},
-                    {"name": "test_classical_ml.py", "tests": 24, "status": "PASSED"},
-                    {"name": "test_neural_networks.py", "tests": 12, "status": "PASSED"},
-                    {"name": "test_nlp.py", "tests": 14, "status": "PASSED"},
-                    {"name": "test_timeseries.py", "tests": 11, "status": "PASSED"},
-                    {"name": "test_multimodal.py", "tests": 13, "status": "PASSED"},
-                    {"name": "test_generative.py", "tests": 15, "status": "PASSED"},
-                    {"name": "test_metrics.py", "tests": 16, "status": "PASSED"},
-                    {"name": "test_reproducibility.py", "tests": 7, "status": "PASSED"},
-                    {"name": "test_config.py", "tests": 10, "status": "PASSED"},
-                    {"name": "test_experiment.py", "tests": 9, "status": "PASSED"}
-                ]
-            }
-            self._set_headers(200)
-            self.wfile.write(json.dumps(test_summary, indent=2).encode("utf-8"))
-
+                "platform": sys.platform,
+            })
+            self._send(data)
+        elif raw == "/api/benchmarks":
+            self._send(load_all_benchmarks())
+        elif raw == "/api/stages":
+            self._send(STAGE_META)
+        elif raw == "/api/experiments":
+            self._send(load_registry_index())
+        elif raw == "/api/experiment":
+            exp_id = query.get("id", "")
+            # Guard against path traversal; registry ids are timestamp_slug_hash only.
+            safe = "".join(c for c in exp_id if c.isalnum() or c in ("_", "-"))
+            rec = _read_json(os.path.join("experiments", "registry", f"{safe}.json"))
+            if rec is None:
+                self._send({"error": f"experiment not found: {exp_id}"}, 404)
+            else:
+                self._send(rec)
+        elif raw == "/api/test-status":
+            self._send(load_test_status())
         else:
-            self._set_headers(404)
-            self.wfile.write(json.dumps({"error": f"Endpoint not found: {path}"}).encode("utf-8"))
+            self._send({"error": f"Endpoint not found: {raw}"}, 404)
 
     def do_POST(self):
-        content_length = int(self.headers.get("Content-Length", 0))
-        post_data = self.rfile.read(content_length) if content_length > 0 else b"{}"
-        
+        length = int(self.headers.get("Content-Length", 0))
+        raw_body = self.rfile.read(length) if length > 0 else b"{}"
         try:
-            body = json.loads(post_data.decode("utf-8")) if post_data else {}
+            body = json.loads(raw_body.decode("utf-8")) if raw_body else {}
         except Exception:
             body = {}
-
         path = self.path.split("?")[0].rstrip("/")
 
         if path == "/api/benchmark-matrix":
-            # Real matrix multiply benchmark in pure Python
-            dim = int(body.get("dim", 120))
-            dim = max(20, min(dim, 300))  # bound for serverless responsiveness
-            
+            dim = max(20, min(int(body.get("dim", 120)), 300))
             t0 = time.perf_counter()
-            # Generate deterministic matrices
             random.seed(42)
             A = [[random.random() for _ in range(dim)] for _ in range(dim)]
             B = [[random.random() for _ in range(dim)] for _ in range(dim)]
-            
-            # Multiply A x B
             C = [[0.0] * dim for _ in range(dim)]
             for i in range(dim):
                 row_a = A[i]
@@ -167,46 +211,39 @@ class handler(BaseHTTPRequestHandler):
                     row_b = B[k]
                     for j in range(dim):
                         C[i][j] += aik * row_b[j]
-                        
             elapsed = time.perf_counter() - t0
             flops = 2 * (dim ** 3)
-            gflops = (flops / elapsed) / 1e9 if elapsed > 0 else 0
-
-            response = {
+            self._send({
                 "dimension": f"{dim}x{dim}",
                 "elapsed_seconds": round(elapsed, 4),
                 "total_flops": flops,
-                "gflops": round(gflops, 3),
-                "sample_val": round(C[0][0], 4)
-            }
-            self._set_headers(200)
-            self.wfile.write(json.dumps(response).encode("utf-8"))
-
+                "gflops": round((flops / elapsed) / 1e9, 3) if elapsed > 0 else 0,
+                "sample_val": round(C[0][0], 4),
+            })
         elif path == "/api/calculate-metrics":
             y_true = body.get("y_true", [1, 0, 1, 1, 0, 1, 0, 0, 1, 1])
             y_pred = body.get("y_pred", [1, 0, 0, 1, 0, 1, 1, 0, 1, 0])
-            
             n = len(y_true)
-            tp = sum(1 for yt, yp in zip(y_true, y_pred) if yt == 1 and yp == 1)
-            tn = sum(1 for yt, yp in zip(y_true, y_pred) if yt == 0 and yp == 0)
-            fp = sum(1 for yt, yp in zip(y_true, y_pred) if yt == 0 and yp == 1)
-            fn = sum(1 for yt, yp in zip(y_true, y_pred) if yt == 1 and yp == 0)
-            
-            acc = (tp + tn) / n if n > 0 else 0
-            prec = tp / (tp + fp) if (tp + fp) > 0 else 0
-            rec = tp / (tp + fn) if (tp + fn) > 0 else 0
-            f1 = (2 * prec * rec) / (prec + rec) if (prec + rec) > 0 else 0
-
-            res = {
-                "accuracy": round(acc, 4),
-                "precision": round(prec, 4),
-                "recall": round(rec, 4),
-                "f1": round(f1, 4),
-                "confusion_matrix": {"tp": tp, "tn": tn, "fp": fp, "fn": fn}
-            }
-            self._set_headers(200)
-            self.wfile.write(json.dumps(res).encode("utf-8"))
-
+            tp = sum(1 for a, b in zip(y_true, y_pred) if a == 1 and b == 1)
+            tn = sum(1 for a, b in zip(y_true, y_pred) if a == 0 and b == 0)
+            fp = sum(1 for a, b in zip(y_true, y_pred) if a == 0 and b == 1)
+            fn = sum(1 for a, b in zip(y_true, y_pred) if a == 1 and b == 0)
+            acc = (tp + tn) / n if n else 0
+            prec = tp / (tp + fp) if (tp + fp) else 0
+            rec = tp / (tp + fn) if (tp + fn) else 0
+            f1 = (2 * prec * rec) / (prec + rec) if (prec + rec) else 0
+            self._send({
+                "accuracy": round(acc, 4), "precision": round(prec, 4),
+                "recall": round(rec, 4), "f1": round(f1, 4),
+                "confusion_matrix": {"tp": tp, "tn": tn, "fp": fp, "fn": fn},
+            })
+        elif path in ("/api/run-experiment", "/api/run"):
+            # Honest: the serverless runtime cannot train (no torch, read-only, time-limited).
+            self._send({
+                "started": False,
+                "reason": "Training is not available on the serverless runtime.",
+                "how_to_run": "Run experiments locally: `python demo_stage12.py` or "
+                              "`python demo_stage13.py`; results appear in experiments/registry/.",
+            }, 501)
         else:
-            self._set_headers(404)
-            self.wfile.write(json.dumps({"error": f"Endpoint not found: {path}"}).encode("utf-8"))
+            self._send({"error": f"Endpoint not found: {path}"}, 404)

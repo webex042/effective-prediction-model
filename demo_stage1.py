@@ -17,6 +17,14 @@ import matplotlib
 matplotlib.use("Agg")  # Non-interactive backend
 import matplotlib.pyplot as plt
 from pathlib import Path
+import sys
+
+# Ensure Unicode (box-drawing, em dash) prints safely on Windows consoles (cp1252)
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 from src.reproducibility import set_seed
 from src.logger import setup_logging
