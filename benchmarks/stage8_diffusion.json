@@ -1,0 +1,55 @@
+{
+  "summary": [
+    {
+      "Method": "DDPM (Full SDE)",
+      "Steps": 100,
+      "Eta (Stochasticity)": 1.0,
+      "Total Latency (ms)": 300.73,
+      "Latency / Sample (ms)": 4.7,
+      "Latency / Step (ms)": 3.01,
+      "MMD vs Real Telemetry": 0.2473,
+      "Mean Amplitude": 1083.872,
+      "Output Variance": 1365.743,
+      "Model Parameters": "273,016"
+    },
+    {
+      "Method": "DDIM-20 (Deterministic ODE)",
+      "Steps": 20,
+      "Eta (Stochasticity)": 0.0,
+      "Total Latency (ms)": 72.46,
+      "Latency / Sample (ms)": 1.13,
+      "Latency / Step (ms)": 3.62,
+      "MMD vs Real Telemetry": 0.2473,
+      "Mean Amplitude": 1094.829,
+      "Output Variance": 1378.198,
+      "Model Parameters": "273,016"
+    },
+    {
+      "Method": "DDIM-10 (Fast ODE)",
+      "Steps": 10,
+      "Eta (Stochasticity)": 0.0,
+      "Total Latency (ms)": 31.02,
+      "Latency / Sample (ms)": 0.48,
+      "Latency / Step (ms)": 3.1,
+      "MMD vs Real Telemetry": 0.2473,
+      "Mean Amplitude": 1094.953,
+      "Output Variance": 1378.337,
+      "Model Parameters": "273,016"
+    },
+    {
+      "Method": "DDIM-20 (Stochastic)",
+      "Steps": 20,
+      "Eta (Stochasticity)": 0.5,
+      "Total Latency (ms)": 64.44,
+      "Latency / Sample (ms)": 1.01,
+      "Latency / Step (ms)": 3.22,
+      "MMD vs Real Telemetry": 0.2473,
+      "Mean Amplitude": 1094.452,
+      "Output Variance": 1377.778,
+      "Model Parameters": "273,016"
+    }
+  ],
+  "input_dim": 120,
+  "parameters": 273016,
+  "num_eval_samples": 64
+}

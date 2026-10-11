@@ -55,7 +55,7 @@ set_seed(42)
 
 PLOTS_DIR = Path("docs/plots/stage11")
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
-WEB_PLOTS_DIR = Path("plots/stage11")
+WEB_PLOTS_DIR = Path("web/plots/stage11")
 WEB_PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 BENCHMARKS_DIR = Path("benchmarks")
 BENCHMARKS_DIR.mkdir(parents=True, exist_ok=True)

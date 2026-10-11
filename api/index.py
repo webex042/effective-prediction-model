@@ -22,13 +22,26 @@ import sys
 import glob
 import os
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+API_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(API_DIR)
+# Candidate base dirs for reading committed data artifacts. Different deploy
+# layouts (classic function, service bundle, local run) place the working set
+# differently, so we probe the project root, the function's own dir, and cwd.
+_DATA_BASES = [ROOT, API_DIR, os.getcwd()]
+
+
+def _resolve(rel_path):
+    for base in _DATA_BASES:
+        candidate = os.path.join(base, rel_path)
+        if os.path.exists(candidate):
+            return candidate
+    return os.path.join(ROOT, rel_path)
 
 
 def _read_json(rel_path, default=None):
-    """Safely read a JSON artifact relative to the project root."""
+    """Safely read a JSON artifact from the first base dir that has it."""
     try:
-        with open(os.path.join(ROOT, rel_path), "r", encoding="utf-8") as f:
+        with open(_resolve(rel_path), "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception:
         return default
@@ -37,11 +50,15 @@ def _read_json(rel_path, default=None):
 def load_all_benchmarks():
     """Load every benchmarks/*.json keyed by filename stem (real artifacts)."""
     out = {}
-    for path in sorted(glob.glob(os.path.join(ROOT, "benchmarks", "*.json"))):
-        stem = os.path.splitext(os.path.basename(path))[0]
-        data = _read_json(os.path.join("benchmarks", os.path.basename(path)))
-        if data is not None:
-            out[stem] = data
+    for base in _DATA_BASES:
+        for path in sorted(glob.glob(os.path.join(base, "benchmarks", "*.json"))):
+            name = os.path.basename(path)
+            stem = os.path.splitext(name)[0]
+            if stem in out:
+                continue
+            data = _read_json(os.path.join("benchmarks", name))
+            if data is not None:
+                out[stem] = data
     return out
 
 

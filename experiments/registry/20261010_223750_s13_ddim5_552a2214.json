@@ -1,0 +1,132 @@
+{
+  "experiment_id": "20261010_223750_s13_ddim5_552a2214",
+  "name": "h1_reduced_step_forecasting:ddim_5",
+  "stage": 13,
+  "status": "completed",
+  "hypothesis": "H1",
+  "timestamp": "2026-10-10T17:07:50.282059+00:00",
+  "model_architecture": "ts_diffusion",
+  "method": "ddim_5steps",
+  "baseline_checkpoint": null,
+  "checkpoint_location": null,
+  "config": {
+    "name": "h1_reduced_step_forecasting",
+    "hypothesis": "H1",
+    "hypothesis_statement": "A reduced-step generative model can maintain competitive forecasting performance while reducing inference latency and computational cost compared with conventional (many-step) diffusion sampling.",
+    "dataset": "synthetic_industrial_telemetry",
+    "dataset_version": "v1",
+    "n_timesteps": 1600,
+    "sampling_rate_minutes": 10,
+    "target_channel": 0,
+    "window_size": 24,
+    "horizon": 12,
+    "train_ratio": 0.7,
+    "val_ratio": 0.15,
+    "model_arch": "ts_diffusion",
+    "hidden_dim": 96,
+    "context_dim": 48,
+    "schedule_type": "cosine",
+    "diffusion_timesteps": 100,
+    "baselines": [
+      "linear",
+      "lstm",
+      "transformer"
+    ],
+    "epochs": 18,
+    "batch_size": 32,
+    "lr": 0.001,
+    "sampling_steps": [
+      100,
+      50,
+      20,
+      10,
+      5
+    ],
+    "n_mc_samples": 16,
+    "eta": 0.3,
+    "seeds": [
+      0,
+      1
+    ],
+    "latency_warmup": 10,
+    "latency_reps": 30,
+    "bootstrap_resamples": 1000,
+    "device": "cpu",
+    "compression_method": null
+  },
+  "dataset": "synthetic_industrial_telemetry",
+  "dataset_version": "v1",
+  "split": {
+    "train": 1095,
+    "val": 235,
+    "test": 235
+  },
+  "seed": null,
+  "seeds": [
+    0,
+    1
+  ],
+  "parameter_count": 100716,
+  "sparsity": null,
+  "model_size_kb": 411.19,
+  "peak_memory_mb": null,
+  "inference_latency_ms": 14.635249999628286,
+  "latency_iqr_ms": null,
+  "throughput_per_sec": 68.55750839422637,
+  "sampling_steps": 5,
+  "predictive_metrics": {
+    "mae": {
+      "mean": 4.372673511505127,
+      "std": 0.05026721954345703,
+      "ci_low": 4.32240629196167,
+      "ci_high": 4.422940731048584,
+      "n": 2
+    },
+    "rmse": {
+      "mean": 5.198103666305542,
+      "std": 0.20431160926818848,
+      "ci_low": 4.9937920570373535,
+      "ci_high": 5.4024152755737305,
+      "n": 2
+    }
+  },
+  "probabilistic_metrics": {
+    "crps": {
+      "mean": 3.3671828508377075,
+      "std": 0.025852322578430176,
+      "ci_low": 3.3413305282592773,
+      "ci_high": 3.3930351734161377,
+      "n": 2
+    },
+    "picp_90": {
+      "mean": 0.915,
+      "std": 0.011666666666666659,
+      "ci_low": 0.9033333333333333,
+      "ci_high": 0.9266666666666666,
+      "n": 2
+    },
+    "mpiw_90": {
+      "mean": 26.009479522705078,
+      "std": 1.8747692108154297,
+      "ci_low": 24.13471031188965,
+      "ci_high": 27.884248733520508,
+      "n": 2
+    }
+  },
+  "environment": {
+    "python": "3.13.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "numpy": "2.5.3",
+    "torch": "2.14.1+cpu",
+    "sklearn": "1.9.1",
+    "cuda_available": false,
+    "device_name": "cpu"
+  },
+  "notes": [],
+  "errors": null,
+  "limitations": [
+    "CPU-only timing",
+    "synthetic telemetry dataset"
+  ]
+}

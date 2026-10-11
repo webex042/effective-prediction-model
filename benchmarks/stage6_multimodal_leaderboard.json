@@ -1,0 +1,661 @@
+{
+  "summary": [
+    {
+      "Model": "Sensor-Only",
+      "Parameters": 136003,
+      "Train Time (s)": 21.379,
+      "Latency (ms)": 21.02,
+      "Clean Acc": 1.0,
+      "Clean Macro F1": 1.0,
+      "Noisy Sensor F1": 0.5631,
+      "Missing Text F1": 1.0,
+      "Missing Sensor F1": 0.1728
+    },
+    {
+      "Model": "Text-Only",
+      "Parameters": 69315,
+      "Train Time (s)": 7.935,
+      "Latency (ms)": 6.78,
+      "Clean Acc": 1.0,
+      "Clean Macro F1": 1.0,
+      "Noisy Sensor F1": 1.0,
+      "Missing Text F1": 0.1667,
+      "Missing Sensor F1": 1.0
+    },
+    {
+      "Model": "Multimodal-Concat",
+      "Parameters": 215811,
+      "Train Time (s)": 25.543,
+      "Latency (ms)": 20.65,
+      "Clean Acc": 1.0,
+      "Clean Macro F1": 1.0,
+      "Noisy Sensor F1": 0.5654,
+      "Missing Text F1": 1.0,
+      "Missing Sensor F1": 1.0
+    },
+    {
+      "Model": "Multimodal-Gated",
+      "Parameters": 219843,
+      "Train Time (s)": 44.046,
+      "Latency (ms)": 23.52,
+      "Clean Acc": 1.0,
+      "Clean Macro F1": 1.0,
+      "Noisy Sensor F1": 0.542,
+      "Missing Text F1": 1.0,
+      "Missing Sensor F1": 1.0
+    },
+    {
+      "Model": "Multimodal-CrossAttn",
+      "Parameters": 249347,
+      "Train Time (s)": 30.239,
+      "Latency (ms)": 26.47,
+      "Clean Acc": 1.0,
+      "Clean Macro F1": 1.0,
+      "Noisy Sensor F1": 0.548,
+      "Missing Text F1": 1.0,
+      "Missing Sensor F1": 0.5071
+    }
+  ],
+  "detailed_results": {
+    "Sensor-Only": {
+      "parameters": 136003,
+      "train_time_sec": 21.379000000000815,
+      "clean": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 21.021074999225675
+      },
+      "missing_text": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 17.937124999662046
+      },
+      "noisy_sensor": {
+        "accuracy": 0.6583333333333333,
+        "macro_precision": 0.8209297477590161,
+        "macro_recall": 0.6746031746031745,
+        "macro_f1": 0.5631127875625781,
+        "per_class_f1": [
+          0.6551724137931034,
+          0.046511627906976744,
+          0.9876543209876543
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            40,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 18.55082499969285
+      },
+      "missing_sensor": {
+        "accuracy": 0.35,
+        "macro_precision": 0.11666666666666665,
+        "macro_recall": 0.3333333333333333,
+        "macro_f1": 0.1728395061728395,
+        "per_class_f1": [
+          0.0,
+          0.5185185185185185,
+          0.0
+        ],
+        "confusion_matrix": [
+          [
+            0,
+            38,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            40,
+            0
+          ]
+        ],
+        "latency_ms": 16.618949999610777
+      }
+    },
+    "Text-Only": {
+      "parameters": 69315,
+      "train_time_sec": 7.934993500002747,
+      "clean": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 6.776500000341912
+      },
+      "missing_text": {
+        "accuracy": 0.3333333333333333,
+        "macro_precision": 0.1111111111111111,
+        "macro_recall": 0.3333333333333333,
+        "macro_f1": 0.16666666666666666,
+        "per_class_f1": [
+          0.0,
+          0.0,
+          0.5
+        ],
+        "confusion_matrix": [
+          [
+            0,
+            0,
+            38
+          ],
+          [
+            0,
+            0,
+            42
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 5.750925000029383
+      },
+      "noisy_sensor": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 6.68447499992908
+      },
+      "missing_sensor": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 6.802574999710487
+      }
+    },
+    "Multimodal-Concat": {
+      "parameters": 215811,
+      "train_time_sec": 25.542895500002487,
+      "clean": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 20.653249999668333
+      },
+      "missing_text": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 19.802850000814942
+      },
+      "noisy_sensor": {
+        "accuracy": 0.6583333333333333,
+        "macro_precision": 0.8270042194092827,
+        "macro_recall": 0.6746031746031745,
+        "macro_f1": 0.5653614258265421,
+        "per_class_f1": [
+          0.6495726495726496,
+          0.046511627906976744,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            41,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 20.508199999312637
+      },
+      "missing_sensor": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 20.386799999869254
+      }
+    },
+    "Multimodal-Gated": {
+      "parameters": 219843,
+      "train_time_sec": 44.0456935000002,
+      "clean": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 23.52367499952379
+      },
+      "missing_text": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 22.75237499998184
+      },
+      "noisy_sensor": {
+        "accuracy": 0.6416666666666667,
+        "macro_precision": 0.48971193415637854,
+        "macro_recall": 0.6583333333333333,
+        "macro_f1": 0.5419990781122576,
+        "per_class_f1": [
+          0.638655462184874,
+          0.0,
+          0.9873417721518987
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            42,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            39
+          ]
+        ],
+        "latency_ms": 23.914549999972223
+      },
+      "missing_sensor": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 23.348075000285462
+      }
+    },
+    "Multimodal-CrossAttn": {
+      "parameters": 249347,
+      "train_time_sec": 30.23935630000051,
+      "clean": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 26.4707249998537
+      },
+      "missing_text": {
+        "accuracy": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "per_class_f1": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            0,
+            42,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 30.129849999866565
+      },
+      "noisy_sensor": {
+        "accuracy": 0.65,
+        "macro_precision": 0.4916666666666667,
+        "macro_recall": 0.6666666666666666,
+        "macro_f1": 0.5480225988700566,
+        "per_class_f1": [
+          0.6440677966101694,
+          0.0,
+          1.0
+        ],
+        "confusion_matrix": [
+          [
+            38,
+            0,
+            0
+          ],
+          [
+            42,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 26.21407500009809
+      },
+      "missing_sensor": {
+        "accuracy": 0.5583333333333333,
+        "macro_precision": 0.7383720930232558,
+        "macro_recall": 0.5651629072681704,
+        "macro_f1": 0.507094757094757,
+        "per_class_f1": [
+          0.6363636363636364,
+          0.25,
+          0.6349206349206349
+        ],
+        "confusion_matrix": [
+          [
+            21,
+            0,
+            17
+          ],
+          [
+            7,
+            6,
+            29
+          ],
+          [
+            0,
+            0,
+            40
+          ]
+        ],
+        "latency_ms": 25.866025000141235
+      }
+    }
+  }
+}

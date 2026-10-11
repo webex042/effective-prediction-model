@@ -29,7 +29,7 @@ ROOT_DIR = Path(__file__).resolve().parent
 # Ensure plots folder exists for static web serving
 def sync_plots():
     docs_plots = ROOT_DIR / "docs" / "plots"
-    web_plots = ROOT_DIR / "plots"
+    web_plots = ROOT_DIR / "web" / "plots"
     if docs_plots.exists() and not web_plots.exists():
         try:
             shutil.copytree(docs_plots, web_plots)
@@ -101,14 +101,19 @@ def run_tests():
 def serve_dashboard(port: int = 3000):
     sync_plots()
     from http.server import SimpleHTTPRequestHandler, HTTPServer
-    
-    # Custom handler that supports /api endpoints locally if needed
+    import functools
+
+    # The static frontend lives in web/ (keeps the Vercel "app" service root free
+    # of Python markers). Serve that directory locally so paths match production.
+    web_dir = ROOT_DIR / "web"
+
     class EPMHTTPHandler(SimpleHTTPRequestHandler):
         def end_headers(self):
             self.send_header("Access-Control-Allow-Origin", "*")
             self.send_header("Cache-Control", "no-cache")
             super().end_headers()
 
+    handler_cls = functools.partial(EPMHTTPHandler, directory=str(web_dir))
     server_address = ("", port)
     print_banner()
     print(f"\n[SERVER] Serving EPM Vercel Dashboard at:")
@@ -122,7 +127,7 @@ def serve_dashboard(port: int = 3000):
         pass
 
     try:
-        httpd = HTTPServer(server_address, EPMHTTPHandler)
+        httpd = HTTPServer(server_address, handler_cls)
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("\n[SERVER] Stopped.")

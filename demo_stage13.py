@@ -51,7 +51,7 @@ plt.rcParams.update({
 GRAYS = ["#000000", "#303030", "#777777", "#aaaaaa", "#cccccc"]
 
 PLOTS_DIR = Path("docs/plots/stage13")
-WEB_PLOTS_DIR = Path("plots/stage13")
+WEB_PLOTS_DIR = Path("web/plots/stage13")
 BENCH_DIR = Path("benchmarks")
 DOCS_DIR = Path("docs")
 for d in (PLOTS_DIR, WEB_PLOTS_DIR, BENCH_DIR):

@@ -1,0 +1,38 @@
+{
+  "summary": [
+    {
+      "Model": "Standard-AE",
+      "Latent Dim": 8,
+      "Parameters": 20672,
+      "Train Time (s)": 9.804,
+      "Latency (ms)": 3.18,
+      "Recon MSE": 0.03076,
+      "Recon MAE": 0.11798,
+      "Anomaly AUROC": 1.0
+    },
+    {
+      "Model": "Conditional-VAE",
+      "Latent Dim": 8,
+      "Parameters": 21224,
+      "Train Time (s)": 3.538,
+      "Latency (ms)": 2.43,
+      "Recon MSE": 0.03265,
+      "Recon MAE": 0.12435,
+      "Anomaly AUROC": 1.0
+    },
+    {
+      "Model": "Variational-VAE",
+      "Latent Dim": 8,
+      "Parameters": 20936,
+      "Train Time (s)": 3.441,
+      "Latency (ms)": 2.98,
+      "Recon MSE": 0.16204,
+      "Recon MAE": 0.34906,
+      "Anomaly AUROC": 0.927
+    }
+  ],
+  "numerical_gradient_check": {
+    "max_relative_error": 1.415878945937518e-09,
+    "status": "PASSED"
+  }
+}

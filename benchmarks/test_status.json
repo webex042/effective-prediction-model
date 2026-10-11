@@ -1,0 +1,97 @@
+{
+  "available": true,
+  "collected": 281,
+  "passed": 281,
+  "failed": 0,
+  "skipped": 0,
+  "pass_rate_pct": 100.0,
+  "generated_at": "2026-10-10",
+  "python": "3.13.7",
+  "modules": [
+    {
+      "name": "test_classical_ml.py",
+      "tests": 18,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_compression.py",
+      "tests": 13,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_config.py",
+      "tests": 18,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_diffusion.py",
+      "tests": 12,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_efficiency.py",
+      "tests": 10,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_experiment.py",
+      "tests": 12,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_flow_matching.py",
+      "tests": 13,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_generative.py",
+      "tests": 9,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_math_foundations.py",
+      "tests": 74,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_metrics.py",
+      "tests": 25,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_multimodal.py",
+      "tests": 13,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_neural_networks.py",
+      "tests": 9,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_nlp.py",
+      "tests": 12,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_reproducibility.py",
+      "tests": 7,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_research.py",
+      "tests": 21,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_timeseries.py",
+      "tests": 8,
+      "status": "PASSED"
+    },
+    {
+      "name": "test_timeseries_diffusion.py",
+      "tests": 7,
+      "status": "PASSED"
+    }
+  ]
+}

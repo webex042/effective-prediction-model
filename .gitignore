@@ -50,10 +50,16 @@ models/*
 *.h5
 
 # --- Experiment outputs ---
+# Ignore local run noise, but DO track the structured experiment registry and
+# the benchmark result JSONs so the dashboard/API can serve real data on deploy.
+# (Loose experiments/*.json run-logs stay ignored — they embed local paths.)
 experiments/*
 !experiments/.gitkeep
+!experiments/registry/
+!experiments/registry/*
 benchmarks/*
 !benchmarks/.gitkeep
+!benchmarks/*.json
 
 # --- OS ---
 .DS_Store

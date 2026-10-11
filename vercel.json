@@ -2,8 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "services": {
     "app": {
-      "root": ".",
-      "buildCommand": "echo 'EPM dashboard: static assets, no build step'",
+      "root": "web",
       "outputDirectory": ".",
       "cleanUrls": true
     },

@@ -1,0 +1,62 @@
+[
+  {
+    "model":"Linear Regression",
+    "family":"Classical Baseline",
+    "rmse":2.833,
+    "mae":2.2459,
+    "r2":0.926,
+    "latency_us_per_sample":2.41,
+    "training_time_s":0.0427,
+    "parameters":726
+  },
+  {
+    "model":"Random Forest",
+    "family":"Ensemble Trees",
+    "rmse":6.7187,
+    "mae":4.8346,
+    "r2":0.5835,
+    "latency_us_per_sample":46.29,
+    "training_time_s":3.4615,
+    "parameters":25000
+  },
+  {
+    "model":"XGBoost",
+    "family":"Gradient Boosting",
+    "rmse":7.9698,
+    "mae":5.9271,
+    "r2":0.414,
+    "latency_us_per_sample":21.8,
+    "training_time_s":2.3916,
+    "parameters":18000
+  },
+  {
+    "model":"Transformer",
+    "family":"Self-Attention",
+    "rmse":8.9734,
+    "mae":6.9075,
+    "r2":0.2571,
+    "latency_us_per_sample":55.53,
+    "training_time_s":34.5725,
+    "parameters":17478
+  },
+  {
+    "model":"GRU",
+    "family":"Recurrent (Streamlined Gate)",
+    "rmse":10.3244,
+    "mae":8.8666,
+    "r2":0.0166,
+    "latency_us_per_sample":71.19,
+    "training_time_s":35.9907,
+    "parameters":10278
+  },
+  {
+    "model":"LSTM",
+    "family":"Recurrent (Gated Highway)",
+    "rmse":14.5764,
+    "mae":11.8969,
+    "r2":-0.9603,
+    "latency_us_per_sample":52.11,
+    "training_time_s":13.2459,
+    "parameters":13638
+  }
+]

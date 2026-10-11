@@ -126,7 +126,7 @@ EPM/
 ├── benchmarks/               # Benchmark results (incl. test_status.json, stage13_research.json)
 ├── tests/                    # Unit tests
 ├── docs/                     # Educational documentation + stage13_research_report.md
-├── index.html, app.js, styles.css   # Static monochrome retro dashboard (Vercel + run.py --serve)
+├── web/                      # Static monochrome retro dashboard — index.html, app.js, styles.css, plots/ (Vercel "app" service root)
 └── api/                      # Zero-dependency serverless API serving real artifact data
 ```
 
@@ -180,7 +180,7 @@ vercel
 
 - **Configuration:** [vercel.json](file:///c:/Users/prans/OneDrive/Desktop/Project-1/vercel.json)
 - **Zero-Dependency Serverless Functions:** [api/index.py](file:///c:/Users/prans/OneDrive/Desktop/Project-1/api/index.py)
-- **Interactive Web Dashboard:** [index.html](file:///c:/Users/prans/OneDrive/Desktop/Project-1/index.html) with Vanilla JS client engines and publication figure gallery.
+- **Interactive Web Dashboard:** [web/index.html](web/index.html) with Vanilla JS client engines and publication figure gallery.
 
 
 ---

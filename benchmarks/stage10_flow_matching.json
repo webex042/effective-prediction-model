@@ -1,0 +1,75 @@
+{
+  "summary": [
+    {
+      "Model / Method": "OT-CFM (Euler, 20 steps)",
+      "Paradigm": "Flow Matching (OT)",
+      "Solver / Method": "Euler (1st Order)",
+      "NFE": 20,
+      "Wasserstein-2 (W2)": 0.5982,
+      "Straightness Ratio": 0.991,
+      "NLL (nats)": 1.051,
+      "Latency / Sample": "0.20 ms",
+      "Parameters": "84,738"
+    },
+    {
+      "Model / Method": "OT-CFM (RK4, 5 steps)",
+      "Paradigm": "Flow Matching (OT)",
+      "Solver / Method": "Runge-Kutta 4 (4th Order)",
+      "NFE": 20,
+      "Wasserstein-2 (W2)": 0.5991,
+      "Straightness Ratio": 0.992,
+      "NLL (nats)": 1.051,
+      "Latency / Sample": "0.18 ms",
+      "Parameters": "84,738"
+    },
+    {
+      "Model / Method": "OT-CFM Ultra-Fast (Euler, 5 steps)",
+      "Paradigm": "Flow Matching (OT)",
+      "Solver / Method": "Euler (1st Order)",
+      "NFE": 5,
+      "Wasserstein-2 (W2)": 0.5955,
+      "Straightness Ratio": 0.991,
+      "NLL (nats)": 1.171,
+      "Latency / Sample": "0.04 ms",
+      "Parameters": "84,738"
+    },
+    {
+      "Model / Method": "Gaussian-CFM (Euler, 20 steps)",
+      "Paradigm": "Flow Matching (Standard)",
+      "Solver / Method": "Euler (1st Order)",
+      "NFE": 20,
+      "Wasserstein-2 (W2)": 0.5829,
+      "Straightness Ratio": 0.493,
+      "NLL (nats)": 1.231,
+      "Latency / Sample": "0.18 ms",
+      "Parameters": "84,738"
+    },
+    {
+      "Model / Method": "Accelerated Diffusion (DDIM-20)",
+      "Paradigm": "Score Diffusion (Deterministic)",
+      "Solver / Method": "DDIM Inversion (eta=0.0)",
+      "NFE": 20,
+      "Wasserstein-2 (W2)": 208.4439,
+      "Straightness Ratio": 0.999,
+      "NLL (nats)": "N/A (Bound)",
+      "Latency / Sample": "0.28 ms",
+      "Parameters": "149,154"
+    },
+    {
+      "Model / Method": "Standard Diffusion (DDPM-100)",
+      "Paradigm": "Score Diffusion (Stochastic)",
+      "Solver / Method": "Ancestral Sampling (T=100)",
+      "NFE": 100,
+      "Wasserstein-2 (W2)": 84.1446,
+      "Straightness Ratio": 0.625,
+      "NLL (nats)": "N/A (Bound)",
+      "Latency / Sample": "1.34 ms",
+      "Parameters": "149,154"
+    }
+  ],
+  "eval_samples": 300,
+  "ot_straightness": 0.9909166693687439,
+  "ddim_straightness": 0.9986642599105835,
+  "ddpm_straightness": 0.625432014465332,
+  "exact_nll": 1.0043015480041504
+}

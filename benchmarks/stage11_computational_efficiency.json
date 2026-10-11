@@ -1,0 +1,151 @@
+{
+  "scaling_records": [
+    {
+      "sequence_length": 64,
+      "standard_latency_ms": 0.345,
+      "linear_latency_ms": 0.397,
+      "local_latency_ms": 1.034,
+      "tiled_latency_ms": 0.571,
+      "standard_mem_kb": 128.0,
+      "linear_mem_kb": 40.0,
+      "local_mem_kb": 64.0,
+      "tiled_mem_kb": 48.0,
+      "tiled_numerical_error": 0.0,
+      "linear_speedup_vs_standard": 0.87,
+      "standard_flops": 1048576,
+      "linear_flops": 262144
+    },
+    {
+      "sequence_length": 128,
+      "standard_latency_ms": 0.504,
+      "linear_latency_ms": 0.559,
+      "local_latency_ms": 1.549,
+      "tiled_latency_ms": 1.311,
+      "standard_mem_kb": 512.0,
+      "linear_mem_kb": 72.0,
+      "local_mem_kb": 128.0,
+      "tiled_mem_kb": 80.0,
+      "tiled_numerical_error": 1e-06,
+      "linear_speedup_vs_standard": 0.9,
+      "standard_flops": 4194304,
+      "linear_flops": 524288
+    },
+    {
+      "sequence_length": 256,
+      "standard_latency_ms": 1.16,
+      "linear_latency_ms": 0.9,
+      "local_latency_ms": 2.756,
+      "tiled_latency_ms": 3.499,
+      "standard_mem_kb": 2048.0,
+      "linear_mem_kb": 136.0,
+      "local_mem_kb": 256.0,
+      "tiled_mem_kb": 144.0,
+      "tiled_numerical_error": 0.0,
+      "linear_speedup_vs_standard": 1.29,
+      "standard_flops": 16777216,
+      "linear_flops": 1048576
+    },
+    {
+      "sequence_length": 512,
+      "standard_latency_ms": 6.071,
+      "linear_latency_ms": 0.968,
+      "local_latency_ms": 5.383,
+      "tiled_latency_ms": 9.569,
+      "standard_mem_kb": 8192.0,
+      "linear_mem_kb": 264.0,
+      "local_mem_kb": 512.0,
+      "tiled_mem_kb": 272.0,
+      "tiled_numerical_error": 0.0,
+      "linear_speedup_vs_standard": 6.27,
+      "standard_flops": 67108864,
+      "linear_flops": 2097152
+    },
+    {
+      "sequence_length": 1024,
+      "standard_latency_ms": 33.786,
+      "linear_latency_ms": 1.239,
+      "local_latency_ms": 11.246,
+      "tiled_latency_ms": 32.877,
+      "standard_mem_kb": 32768.0,
+      "linear_mem_kb": 520.0,
+      "local_mem_kb": 1024.0,
+      "tiled_mem_kb": 528.0,
+      "tiled_numerical_error": 0.0,
+      "linear_speedup_vs_standard": 27.27,
+      "standard_flops": 268435456,
+      "linear_flops": 4194304
+    },
+    {
+      "sequence_length": 2048,
+      "standard_latency_ms": 166.538,
+      "linear_latency_ms": 1.736,
+      "local_latency_ms": 27.573,
+      "tiled_latency_ms": 153.619,
+      "standard_mem_kb": 131072.0,
+      "linear_mem_kb": 1032.0,
+      "local_mem_kb": 2048.0,
+      "tiled_mem_kb": 1040.0,
+      "tiled_numerical_error": 0.0,
+      "linear_speedup_vs_standard": 95.96,
+      "standard_flops": 1073741824,
+      "linear_flops": 8388608
+    }
+  ],
+  "downstream_summary": [
+    {
+      "Mechanism": "Standard Attention",
+      "Attn Type": "standard",
+      "Time Complexity": "O(N\u00b2 d)",
+      "Space Complexity": "O(N\u00b2)",
+      "Test RMSE": 0.5453,
+      "Test MAE": 0.4191,
+      "Latency / Sample": "0.403 ms",
+      "Training Time": "5.83 s",
+      "Parameters": "22,092"
+    },
+    {
+      "Mechanism": "Tiled Exact Attention",
+      "Attn Type": "tiled",
+      "Time Complexity": "O(N\u00b2 d)",
+      "Space Complexity": "O(N d)",
+      "Test RMSE": 0.9145,
+      "Test MAE": 0.7655,
+      "Latency / Sample": "0.596 ms",
+      "Training Time": "7.76 s",
+      "Parameters": "22,092"
+    },
+    {
+      "Mechanism": "Kernel Linear Attention",
+      "Attn Type": "linear",
+      "Time Complexity": "O(N d\u00b2)",
+      "Space Complexity": "O(N d)",
+      "Test RMSE": 0.844,
+      "Test MAE": 0.63,
+      "Latency / Sample": "0.190 ms",
+      "Training Time": "4.57 s",
+      "Parameters": "22,092"
+    },
+    {
+      "Mechanism": "Local Window Attention",
+      "Attn Type": "local",
+      "Time Complexity": "O(N w d)",
+      "Space Complexity": "O(N w)",
+      "Test RMSE": 1.3501,
+      "Test MAE": 0.9632,
+      "Latency / Sample": "1.299 ms",
+      "Training Time": "23.21 s",
+      "Parameters": "22,092"
+    }
+  ],
+  "sequence_lengths": [
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "tiled_max_error": 0.0,
+  "max_linear_speedup": 95.96,
+  "peak_memory_savings_at_2048": "127.0x"
+}

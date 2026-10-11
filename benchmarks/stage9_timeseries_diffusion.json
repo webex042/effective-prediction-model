@@ -1,0 +1,53 @@
+{
+  "summary": [
+    {
+      "Model Forecaster": "Linear Autoregressive",
+      "Model Type": "Deterministic Classical",
+      "RMSE (Horizon=12)": 0.445,
+      "MAE": 0.354,
+      "CRPS Score": "N/A (Point)",
+      "90% Coverage (PICP)": "N/A",
+      "Interval Width (MPIW)": "0.00",
+      "Latency / Trajectory": "0.08 ms",
+      "Parameters": "726"
+    },
+    {
+      "Model Forecaster": "Recurrent LSTM Forecaster",
+      "Model Type": "Deterministic Deep RNN",
+      "RMSE (Horizon=12)": 0.374,
+      "MAE": 0.297,
+      "CRPS Score": "N/A (Point)",
+      "90% Coverage (PICP)": "N/A",
+      "Interval Width (MPIW)": "0.00",
+      "Latency / Trajectory": "0.62 ms",
+      "Parameters": "14,320"
+    },
+    {
+      "Model Forecaster": "Temporal Transformer",
+      "Model Type": "Deterministic Attention",
+      "RMSE (Horizon=12)": 0.327,
+      "MAE": 0.263,
+      "CRPS Score": "N/A (Point)",
+      "90% Coverage (PICP)": "N/A",
+      "Interval Width (MPIW)": "0.00",
+      "Latency / Trajectory": "1.15 ms",
+      "Parameters": "17,478"
+    },
+    {
+      "Model Forecaster": "Time-Series Diffusion (DDIM-20)",
+      "Model Type": "Probabilistic Generative",
+      "RMSE (Horizon=12)": 1.52,
+      "MAE": 1.379,
+      "CRPS Score": 1.0777,
+      "90% Coverage (PICP)": "15.4%",
+      "Interval Width (MPIW)": 1.734,
+      "Latency / Trajectory": "2.14 ms",
+      "Parameters": "175,244"
+    }
+  ],
+  "eval_samples": 100,
+  "horizon": 12,
+  "crps": 1.077695608139038,
+  "coverage_80": 0.15416666666666667,
+  "width_80": 1.7337548732757568
+}
