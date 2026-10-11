@@ -1,0 +1,25 @@
+# Keep the "app" (static) service surface clean and the deployment upload small.
+# The "api" service (root: api/) is self-contained (stdlib only) and needs none
+# of these. Experiment artifacts (benchmarks/, experiments/) are produced by
+# local runs and are already git-ignored; the API degrades gracefully without them.
+
+venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+*.pyc
+
+logs/
+models/
+data/raw/
+data/processed/
+notebooks/
+
+src/
+tests/
+docs/
+demo_stage*.py
+run.py
+local_server.py
+*.md
+.claude/

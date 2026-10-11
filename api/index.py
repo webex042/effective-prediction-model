@@ -135,6 +135,114 @@ def build_project_info():
 
     return info
 
+def _matrix_benchmark(dim):
+    """Real pure-Python matrix-multiply micro-benchmark (bounded for responsiveness)."""
+    dim = max(20, min(int(dim), 300))
+    t0 = time.perf_counter()
+    random.seed(42)
+    A = [[random.random() for _ in range(dim)] for _ in range(dim)]
+    B = [[random.random() for _ in range(dim)] for _ in range(dim)]
+    C = [[0.0] * dim for _ in range(dim)]
+    for i in range(dim):
+        row_a = A[i]
+        for k in range(dim):
+            aik = row_a[k]
+            row_b = B[k]
+            for j in range(dim):
+                C[i][j] += aik * row_b[j]
+    elapsed = time.perf_counter() - t0
+    flops = 2 * (dim ** 3)
+    return {
+        "dimension": f"{dim}x{dim}",
+        "elapsed_seconds": round(elapsed, 4),
+        "total_flops": flops,
+        "gflops": round((flops / elapsed) / 1e9, 3) if elapsed > 0 else 0,
+        "sample_val": round(C[0][0], 4),
+    }
+
+
+def _calc_metrics(y_true, y_pred):
+    """Real confusion-matrix classification metrics."""
+    n = len(y_true)
+    tp = sum(1 for a, b in zip(y_true, y_pred) if a == 1 and b == 1)
+    tn = sum(1 for a, b in zip(y_true, y_pred) if a == 0 and b == 0)
+    fp = sum(1 for a, b in zip(y_true, y_pred) if a == 0 and b == 1)
+    fn = sum(1 for a, b in zip(y_true, y_pred) if a == 1 and b == 0)
+    acc = (tp + tn) / n if n else 0
+    prec = tp / (tp + fp) if (tp + fp) else 0
+    rec = tp / (tp + fn) if (tp + fn) else 0
+    f1 = (2 * prec * rec) / (prec + rec) if (prec + rec) else 0
+    return {
+        "accuracy": round(acc, 4), "precision": round(prec, 4),
+        "recall": round(rec, 4), "f1": round(f1, 4),
+        "confusion_matrix": {"tp": tp, "tn": tn, "fp": fp, "fn": fn},
+    }
+
+
+def _parse_query(query_string):
+    out = {}
+    for part in (query_string or "").split("&"):
+        if "=" in part:
+            k, v = part.split("=", 1)
+            out[k] = v
+    return out
+
+def route_request(method, path, query, body):
+    """Shared router used by BOTH the classic `handler` and the WSGI `app`.
+
+    Returns (status_code, payload_dict). Pure routing over the real-data
+    loaders and compute helpers above; no framework dependencies.
+    """
+    raw = (path or "").split("?")[0].rstrip("/")
+    method = (method or "GET").upper()
+
+    if method == "OPTIONS":
+        return 200, {}
+
+    if method == "GET":
+        if raw in ("", "/api", "/api/health"):
+            data = dict(build_project_info())
+            data.update({
+                "server_time": time.time(),
+                "python_runtime": f"Python {sys.version.split()[0]}",
+                "platform": sys.platform,
+            })
+            return 200, data
+        if raw == "/api/benchmarks":
+            return 200, load_all_benchmarks()
+        if raw == "/api/stages":
+            return 200, STAGE_META
+        if raw == "/api/experiments":
+            return 200, load_registry_index()
+        if raw == "/api/experiment":
+            exp_id = query.get("id", "")
+            safe = "".join(c for c in exp_id if c.isalnum() or c in ("_", "-"))
+            rec = _read_json(os.path.join("experiments", "registry", f"{safe}.json"))
+            return (200, rec) if rec is not None else (404, {"error": f"experiment not found: {exp_id}"})
+        if raw == "/api/test-status":
+            return 200, load_test_status()
+        return 404, {"error": f"Endpoint not found: {raw}"}
+
+    if method == "POST":
+        if raw == "/api/benchmark-matrix":
+            return 200, _matrix_benchmark(body.get("dim", 120))
+        if raw == "/api/calculate-metrics":
+            return 200, _calc_metrics(
+                body.get("y_true", [1, 0, 1, 1, 0, 1, 0, 0, 1, 1]),
+                body.get("y_pred", [1, 0, 0, 1, 0, 1, 1, 0, 1, 0]),
+            )
+        if raw in ("/api/run-experiment", "/api/run"):
+            return 501, {
+                "started": False,
+                "reason": "Training is not available on the serverless/service runtime.",
+                "how_to_run": "Run locally: `python demo_stage12.py` or `python demo_stage13.py`; "
+                              "results appear in experiments/registry/.",
+            }
+        return 404, {"error": f"Endpoint not found: {raw}"}
+
+    return 405, {"error": f"Method not allowed: {method}"}
+
+
 class handler(BaseHTTPRequestHandler):
     """Vercel-compatible serverless handler serving real artifact-derived data."""
 
@@ -152,41 +260,10 @@ class handler(BaseHTTPRequestHandler):
         self._send({}, 200)
 
     def do_GET(self):
-        raw = self.path.split("?")[0].rstrip("/")
-        query = {}
-        if "?" in self.path:
-            for part in self.path.split("?", 1)[1].split("&"):
-                if "=" in part:
-                    k, v = part.split("=", 1)
-                    query[k] = v
-
-        if raw in ("", "/api", "/api/health"):
-            data = dict(build_project_info())
-            data.update({
-                "server_time": time.time(),
-                "python_runtime": f"Python {sys.version.split()[0]}",
-                "platform": sys.platform,
-            })
-            self._send(data)
-        elif raw == "/api/benchmarks":
-            self._send(load_all_benchmarks())
-        elif raw == "/api/stages":
-            self._send(STAGE_META)
-        elif raw == "/api/experiments":
-            self._send(load_registry_index())
-        elif raw == "/api/experiment":
-            exp_id = query.get("id", "")
-            # Guard against path traversal; registry ids are timestamp_slug_hash only.
-            safe = "".join(c for c in exp_id if c.isalnum() or c in ("_", "-"))
-            rec = _read_json(os.path.join("experiments", "registry", f"{safe}.json"))
-            if rec is None:
-                self._send({"error": f"experiment not found: {exp_id}"}, 404)
-            else:
-                self._send(rec)
-        elif raw == "/api/test-status":
-            self._send(load_test_status())
-        else:
-            self._send({"error": f"Endpoint not found: {raw}"}, 404)
+        raw = self.path.split("?")[0]
+        qs = self.path.split("?", 1)[1] if "?" in self.path else ""
+        status, payload = route_request("GET", raw, _parse_query(qs), {})
+        self._send(payload, status)
 
     def do_POST(self):
         length = int(self.headers.get("Content-Length", 0))
@@ -195,55 +272,46 @@ class handler(BaseHTTPRequestHandler):
             body = json.loads(raw_body.decode("utf-8")) if raw_body else {}
         except Exception:
             body = {}
-        path = self.path.split("?")[0].rstrip("/")
+        status, payload = route_request("POST", self.path, {}, body)
+        self._send(payload, status)
 
-        if path == "/api/benchmark-matrix":
-            dim = max(20, min(int(body.get("dim", 120)), 300))
-            t0 = time.perf_counter()
-            random.seed(42)
-            A = [[random.random() for _ in range(dim)] for _ in range(dim)]
-            B = [[random.random() for _ in range(dim)] for _ in range(dim)]
-            C = [[0.0] * dim for _ in range(dim)]
-            for i in range(dim):
-                row_a = A[i]
-                for k in range(dim):
-                    aik = row_a[k]
-                    row_b = B[k]
-                    for j in range(dim):
-                        C[i][j] += aik * row_b[j]
-            elapsed = time.perf_counter() - t0
-            flops = 2 * (dim ** 3)
-            self._send({
-                "dimension": f"{dim}x{dim}",
-                "elapsed_seconds": round(elapsed, 4),
-                "total_flops": flops,
-                "gflops": round((flops / elapsed) / 1e9, 3) if elapsed > 0 else 0,
-                "sample_val": round(C[0][0], 4),
-            })
-        elif path == "/api/calculate-metrics":
-            y_true = body.get("y_true", [1, 0, 1, 1, 0, 1, 0, 0, 1, 1])
-            y_pred = body.get("y_pred", [1, 0, 0, 1, 0, 1, 1, 0, 1, 0])
-            n = len(y_true)
-            tp = sum(1 for a, b in zip(y_true, y_pred) if a == 1 and b == 1)
-            tn = sum(1 for a, b in zip(y_true, y_pred) if a == 0 and b == 0)
-            fp = sum(1 for a, b in zip(y_true, y_pred) if a == 0 and b == 1)
-            fn = sum(1 for a, b in zip(y_true, y_pred) if a == 1 and b == 0)
-            acc = (tp + tn) / n if n else 0
-            prec = tp / (tp + fp) if (tp + fp) else 0
-            rec = tp / (tp + fn) if (tp + fn) else 0
-            f1 = (2 * prec * rec) / (prec + rec) if (prec + rec) else 0
-            self._send({
-                "accuracy": round(acc, 4), "precision": round(prec, 4),
-                "recall": round(rec, 4), "f1": round(f1, 4),
-                "confusion_matrix": {"tp": tp, "tn": tn, "fp": fp, "fn": fn},
-            })
-        elif path in ("/api/run-experiment", "/api/run"):
-            # Honest: the serverless runtime cannot train (no torch, read-only, time-limited).
-            self._send({
-                "started": False,
-                "reason": "Training is not available on the serverless runtime.",
-                "how_to_run": "Run experiments locally: `python demo_stage12.py` or "
-                              "`python demo_stage13.py`; results appear in experiments/registry/.",
-            }, 501)
-        else:
-            self._send({"error": f"Endpoint not found: {path}"}, 404)
+
+def app(environ, start_response):
+    """WSGI entrypoint for Vercel Services (service `api`, entrypoint `index:app`).
+
+    Serves the same routes as the classic `handler` via the shared
+    `route_request` dispatcher, so both deployment modes behave identically.
+    """
+    method = environ.get("REQUEST_METHOD", "GET").upper()
+    path = environ.get("PATH_INFO", "/") or "/"
+    query = _parse_query(environ.get("QUERY_STRING", ""))
+
+    body = {}
+    if method == "POST":
+        try:
+            size = int(environ.get("CONTENT_LENGTH") or 0)
+        except (TypeError, ValueError):
+            size = 0
+        if size > 0:
+            raw = environ["wsgi.input"].read(size)
+            try:
+                body = json.loads(raw.decode("utf-8")) if raw else {}
+            except Exception:
+                body = {}
+
+    status, payload = route_request(method, path, query, body)
+    data = json.dumps(payload, indent=2, default=str).encode("utf-8")
+    status_line = {
+        200: "200 OK", 404: "404 Not Found",
+        405: "405 Method Not Allowed", 501: "501 Not Implemented",
+    }.get(status, f"{status} OK")
+    headers = [
+        ("Content-Type", "application/json"),
+        ("Content-Length", str(len(data))),
+        ("Access-Control-Allow-Origin", "*"),
+        ("Access-Control-Allow-Methods", "GET, POST, OPTIONS"),
+        ("Access-Control-Allow-Headers", "Content-Type"),
+        ("Cache-Control", "no-cache, no-store, must-revalidate"),
+    ]
+    start_response(status_line, headers)
+    return [data]
