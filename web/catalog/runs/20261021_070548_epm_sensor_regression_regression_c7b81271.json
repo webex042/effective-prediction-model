@@ -1,0 +1,476 @@
+{
+ "run_id": "20261021_070548_epm_sensor_regression_regression_c7b81271",
+ "created_at": "2026-10-21T07:05:48+00:00",
+ "dataset_id": "epm_sensor_regression",
+ "dataset_name": "EPM Synthetic Sensor Regression",
+ "task": "regression",
+ "dataset": {
+  "source": "Synthetic (src/classical_ml/baselines.py)",
+  "source_url": "src/classical_ml/baselines.py",
+  "license": "Project-generated (MIT, same as EPM)",
+  "n_samples": 1200,
+  "n_features": 5,
+  "numeric_features": 5,
+  "categorical_features": 0,
+  "caveats": [
+   "Synthetic: results do not transfer to real-world data."
+  ],
+  "load_seconds": 0.003,
+  "memory_mb": 0.055
+ },
+ "config": {
+  "dataset_id": "epm_sensor_regression",
+  "task": null,
+  "algorithms": null,
+  "seed": 42,
+  "test_size": 0.2,
+  "val_size": 0.1,
+  "cv_folds": 5,
+  "tune": false,
+  "max_train_rows": null,
+  "allow_large": false,
+  "allow_download": true,
+  "preprocessing": {
+   "impute_numeric": "median",
+   "impute_categorical": "most_frequent",
+   "scale": "auto",
+   "encode_categorical": "onehot",
+   "max_categories": 50,
+   "clip_outliers": false,
+   "clip_quantiles": [
+    0.005,
+    0.995
+   ],
+   "log1p_columns": [],
+   "drop_duplicates": true,
+   "class_weight": "none"
+  },
+  "window": null,
+  "horizon": null,
+  "n_clusters": null,
+  "contamination": null,
+  "epochs": null,
+  "max_algorithms": 16,
+  "save": true,
+  "save_dir": null
+ },
+ "config_hash": "c7b81271",
+ "skipped_algorithms": {},
+ "warnings": [],
+ "models": [
+  {
+   "algorithm": "dummy_reg",
+   "name": "Mean Baseline",
+   "framework": "baseline",
+   "family": "baseline",
+   "cost": "low",
+   "interpretability": "high",
+   "train_time_s": 0.0088,
+   "latency_us_per_sample": 10.927,
+   "model_size_kb": 1.41,
+   "n_parameters": null,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_rmse": 10.509969,
+   "metrics": {
+    "mae": 7.725012,
+    "mse": 87.005919,
+    "rmse": 9.327696,
+    "r2": -0.000222,
+    "median_ae": 7.186518
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 10.087351,
+    "std": 0.337778
+   },
+   "status": "ok",
+   "rank": 11,
+   "pareto_optimal": false,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "linreg_scratch_ne",
+   "name": "Linear Regression (scratch, normal eq.)",
+   "framework": "scratch",
+   "family": "linear",
+   "cost": "low",
+   "interpretability": "high",
+   "train_time_s": 0.01,
+   "latency_us_per_sample": 15.202,
+   "model_size_kb": 2.11,
+   "n_parameters": 6,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "standard scaling"
+   ],
+   "val_rmse": 0.487063,
+   "metrics": {
+    "mae": 0.431041,
+    "mse": 0.303289,
+    "rmse": 0.550717,
+    "r2": 0.996513,
+    "median_ae": 0.344682
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 0.518382,
+    "std": 0.028715
+   },
+   "status": "ok",
+   "rank": 3,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "ols",
+   "name": "Linear Regression (OLS)",
+   "framework": "scikit-learn",
+   "family": "linear",
+   "cost": "low",
+   "interpretability": "high",
+   "train_time_s": 0.0098,
+   "latency_us_per_sample": 15.492,
+   "model_size_kb": 2.03,
+   "n_parameters": 6,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "standard scaling"
+   ],
+   "val_rmse": 0.487063,
+   "metrics": {
+    "mae": 0.431041,
+    "mse": 0.303289,
+    "rmse": 0.550717,
+    "r2": 0.996513,
+    "median_ae": 0.344682
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 0.518382,
+    "std": 0.028715
+   },
+   "status": "ok",
+   "rank": 4,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "ridge",
+   "name": "Ridge Regression (L2)",
+   "framework": "scikit-learn",
+   "family": "linear",
+   "cost": "low",
+   "interpretability": "high",
+   "train_time_s": 0.0063,
+   "latency_us_per_sample": 9.889,
+   "model_size_kb": 1.97,
+   "n_parameters": 6,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "standard scaling"
+   ],
+   "val_rmse": 0.486667,
+   "metrics": {
+    "mae": 0.43044,
+    "mse": 0.301927,
+    "rmse": 0.549479,
+    "r2": 0.996529,
+    "median_ae": 0.346026
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 0.518552,
+    "std": 0.028619
+   },
+   "status": "ok",
+   "rank": 2,
+   "pareto_optimal": true,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "lasso",
+   "name": "Lasso Regression (L1)",
+   "framework": "scikit-learn",
+   "family": "linear",
+   "cost": "low",
+   "interpretability": "high",
+   "train_time_s": 0.0061,
+   "latency_us_per_sample": 15.773,
+   "model_size_kb": 2.05,
+   "n_parameters": 6,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "standard scaling"
+   ],
+   "val_rmse": 0.488713,
+   "metrics": {
+    "mae": 0.430241,
+    "mse": 0.30192,
+    "rmse": 0.549472,
+    "r2": 0.996529,
+    "median_ae": 0.339513
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 0.518773,
+    "std": 0.028962
+   },
+   "status": "ok",
+   "rank": 1,
+   "pareto_optimal": true,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "knn_reg",
+   "name": "KNN Regressor (k=5)",
+   "framework": "scikit-learn",
+   "family": "neighbors",
+   "cost": "low",
+   "interpretability": "medium",
+   "train_time_s": 0.0065,
+   "latency_us_per_sample": 14.91,
+   "model_size_kb": 51.88,
+   "n_parameters": null,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "standard scaling"
+   ],
+   "val_rmse": 2.209385,
+   "metrics": {
+    "mae": 1.476251,
+    "mse": 3.620929,
+    "rmse": 1.902874,
+    "r2": 0.958374,
+    "median_ae": 1.245001
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 2.094793,
+    "std": 0.146041
+   },
+   "status": "ok",
+   "rank": 9,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "dt_reg",
+   "name": "Decision Tree Regressor (depth 8)",
+   "framework": "scikit-learn",
+   "family": "tree",
+   "cost": "low",
+   "interpretability": "high",
+   "train_time_s": 0.0102,
+   "latency_us_per_sample": 15.488,
+   "model_size_kb": 35.67,
+   "n_parameters": 477,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_rmse": 3.692211,
+   "metrics": {
+    "mae": 2.547436,
+    "mse": 10.58635,
+    "rmse": 3.253667,
+    "r2": 0.878299,
+    "median_ae": 2.113829
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 3.802706,
+    "std": 0.116718
+   },
+   "status": "ok",
+   "rank": 10,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "rf_reg",
+   "name": "Random Forest Regressor",
+   "framework": "scikit-learn",
+   "family": "ensemble",
+   "cost": "medium",
+   "interpretability": "low",
+   "train_time_s": 0.5983,
+   "latency_us_per_sample": 103.124,
+   "model_size_kb": 15000.12,
+   "n_parameters": 212596,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_rmse": 1.933343,
+   "metrics": {
+    "mae": 1.451506,
+    "mse": 3.426186,
+    "rmse": 1.850996,
+    "r2": 0.960613,
+    "median_ae": 1.220489
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 2.087868,
+    "std": 0.211715
+   },
+   "status": "ok",
+   "rank": 8,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "svr",
+   "name": "Support Vector Regression (RBF)",
+   "framework": "scikit-learn",
+   "family": "kernel",
+   "cost": "high",
+   "interpretability": "low",
+   "train_time_s": 0.0919,
+   "latency_us_per_sample": 32.37,
+   "model_size_kb": 39.61,
+   "n_parameters": null,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "standard scaling"
+   ],
+   "val_rmse": 0.707662,
+   "metrics": {
+    "mae": 0.531698,
+    "mse": 0.461489,
+    "rmse": 0.67933,
+    "r2": 0.994695,
+    "median_ae": 0.460254
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 0.811553,
+    "std": 0.068341
+   },
+   "status": "ok",
+   "rank": 5,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "gbr",
+   "name": "Gradient Boosting Regressor",
+   "framework": "scikit-learn",
+   "family": "boosting",
+   "cost": "medium",
+   "interpretability": "low",
+   "train_time_s": 0.3379,
+   "latency_us_per_sample": 13.794,
+   "model_size_kb": 267.69,
+   "n_parameters": 2958,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_rmse": 1.194184,
+   "metrics": {
+    "mae": 0.870981,
+    "mse": 1.25149,
+    "rmse": 1.1187,
+    "r2": 0.985613,
+    "median_ae": 0.672151
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 1.348916,
+    "std": 0.11362
+   },
+   "status": "ok",
+   "rank": 6,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "xgb_reg",
+   "name": "XGBoost Regressor",
+   "framework": "xgboost",
+   "family": "boosting",
+   "cost": "medium",
+   "interpretability": "low",
+   "train_time_s": 0.0821,
+   "latency_us_per_sample": 15.433,
+   "model_size_kb": 329.87,
+   "n_parameters": null,
+   "preprocessing": [
+    "median imputation of 5 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_rmse": 1.246537,
+   "metrics": {
+    "mae": 1.003874,
+    "mse": 1.488558,
+    "rmse": 1.220065,
+    "r2": 0.982888,
+    "median_ae": 0.891218
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "folds": 5,
+    "mean": 1.436493,
+    "std": 0.135845
+   },
+   "status": "ok",
+   "rank": 7,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  }
+ ],
+ "split": {
+  "strategy": "random",
+  "n_train": 840,
+  "n_val": 120,
+  "n_test": 240,
+  "duplicates_dropped": 0,
+  "train_subsampled_from": null,
+  "fingerprint": "203c763d0466"
+ },
+ "primary_metric": {
+  "name": "rmse",
+  "goal": "minimise"
+ },
+ "summary": {
+  "best_by_metric": "lasso",
+  "best_value": 0.549472,
+  "fastest_inference": "ridge",
+  "fastest_training": "lasso",
+  "smallest_model": "dummy_reg",
+  "pareto_front": [
+   "lasso",
+   "ridge"
+  ],
+  "latency_note": "latency = batch prediction time / n_test, including the preprocessing pipeline",
+  "note": "Rankings use one test split on one dataset. Weigh accuracy against latency, size, interpretability and CV variance; differences inside the CV std are not meaningful.",
+  "baseline": "dummy_reg"
+ },
+ "status": "completed",
+ "duration_s": 6.565
+}

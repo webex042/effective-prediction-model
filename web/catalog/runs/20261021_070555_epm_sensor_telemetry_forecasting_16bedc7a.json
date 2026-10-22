@@ -1,0 +1,352 @@
+{
+ "run_id": "20261021_070555_epm_sensor_telemetry_forecasting_16bedc7a",
+ "created_at": "2026-10-21T07:05:55+00:00",
+ "dataset_id": "epm_sensor_telemetry",
+ "dataset_name": "EPM Synthetic Sensor Telemetry",
+ "task": "forecasting",
+ "dataset": {
+  "source": "Synthetic (src/timeseries/dataset.py)",
+  "source_url": "src/timeseries/dataset.py",
+  "license": "Project-generated (MIT, same as EPM)",
+  "n_samples": 2000,
+  "n_features": 5,
+  "numeric_features": 5,
+  "categorical_features": 0,
+  "caveats": [
+   "The test segment falls inside the synthetic degradation phase (distribution shift by design)."
+  ],
+  "start": "0",
+  "end": "1999",
+  "load_seconds": 0.006,
+  "memory_mb": 0.092
+ },
+ "config": {
+  "dataset_id": "epm_sensor_telemetry",
+  "task": null,
+  "algorithms": [
+   "naive",
+   "linear_ar",
+   "rf_forecast",
+   "xgb_forecast",
+   "lstm",
+   "gru",
+   "ts_transformer"
+  ],
+  "seed": 42,
+  "test_size": 0.2,
+  "val_size": 0.1,
+  "cv_folds": 3,
+  "tune": false,
+  "max_train_rows": null,
+  "allow_large": false,
+  "allow_download": true,
+  "preprocessing": {
+   "impute_numeric": "median",
+   "impute_categorical": "most_frequent",
+   "scale": "auto",
+   "encode_categorical": "onehot",
+   "max_categories": 50,
+   "clip_outliers": false,
+   "clip_quantiles": [
+    0.005,
+    0.995
+   ],
+   "log1p_columns": [],
+   "drop_duplicates": true,
+   "class_weight": "none"
+  },
+  "window": null,
+  "horizon": null,
+  "n_clusters": null,
+  "contamination": null,
+  "epochs": null,
+  "max_algorithms": 16,
+  "save": true,
+  "save_dir": null
+ },
+ "config_hash": "16bedc7a",
+ "skipped_algorithms": {},
+ "warnings": [],
+ "models": [
+  {
+   "algorithm": "naive",
+   "name": "Naive (persistence)",
+   "framework": "baseline",
+   "family": "baseline",
+   "cost": "low",
+   "interpretability": "high",
+   "status": "ok",
+   "train_time_s": 0.0,
+   "latency_us_per_sample": 0.013,
+   "model_size_kb": 0.1,
+   "n_parameters": null,
+   "metrics": {
+    "mae": 0.365753,
+    "rmse": 0.437389,
+    "smape": 0.654432,
+    "mase": 0.318738,
+    "rmse_per_horizon": [
+     0.437389
+    ],
+    "horizon": 1,
+    "skill_vs_naive": 0.0
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "scheme": "rolling-origin, 3 expanding folds",
+    "mean": 0.442199,
+    "std": 0.012326
+   },
+   "rank": 1,
+   "pareto_optimal": true,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "linear_ar",
+   "name": "Linear AR (Ridge on lag window)",
+   "framework": "scikit-learn",
+   "family": "linear",
+   "cost": "low",
+   "interpretability": "high",
+   "status": "ok",
+   "train_time_s": 0.0055,
+   "latency_us_per_sample": 0.679,
+   "model_size_kb": 1.03,
+   "n_parameters": 121,
+   "metrics": {
+    "mae": 0.734666,
+    "rmse": 0.890023,
+    "smape": 1.257211,
+    "mase": 0.640229,
+    "rmse_per_horizon": [
+     0.890023
+    ],
+    "horizon": 1,
+    "skill_vs_naive": -1.034855
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "scheme": "rolling-origin, 3 expanding folds",
+    "mean": 0.293789,
+    "std": 0.008338
+   },
+   "rank": 2,
+   "pareto_optimal": false,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "rf_forecast",
+   "name": "Random Forest (lag window)",
+   "framework": "scikit-learn",
+   "family": "ensemble",
+   "cost": "medium",
+   "interpretability": "low",
+   "status": "ok",
+   "train_time_s": 5.1923,
+   "latency_us_per_sample": 26.162,
+   "model_size_kb": 11475.55,
+   "n_parameters": 162832,
+   "metrics": {
+    "mae": 2.138035,
+    "rmse": 4.167669,
+    "smape": 3.317109,
+    "mase": 1.863203,
+    "rmse_per_horizon": [
+     4.167669
+    ],
+    "horizon": 1,
+    "skill_vs_naive": -8.528519
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "scheme": "rolling-origin, 3 expanding folds",
+    "mean": 0.318109,
+    "std": 0.034313
+   },
+   "rank": 3,
+   "pareto_optimal": false,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "xgb_forecast",
+   "name": "XGBoost (lag window)",
+   "framework": "xgboost",
+   "family": "boosting",
+   "cost": "medium",
+   "interpretability": "low",
+   "status": "ok",
+   "train_time_s": 1.4063,
+   "latency_us_per_sample": 6.355,
+   "model_size_kb": 317.9,
+   "n_parameters": null,
+   "metrics": {
+    "mae": 2.220149,
+    "rmse": 4.282131,
+    "smape": 3.447925,
+    "mase": 1.934762,
+    "rmse_per_horizon": [
+     4.282131
+    ],
+    "horizon": 1,
+    "skill_vs_naive": -8.790214
+   },
+   "notes": [],
+   "cv": {
+    "metric": "rmse",
+    "scheme": "rolling-origin, 3 expanding folds",
+    "mean": 0.306008,
+    "std": 0.033649
+   },
+   "rank": 4,
+   "pareto_optimal": false,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "lstm",
+   "name": "LSTM (Stage 5)",
+   "framework": "pytorch",
+   "family": "recurrent",
+   "cost": "high",
+   "interpretability": "low",
+   "status": "ok",
+   "train_time_s": 4.7372,
+   "latency_us_per_sample": 17.716,
+   "model_size_kb": 56.0,
+   "n_parameters": 13473,
+   "metrics": {
+    "mae": 4.423764,
+    "rmse": 6.443523,
+    "smape": 7.371441,
+    "mase": 3.855115,
+    "rmse_per_horizon": [
+     6.443523
+    ],
+    "horizon": 1,
+    "skill_vs_naive": -13.731791
+   },
+   "notes": [
+    "rolling-origin CV skipped for neural models (cost); see val loss"
+   ],
+   "best_val_loss": 0.002199,
+   "rank": 7,
+   "pareto_optimal": false,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "gru",
+   "name": "GRU (Stage 5)",
+   "framework": "pytorch",
+   "family": "recurrent",
+   "cost": "high",
+   "interpretability": "low",
+   "status": "ok",
+   "train_time_s": 13.7638,
+   "latency_us_per_sample": 21.016,
+   "model_size_kb": 42.88,
+   "n_parameters": 10113,
+   "metrics": {
+    "mae": 3.02202,
+    "rmse": 4.691058,
+    "smape": 4.854869,
+    "mase": 2.633557,
+    "rmse_per_horizon": [
+     4.691058
+    ],
+    "horizon": 1,
+    "skill_vs_naive": -9.72514
+   },
+   "notes": [
+    "rolling-origin CV skipped for neural models (cost); see val loss"
+   ],
+   "best_val_loss": 0.002142,
+   "rank": 5,
+   "pareto_optimal": false,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "ts_transformer",
+   "name": "Temporal Transformer (Stage 5)",
+   "framework": "pytorch",
+   "family": "attention",
+   "cost": "high",
+   "interpretability": "low",
+   "status": "ok",
+   "train_time_s": 15.1391,
+   "latency_us_per_sample": 39.41,
+   "model_size_kb": 142.18,
+   "n_parameters": 17313,
+   "metrics": {
+    "mae": 4.245651,
+    "rmse": 6.427508,
+    "smape": 6.94783,
+    "mase": 3.699898,
+    "rmse_per_horizon": [
+     6.427508
+    ],
+    "horizon": 1,
+    "skill_vs_naive": -13.695176
+   },
+   "notes": [
+    "rolling-origin CV skipped for neural models (cost); see val loss"
+   ],
+   "best_val_loss": 0.002502,
+   "rank": 6,
+   "pareto_optimal": false,
+   "beats_baseline": false
+  }
+ ],
+ "split": {
+  "strategy": "chronological",
+  "n": 2000,
+  "train_end": 1400,
+  "val_end": 1600,
+  "n_train_windows": 1376,
+  "n_val_windows": 200,
+  "n_test_windows": 400,
+  "window": 24,
+  "horizon": 1,
+  "seasonal_period": 144,
+  "train_period": "0 -> 1399",
+  "test_period": "1600 -> 1999"
+ },
+ "forecast_setup": {
+  "naive_test_rmse": 0.437389,
+  "mase_scale": 1.1475049407969813,
+  "preprocessing": [
+   "chronological split",
+   "causal forward-fill",
+   "per-channel z-score fit on training segment",
+   "windows W=24 -> H=1"
+  ],
+  "channels": [
+   "temperature",
+   "vibration",
+   "pressure",
+   "rpm",
+   "load"
+  ],
+  "target": "temperature"
+ },
+ "primary_metric": {
+  "name": "rmse",
+  "goal": "minimise"
+ },
+ "summary": {
+  "best_by_metric": "naive",
+  "best_value": 0.437389,
+  "fastest_inference": "naive",
+  "fastest_training": "linear_ar",
+  "smallest_model": "naive",
+  "pareto_front": [
+   "naive"
+  ],
+  "latency_note": "latency = batch prediction time / n_test, including the preprocessing pipeline",
+  "note": "Rankings use one test split on one dataset. Weigh accuracy against latency, size, interpretability and CV variance; differences inside the CV std are not meaningful.",
+  "baseline": "naive"
+ },
+ "status": "completed",
+ "duration_s": 55.706
+}

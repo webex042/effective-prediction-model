@@ -1,0 +1,741 @@
+{
+ "run_id": "20261021_070518_iris_classification_e682e225",
+ "created_at": "2026-10-21T07:05:18+00:00",
+ "dataset_id": "iris",
+ "dataset_name": "Iris",
+ "task": "classification",
+ "dataset": {
+  "source": "scikit-learn (bundled; originally UCI id 53)",
+  "source_url": "https://archive.ics.uci.edu/dataset/53/iris",
+  "license": "CC BY 4.0 (UCI); bundled with scikit-learn under BSD-3-Clause",
+  "n_samples": 150,
+  "n_features": 4,
+  "numeric_features": 4,
+  "categorical_features": 0,
+  "caveats": [],
+  "load_seconds": 0.004,
+  "memory_mb": 0.016
+ },
+ "config": {
+  "dataset_id": "iris",
+  "task": null,
+  "algorithms": null,
+  "seed": 42,
+  "test_size": 0.2,
+  "val_size": 0.1,
+  "cv_folds": 5,
+  "tune": false,
+  "max_train_rows": null,
+  "allow_large": false,
+  "allow_download": true,
+  "preprocessing": {
+   "impute_numeric": "median",
+   "impute_categorical": "most_frequent",
+   "scale": "auto",
+   "encode_categorical": "onehot",
+   "max_categories": 50,
+   "clip_outliers": false,
+   "clip_quantiles": [
+    0.005,
+    0.995
+   ],
+   "log1p_columns": [],
+   "drop_duplicates": true,
+   "class_weight": "none"
+  },
+  "window": null,
+  "horizon": null,
+  "n_clusters": null,
+  "contamination": null,
+  "epochs": null,
+  "max_algorithms": 16,
+  "save": true,
+  "save_dir": null
+ },
+ "config_hash": "e682e225",
+ "skipped_algorithms": {},
+ "warnings": [],
+ "models": [
+  {
+   "algorithm": "dummy_clf",
+   "name": "Majority-Class Baseline",
+   "framework": "baseline",
+   "family": "baseline",
+   "cost": "low",
+   "interpretability": "high",
+   "train_time_s": 0.0044,
+   "latency_us_per_sample": 62.645,
+   "model_size_kb": 1.55,
+   "n_parameters": null,
+   "preprocessing": [
+    "median imputation of 4 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_f1": 0.166667,
+   "metrics": {
+    "accuracy": 0.333333,
+    "balanced_accuracy": 0.333333,
+    "precision": 0.111111,
+    "recall": 0.333333,
+    "f1": 0.166667,
+    "f1_weighted": 0.166667,
+    "averaging": "macro over classes",
+    "roc_auc": 0.5,
+    "pr_auc": 0.333333,
+    "auc_averaging": "one-vs-rest, macro",
+    "confusion_matrix": {
+     "labels": [
+      "setosa",
+      "versicolor",
+      "virginica"
+     ],
+     "matrix": [
+      [
+       10,
+       0,
+       0
+      ],
+      [
+       10,
+       0,
+       0
+      ],
+      [
+       10,
+       0,
+       0
+      ]
+     ]
+    }
+   },
+   "notes": [],
+   "cv": {
+    "metric": "f1",
+    "folds": 5,
+    "mean": 0.167902,
+    "std": 0.002469
+   },
+   "status": "ok",
+   "rank": 10,
+   "pareto_optimal": true,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "logreg_scratch",
+   "name": "Logistic Regression (scratch)",
+   "framework": "scratch",
+   "family": "linear",
+   "cost": "low",
+   "interpretability": "high",
+   "train_time_s": 0.1303,
+   "latency_us_per_sample": 79.943,
+   "model_size_kb": 29.13,
+   "n_parameters": 15,
+   "preprocessing": [
+    "median imputation of 4 numeric column(s)",
+    "standard scaling"
+   ],
+   "val_f1": 0.93266,
+   "metrics": {
+    "accuracy": 0.8,
+    "balanced_accuracy": 0.8,
+    "precision": 0.814103,
+    "recall": 0.8,
+    "f1": 0.798881,
+    "f1_weighted": 0.798881,
+    "averaging": "macro over classes",
+    "roc_auc": 0.963333,
+    "pr_auc": 0.941089,
+    "auc_averaging": "one-vs-rest, macro",
+    "confusion_matrix": {
+     "labels": [
+      "setosa",
+      "versicolor",
+      "virginica"
+     ],
+     "matrix": [
+      [
+       9,
+       1,
+       0
+      ],
+      [
+       0,
+       6,
+       4
+      ],
+      [
+       0,
+       1,
+       9
+      ]
+     ]
+    }
+   },
+   "notes": [],
+   "cv": {
+    "metric": "f1",
+    "folds": 5,
+    "mean": 0.93094,
+    "std": 0.067426
+   },
+   "status": "ok",
+   "rank": 9,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "logreg",
+   "name": "Logistic Regression",
+   "framework": "scikit-learn",
+   "family": "linear",
+   "cost": "low",
+   "interpretability": "high",
+   "train_time_s": 0.0099,
+   "latency_us_per_sample": 81.67,
+   "model_size_kb": 2.27,
+   "n_parameters": 15,
+   "preprocessing": [
+    "median imputation of 4 numeric column(s)",
+    "standard scaling"
+   ],
+   "val_f1": 0.866667,
+   "metrics": {
+    "accuracy": 0.933333,
+    "balanced_accuracy": 0.933333,
+    "precision": 0.933333,
+    "recall": 0.933333,
+    "f1": 0.933333,
+    "f1_weighted": 0.933333,
+    "averaging": "macro over classes",
+    "roc_auc": 0.996667,
+    "pr_auc": 0.993939,
+    "auc_averaging": "one-vs-rest, macro",
+    "confusion_matrix": {
+     "labels": [
+      "setosa",
+      "versicolor",
+      "virginica"
+     ],
+     "matrix": [
+      [
+       10,
+       0,
+       0
+      ],
+      [
+       0,
+       9,
+       1
+      ],
+      [
+       0,
+       1,
+       9
+      ]
+     ]
+    }
+   },
+   "notes": [],
+   "cv": {
+    "metric": "f1",
+    "folds": 5,
+    "mean": 0.97035,
+    "std": 0.024269
+   },
+   "status": "ok",
+   "rank": 4,
+   "pareto_optimal": true,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "knn_clf",
+   "name": "KNN Classifier (k=5)",
+   "framework": "scikit-learn",
+   "family": "neighbors",
+   "cost": "low",
+   "interpretability": "medium",
+   "train_time_s": 0.007,
+   "latency_us_per_sample": 119.788,
+   "model_size_kb": 7.75,
+   "n_parameters": null,
+   "preprocessing": [
+    "median imputation of 4 numeric column(s)",
+    "standard scaling"
+   ],
+   "val_f1": 0.866667,
+   "metrics": {
+    "accuracy": 0.966667,
+    "balanced_accuracy": 0.966667,
+    "precision": 0.969697,
+    "recall": 0.966667,
+    "f1": 0.966583,
+    "f1_weighted": 0.966583,
+    "averaging": "macro over classes",
+    "roc_auc": 0.995,
+    "pr_auc": 0.988081,
+    "auc_averaging": "one-vs-rest, macro",
+    "confusion_matrix": {
+     "labels": [
+      "setosa",
+      "versicolor",
+      "virginica"
+     ],
+     "matrix": [
+      [
+       10,
+       0,
+       0
+      ],
+      [
+       0,
+       10,
+       0
+      ],
+      [
+       0,
+       1,
+       9
+      ]
+     ]
+    }
+   },
+   "notes": [],
+   "cv": {
+    "metric": "f1",
+    "folds": 5,
+    "mean": 0.979922,
+    "std": 0.024634
+   },
+   "status": "ok",
+   "rank": 1,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "dt_clf",
+   "name": "Decision Tree (depth 8)",
+   "framework": "scikit-learn",
+   "family": "tree",
+   "cost": "low",
+   "interpretability": "high",
+   "train_time_s": 0.0056,
+   "latency_us_per_sample": 74.32,
+   "model_size_kb": 2.99,
+   "n_parameters": 9,
+   "preprocessing": [
+    "median imputation of 4 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_f1": 0.93266,
+   "metrics": {
+    "accuracy": 0.9,
+    "balanced_accuracy": 0.9,
+    "precision": 0.902357,
+    "recall": 0.9,
+    "f1": 0.899749,
+    "f1_weighted": 0.899749,
+    "averaging": "macro over classes",
+    "roc_auc": 0.925,
+    "pr_auc": 0.849158,
+    "auc_averaging": "one-vs-rest, macro",
+    "confusion_matrix": {
+     "labels": [
+      "setosa",
+      "versicolor",
+      "virginica"
+     ],
+     "matrix": [
+      [
+       10,
+       0,
+       0
+      ],
+      [
+       0,
+       9,
+       1
+      ],
+      [
+       0,
+       2,
+       8
+      ]
+     ]
+    }
+   },
+   "notes": [],
+   "cv": {
+    "metric": "f1",
+    "folds": 5,
+    "mean": 0.97035,
+    "std": 0.024269
+   },
+   "status": "ok",
+   "rank": 8,
+   "pareto_optimal": true,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "rf_clf",
+   "name": "Random Forest",
+   "framework": "scikit-learn",
+   "family": "ensemble",
+   "cost": "medium",
+   "interpretability": "low",
+   "train_time_s": 0.2385,
+   "latency_us_per_sample": 510.886,
+   "model_size_kb": 244.79,
+   "n_parameters": 2114,
+   "preprocessing": [
+    "median imputation of 4 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_f1": 0.866667,
+   "metrics": {
+    "accuracy": 0.933333,
+    "balanced_accuracy": 0.933333,
+    "precision": 0.933333,
+    "recall": 0.933333,
+    "f1": 0.933333,
+    "f1_weighted": 0.933333,
+    "averaging": "macro over classes",
+    "roc_auc": 0.986667,
+    "pr_auc": 0.978822,
+    "auc_averaging": "one-vs-rest, macro",
+    "confusion_matrix": {
+     "labels": [
+      "setosa",
+      "versicolor",
+      "virginica"
+     ],
+     "matrix": [
+      [
+       10,
+       0,
+       0
+      ],
+      [
+       0,
+       9,
+       1
+      ],
+      [
+       0,
+       1,
+       9
+      ]
+     ]
+    }
+   },
+   "notes": [],
+   "cv": {
+    "metric": "f1",
+    "folds": 5,
+    "mean": 0.97035,
+    "std": 0.024269
+   },
+   "status": "ok",
+   "rank": 5,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "svc",
+   "name": "Support Vector Machine (RBF)",
+   "framework": "scikit-learn",
+   "family": "kernel",
+   "cost": "high",
+   "interpretability": "low",
+   "train_time_s": 0.0112,
+   "latency_us_per_sample": 118.29,
+   "model_size_kb": 4.74,
+   "n_parameters": null,
+   "preprocessing": [
+    "median imputation of 4 numeric column(s)",
+    "standard scaling"
+   ],
+   "val_f1": 0.866667,
+   "metrics": {
+    "accuracy": 0.966667,
+    "balanced_accuracy": 0.966667,
+    "precision": 0.969697,
+    "recall": 0.966667,
+    "f1": 0.966583,
+    "f1_weighted": 0.966583,
+    "averaging": "macro over classes",
+    "roc_auc": 0.998333,
+    "pr_auc": 0.99697,
+    "auc_averaging": "one-vs-rest, macro",
+    "confusion_matrix": {
+     "labels": [
+      "setosa",
+      "versicolor",
+      "virginica"
+     ],
+     "matrix": [
+      [
+       10,
+       0,
+       0
+      ],
+      [
+       0,
+       9,
+       1
+      ],
+      [
+       0,
+       0,
+       10
+      ]
+     ]
+    }
+   },
+   "notes": [],
+   "cv": {
+    "metric": "f1",
+    "folds": 5,
+    "mean": 0.97035,
+    "std": 0.024269
+   },
+   "status": "ok",
+   "rank": 2,
+   "pareto_optimal": true,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "gnb",
+   "name": "Gaussian Naive Bayes",
+   "framework": "scikit-learn",
+   "family": "probabilistic",
+   "cost": "low",
+   "interpretability": "medium",
+   "train_time_s": 0.0082,
+   "latency_us_per_sample": 121.35,
+   "model_size_kb": 1.88,
+   "n_parameters": null,
+   "preprocessing": [
+    "median imputation of 4 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_f1": 0.93266,
+   "metrics": {
+    "accuracy": 0.966667,
+    "balanced_accuracy": 0.966667,
+    "precision": 0.969697,
+    "recall": 0.966667,
+    "f1": 0.966583,
+    "f1_weighted": 0.966583,
+    "averaging": "macro over classes",
+    "roc_auc": 0.99,
+    "pr_auc": 0.98224,
+    "auc_averaging": "one-vs-rest, macro",
+    "confusion_matrix": {
+     "labels": [
+      "setosa",
+      "versicolor",
+      "virginica"
+     ],
+     "matrix": [
+      [
+       10,
+       0,
+       0
+      ],
+      [
+       0,
+       9,
+       1
+      ],
+      [
+       0,
+       0,
+       10
+      ]
+     ]
+    }
+   },
+   "notes": [],
+   "cv": {
+    "metric": "f1",
+    "folds": 5,
+    "mean": 0.97035,
+    "std": 0.024269
+   },
+   "status": "ok",
+   "rank": 3,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "gb_clf",
+   "name": "Gradient Boosting",
+   "framework": "scikit-learn",
+   "family": "boosting",
+   "cost": "medium",
+   "interpretability": "low",
+   "train_time_s": 0.2773,
+   "latency_us_per_sample": 108.456,
+   "model_size_kb": 431.72,
+   "n_parameters": 4406,
+   "preprocessing": [
+    "median imputation of 4 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_f1": 0.79798,
+   "metrics": {
+    "accuracy": 0.933333,
+    "balanced_accuracy": 0.933333,
+    "precision": 0.933333,
+    "recall": 0.933333,
+    "f1": 0.933333,
+    "f1_weighted": 0.933333,
+    "averaging": "macro over classes",
+    "roc_auc": 0.954167,
+    "pr_auc": 0.941019,
+    "auc_averaging": "one-vs-rest, macro",
+    "confusion_matrix": {
+     "labels": [
+      "setosa",
+      "versicolor",
+      "virginica"
+     ],
+     "matrix": [
+      [
+       10,
+       0,
+       0
+      ],
+      [
+       0,
+       9,
+       1
+      ],
+      [
+       0,
+       1,
+       9
+      ]
+     ]
+    }
+   },
+   "notes": [],
+   "cv": {
+    "metric": "f1",
+    "folds": 5,
+    "mean": 0.960777,
+    "std": 0.019694
+   },
+   "status": "ok",
+   "rank": 6,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  },
+  {
+   "algorithm": "xgb_clf",
+   "name": "XGBoost Classifier",
+   "framework": "xgboost",
+   "family": "boosting",
+   "cost": "medium",
+   "interpretability": "low",
+   "train_time_s": 0.0366,
+   "latency_us_per_sample": 99.952,
+   "model_size_kb": 454.2,
+   "n_parameters": null,
+   "preprocessing": [
+    "median imputation of 4 numeric column(s)",
+    "no scaling (model is scale-invariant)"
+   ],
+   "val_f1": 0.866667,
+   "metrics": {
+    "accuracy": 0.933333,
+    "balanced_accuracy": 0.933333,
+    "precision": 0.933333,
+    "recall": 0.933333,
+    "f1": 0.933333,
+    "f1_weighted": 0.933333,
+    "averaging": "macro over classes",
+    "roc_auc": 0.961667,
+    "pr_auc": 0.92438,
+    "auc_averaging": "one-vs-rest, macro",
+    "confusion_matrix": {
+     "labels": [
+      "setosa",
+      "versicolor",
+      "virginica"
+     ],
+     "matrix": [
+      [
+       10,
+       0,
+       0
+      ],
+      [
+       0,
+       9,
+       1
+      ],
+      [
+       0,
+       1,
+       9
+      ]
+     ]
+    }
+   },
+   "notes": [],
+   "cv": {
+    "metric": "f1",
+    "folds": 5,
+    "mean": 0.950905,
+    "std": 0.030794
+   },
+   "status": "ok",
+   "rank": 7,
+   "pareto_optimal": false,
+   "beats_baseline": true
+  }
+ ],
+ "split": {
+  "strategy": "stratified",
+  "n_train": 104,
+  "n_val": 15,
+  "n_test": 30,
+  "duplicates_dropped": 1,
+  "train_subsampled_from": null,
+  "fingerprint": "5abf58fbaca5"
+ },
+ "class_labels": [
+  "setosa",
+  "versicolor",
+  "virginica"
+ ],
+ "class_balance_train": {
+  "setosa": 0.3365,
+  "versicolor": 0.3365,
+  "virginica": 0.3269
+ },
+ "primary_metric": {
+  "name": "f1",
+  "goal": "maximise"
+ },
+ "summary": {
+  "best_by_metric": "knn_clf",
+  "best_value": 0.966583,
+  "fastest_inference": "dummy_clf",
+  "fastest_training": "dummy_clf",
+  "smallest_model": "dummy_clf",
+  "pareto_front": [
+   "svc",
+   "logreg",
+   "dt_clf",
+   "dummy_clf"
+  ],
+  "latency_note": "latency = batch prediction time / n_test, including the preprocessing pipeline",
+  "note": "Rankings use one test split on one dataset. Weigh accuracy against latency, size, interpretability and CV variance; differences inside the CV std are not meaningful.",
+  "baseline": "dummy_clf"
+ },
+ "status": "completed",
+ "duration_s": 5.926
+}

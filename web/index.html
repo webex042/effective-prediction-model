@@ -27,7 +27,7 @@
         <span class="status-text">EPM LAB ARCHIVE // STAGES 0–13 OPERATIONAL // VERIFIED DETERMINISTIC SEED 42</span>
       </div>
       <div class="status-right">
-        <span>PYTEST: 281/281 PASSED</span>
+        <span>PYTEST: 502/502 PASSED</span>
         <span class="sep">|</span>
         <span>GRAD CHECK: 1.42e-09 ERR</span>
         <span class="sep">|</span>
@@ -52,6 +52,8 @@
         <a href="#methodology" class="nav-item" id="nav-methodology">Methodology</a>
         <a href="#stages" class="nav-item" id="nav-stages">Stages</a>
         <a href="#workbench" class="nav-item" id="nav-workbench">Lab Workbench</a>
+        <a href="#datalab" class="nav-item" id="nav-datalab">Experiment Lab</a>
+        <a href="#chat" class="nav-item" id="nav-chat">Chat</a>
         <a href="#results" class="nav-item" id="nav-results">Leaderboards</a>
         <a href="#figures" class="nav-item" id="nav-figures">Figures</a>
         <a href="#verification" class="nav-item" id="nav-verification">Verification</a>
@@ -133,8 +135,8 @@
               <tbody>
                 <tr>
                   <td><strong>Unit Test Suite</strong></td>
-                  <td>281 / 281 Passing (100%)</td>
-                  <td>PyTest automated suite across 17 modules</td>
+                  <td>502 / 502 Passing (100%)</td>
+                  <td>PyTest automated suite across 23 modules</td>
                   <td><span class="tag-verified">PASSED</span></td>
                 </tr>
                 <tr>
@@ -493,6 +495,134 @@
     </article>
 
     <!-- =========================================================================
+         4b. EXPERIMENT LAB — DATASET CATALOGUE × ALGORITHM BENCHMARKING
+         (web/datalab.js; local API via `python run.py --serve`, static catalogue otherwise)
+         ========================================================================= -->
+    <article class="paper-window" id="datalab">
+      <div class="window-topbar">
+        <div class="window-identity">
+          <span class="window-dot">■</span>
+          <span class="window-filename">EXPERIMENT_LAB_DATASETS_X_ALGORITHMS.EXE</span>
+        </div>
+        <div class="window-actions">
+          <span class="win-btn">_</span>
+          <span class="win-btn">□</span>
+          <span class="win-btn win-close">✕</span>
+        </div>
+      </div>
+
+      <div class="paper-body">
+        <div class="leaderboard-header-row">
+          <div>
+            <h2 class="section-title">Experiment Lab: Datasets × Algorithms</h2>
+            <p class="section-intro">
+              Pick a task, choose a documented public dataset, select compatible algorithms and run a fair benchmark:
+              one shared split and seed, preprocessing fitted on training data only, task-specific metrics, latency and model size.
+            </p>
+          </div>
+          <span class="dl-mode-pill" id="dl-mode">CONNECTING…</span>
+        </div>
+
+        <div class="dl-notice" id="dl-notice" hidden></div>
+
+        <div class="dl-step"><span class="dl-step-num">1</span> TASK</div>
+        <div class="leaderboard-tabs-bar dl-tabs" id="dl-task-tabs" role="tablist"></div>
+
+        <div class="dl-step"><span class="dl-step-num">2</span> DATASET</div>
+        <div class="interactive-controls-bar dl-finder">
+          <div class="control-group">
+            <label for="dl-budget">Ordering</label>
+            <select class="ctrl-select" id="dl-budget">
+              <option value="quick">Quick experiments first (small)</option>
+              <option value="realistic">Realistic benchmarks first (large)</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="dl-algo-finder">Find datasets for an algorithm</label>
+            <select class="ctrl-select" id="dl-algo-finder"></select>
+          </div>
+          <div class="control-group dl-finder-out-wrap"><label>&nbsp;</label><div id="dl-finder-out" class="dl-small"></div></div>
+        </div>
+        <div class="dl-grid">
+          <div class="data-table-wrap dl-scroll">
+            <table class="research-data-table dl-catalog">
+              <thead><tr><th>DATASET</th><th>SOURCE</th><th>ROWS</th><th>FEAT.</th><th>SIZE</th><th>STATUS</th></tr></thead>
+              <tbody id="dl-dataset-tbody"></tbody>
+            </table>
+          </div>
+          <div class="dl-detail" id="dl-detail"></div>
+        </div>
+
+        <details class="dl-upload">
+          <summary>UPLOAD YOUR OWN CSV (LOCAL SERVER ONLY)</summary>
+          <div class="interactive-controls-bar">
+            <div class="control-group"><label for="dl-up-file">CSV file (≤ 20 MB, UTF-8)</label><input type="file" id="dl-up-file" accept=".csv,text/csv" class="ctrl-select"></div>
+            <div class="control-group"><label for="dl-up-task">Task</label>
+              <select class="ctrl-select" id="dl-up-task">
+                <option value="classification">classification</option><option value="regression">regression</option>
+                <option value="clustering">clustering</option><option value="forecasting">forecasting</option>
+                <option value="anomaly_detection">anomaly detection</option>
+              </select></div>
+            <div class="control-group"><label for="dl-up-target">Target / label column</label><input class="ctrl-select" id="dl-up-target" placeholder="e.g. price"></div>
+            <div class="control-group"><label for="dl-up-time">Time column (forecasting)</label><input class="ctrl-select" id="dl-up-time" placeholder="e.g. timestamp"></div>
+            <div class="control-actions"><button class="ctrl-btn" id="dl-up-btn">VALIDATE &amp; ADD</button></div>
+          </div>
+          <div id="dl-up-out" class="dl-small"></div>
+        </details>
+
+        <div class="dl-step"><span class="dl-step-num">3</span> ALGORITHMS
+          <span class="dl-step-actions">
+            <button class="ctrl-btn" id="dl-sel-rec">RECOMMENDED</button>
+            <button class="ctrl-btn" id="dl-sel-all">ALL COMPATIBLE</button>
+            <button class="ctrl-btn" id="dl-sel-none">NONE</button>
+          </span>
+        </div>
+        <div class="dl-algos" id="dl-algos"></div>
+
+        <div class="dl-step"><span class="dl-step-num">4</span> CONFIGURATION</div>
+        <div class="interactive-controls-bar dl-config">
+          <div class="control-group"><label for="dl-seed">Seed</label><input class="ctrl-select" id="dl-seed" type="number" value="42"></div>
+          <div class="control-group"><label for="dl-test">Test fraction</label><input class="ctrl-select" id="dl-test" type="number" step="0.05" min="0.1" max="0.5" value="0.2"></div>
+          <div class="control-group"><label for="dl-val">Validation fraction</label><input class="ctrl-select" id="dl-val" type="number" step="0.05" min="0" max="0.3" value="0.1"></div>
+          <div class="control-group"><label for="dl-cv">CV folds (0 = off)</label><input class="ctrl-select" id="dl-cv" type="number" min="0" max="10" value="0"></div>
+          <div class="control-group"><label for="dl-max-rows">Max train rows (resource limit)</label><input class="ctrl-select" id="dl-max-rows" type="number" min="50" placeholder="no limit"></div>
+          <div class="control-group"><label for="dl-epochs">Epochs (neural models)</label><input class="ctrl-select" id="dl-epochs" type="number" min="1" max="300" placeholder="default"></div>
+          <div class="control-group"><label for="dl-scale">Scaling</label>
+            <select class="ctrl-select" id="dl-scale"><option value="auto">auto (scale-sensitive models only)</option><option value="always">always</option><option value="never">never</option></select></div>
+          <div class="control-group"><label for="dl-classweight">Class imbalance</label>
+            <select class="ctrl-select" id="dl-classweight"><option value="none">no reweighting</option><option value="balanced">class_weight = balanced</option></select></div>
+          <div class="control-group"><label for="dl-window">Lookback window</label><input class="ctrl-select" id="dl-window" type="number" min="1" max="512"></div>
+          <div class="control-group"><label for="dl-horizon">Forecast horizon</label><input class="ctrl-select" id="dl-horizon" type="number" min="1" max="96"></div>
+          <div class="control-group"><label for="dl-nclusters">Clusters (k)</label><input class="ctrl-select" id="dl-nclusters" type="number" min="2" max="50"></div>
+          <div class="control-group"><label for="dl-contamination">Contamination prior</label><input class="ctrl-select" id="dl-contamination" type="number" step="0.01" min="0.001" max="0.49"></div>
+          <div class="control-group dl-checks">
+            <label><input type="checkbox" id="dl-dedup" checked> Drop duplicate rows</label>
+            <label><input type="checkbox" id="dl-clip"> Winsorise outliers (train quantiles)</label>
+            <label><input type="checkbox" id="dl-tune"> Small grid search (train split, 3-fold)</label>
+            <label><input type="checkbox" id="dl-allow-large"> Allow large datasets</label>
+          </div>
+        </div>
+        <div class="dl-run-row">
+          <button class="audit-btn" id="dl-run" disabled>RUN BENCHMARK [▶]</button>
+          <span class="audit-note" id="dl-run-hint"></span>
+        </div>
+        <div class="dl-progress" id="dl-progress" hidden></div>
+
+        <div class="dl-step"><span class="dl-step-num">5</span> RESULTS</div>
+        <div id="dl-results"><p class="dl-empty">Run a benchmark or open a previous run below.</p></div>
+
+        <div class="dl-step"><span class="dl-step-num">6</span> EXPERIMENT HISTORY</div>
+        <div id="dl-history"></div>
+      </div>
+
+      <div class="window-footer-bar">
+        <span>REGISTRY: SRC/DATA/REGISTRY.PY</span>
+        <span>RUNS: EXPERIMENTS/BENCHMARKS/</span>
+        <span>LEAKAGE GUARD: FIT ON TRAIN ONLY</span>
+      </div>
+    </article>
+
+    <!-- =========================================================================
          5. RESULTS & LEADERBOARDS
          ========================================================================= -->
     <article class="paper-window" id="results">
@@ -604,11 +734,11 @@
           <div>
             <h2 class="section-title">Automated Verification Suite</h2>
             <p class="section-intro">
-              281 unit tests verifying mathematical derivations, gradient checks, exact PyTorch parity, temporal non-leakage, diffusion score matching, flow matching CNF divergence, linear attention complexity, model compression distillation &amp; quantization, and the Stage 13 research pipeline (leakage-free splits, metrics, registry, reproducibility).
+              502 unit tests verifying mathematical derivations, gradient checks, exact PyTorch parity, temporal non-leakage, diffusion score matching, flow matching CNF divergence, linear attention complexity, model compression distillation &amp; quantization, the Stage 13 research pipeline (leakage-free splits, metrics, registry, reproducibility), the dataset registry &amp; benchmark runner (downloads, schema validation, leakage guards, compatibility, API), and the plain-English experiment chatbot.
             </p>
           </div>
           <div class="audit-summary-pill">
-            <span class="audit-count">281 / 281 PASSING</span>
+            <span class="audit-count">502 / 502 PASSING</span>
             <span class="audit-rate">100% COVERAGE RATE</span>
           </div>
         </div>
@@ -624,7 +754,7 @@
       </div>
 
       <div class="window-footer-bar">
-        <span>COVERAGE: 17 TEST MODULES</span>
+        <span>COVERAGE: 23 TEST MODULES</span>
         <span>RUNTIME DURATION: 11.12s</span>
         <span>FAILURES: 0</span>
       </div>
@@ -666,6 +796,28 @@
     </div>
   </footer>
 
+  <!-- EPM Chat (web/chatbot.js) — floating terminal assistant, local server only -->
+  <button class="chat-launcher" id="chat-launcher" type="button" aria-controls="chat-panel" aria-expanded="false"
+          title="Open EPM chat">EPM&gt;_ CHAT</button>
+  <aside class="chat-panel" id="chat-panel" hidden aria-label="EPM chat assistant">
+    <div class="chat-head">
+      <span class="chat-title">EPM CHAT // SESSION <span id="chat-session">NEW</span></span>
+      <span class="chat-mode" id="chat-mode">…</span>
+      <span class="chat-state" id="chat-state">IDLE</span>
+      <button class="chat-close" id="chat-close" type="button" aria-label="Close chat">✕</button>
+    </div>
+    <div class="chat-log" id="chat-log" role="log" aria-live="polite"></div>
+    <div class="chat-suggestions" id="chat-suggestions"></div>
+    <form class="chat-form" id="chat-form" autocomplete="off">
+      <span class="chat-prompt" aria-hidden="true">&gt;</span>
+      <input class="chat-input" id="chat-input" maxlength="1000" placeholder="classify iris with random forest"
+             aria-label="Message to EPM">
+      <button class="chat-send" id="chat-send" type="submit">SEND</button>
+    </form>
+  </aside>
+
   <script src="app.js"></script>
+  <script src="datalab.js"></script>
+  <script src="chatbot.js"></script>
 </body>
 </html>

@@ -28,11 +28,17 @@ data/
 4. **Large files stay out of git.** The `.gitignore` excludes data files.
    Document download instructions here instead.
 
-## Datasets (to be added per stage)
+## Datasets
 
-| Stage | Dataset | Type | Source | Status |
-|-------|---------|------|--------|--------|
-| 2 | TBD | Tabular | — | ⏳ |
-| 4 | TBD | Text | — | ⏳ |
-| 5 | TBD | Time-series (sensor) | — | ⏳ |
-| 6 | TBD | Multimodal | — | ⏳ |
+All datasets are declared in `src/data/registry.py` (source, licence, schema, task, metrics).
+Downloads are cached under `data/raw/<dataset_id>/` with a `manifest.json` that holds the SHA-256, the URL and the download time.
+Derived caches go in `data/processed/`, scikit-learn/OpenML caches in `data/raw/sklearn/`, and user uploads in `data/raw/uploads/`.
+None of these are committed.
+
+See `docs/15_datasets_and_benchmarking.md` for the full table, the compatibility matrix and verification status.
+To download and verify everything:
+
+```bash
+python run.py --verify-datasets            # writes data/verification_report.json
+python run.py --verify-datasets --allow-large
+```

@@ -1,0 +1,205 @@
+{
+ "run_id": "20261021_070838_iris_clustering_5d6782c0",
+ "created_at": "2026-10-21T07:08:38+00:00",
+ "dataset_id": "iris",
+ "dataset_name": "Iris",
+ "task": "clustering",
+ "dataset": {
+  "source": "scikit-learn (bundled; originally UCI id 53)",
+  "source_url": "https://archive.ics.uci.edu/dataset/53/iris",
+  "license": "CC BY 4.0 (UCI); bundled with scikit-learn under BSD-3-Clause",
+  "n_samples": 150,
+  "n_features": 4,
+  "numeric_features": 4,
+  "categorical_features": 0,
+  "caveats": [],
+  "load_seconds": 0.009,
+  "memory_mb": 0.016
+ },
+ "config": {
+  "dataset_id": "iris",
+  "task": "clustering",
+  "algorithms": null,
+  "seed": 42,
+  "test_size": 0.2,
+  "val_size": 0.1,
+  "cv_folds": 0,
+  "tune": false,
+  "max_train_rows": null,
+  "allow_large": false,
+  "allow_download": true,
+  "preprocessing": {
+   "impute_numeric": "median",
+   "impute_categorical": "most_frequent",
+   "scale": "auto",
+   "encode_categorical": "onehot",
+   "max_categories": 50,
+   "clip_outliers": false,
+   "clip_quantiles": [
+    0.005,
+    0.995
+   ],
+   "log1p_columns": [],
+   "drop_duplicates": true,
+   "class_weight": "none"
+  },
+  "window": null,
+  "horizon": null,
+  "n_clusters": null,
+  "contamination": null,
+  "epochs": null,
+  "max_algorithms": 16,
+  "save": true,
+  "save_dir": null
+ },
+ "config_hash": "5d6782c0",
+ "skipped_algorithms": {},
+ "warnings": [
+  "DBSCAN's internal indices are computed without its noise points, which can flatter it; compare noise_fraction and the external ARI/NMI before preferring it."
+ ],
+ "models": [
+  {
+   "algorithm": "kmeans",
+   "name": "K-Means",
+   "framework": "scikit-learn",
+   "family": "centroid",
+   "cost": "low",
+   "interpretability": "high",
+   "status": "ok",
+   "train_time_s": 0.0173,
+   "latency_us_per_sample": 2.337,
+   "model_size_kb": 1.26,
+   "n_parameters": 12,
+   "metrics": {
+    "n_clusters": 3,
+    "noise_fraction": 0.0,
+    "silhouette": 0.460681,
+    "davies_bouldin": 0.831897,
+    "calinski_harabasz": 240.528898,
+    "ari_external": 0.630327,
+    "nmi_external": 0.66537
+   },
+   "notes": [
+    "ARI/NMI use held-out reference labels for evaluation only (never for fitting)"
+   ],
+   "rank": 2,
+   "pareto_optimal": true
+  },
+  {
+   "algorithm": "agglomerative",
+   "name": "Agglomerative (Ward)",
+   "framework": "scikit-learn",
+   "family": "hierarchical",
+   "cost": "medium",
+   "interpretability": "medium",
+   "status": "ok",
+   "train_time_s": 0.0018,
+   "latency_us_per_sample": null,
+   "model_size_kb": 3.99,
+   "n_parameters": null,
+   "metrics": {
+    "n_clusters": 3,
+    "noise_fraction": 0.0,
+    "silhouette": 0.449816,
+    "davies_bouldin": 0.798911,
+    "calinski_harabasz": 222.827179,
+    "ari_external": 0.61471,
+    "nmi_external": 0.674948
+   },
+   "notes": [
+    "ARI/NMI use held-out reference labels for evaluation only (never for fitting)",
+    "no out-of-sample predict(): latency not applicable"
+   ],
+   "rank": 3
+  },
+  {
+   "algorithm": "gmm",
+   "name": "Gaussian Mixture Model",
+   "framework": "scikit-learn",
+   "family": "probabilistic",
+   "cost": "medium",
+   "interpretability": "medium",
+   "status": "ok",
+   "train_time_s": 0.0562,
+   "latency_us_per_sample": 2.634,
+   "model_size_kb": 2.25,
+   "n_parameters": null,
+   "metrics": {
+    "n_clusters": 3,
+    "noise_fraction": 0.0,
+    "silhouette": 0.377605,
+    "davies_bouldin": 1.070934,
+    "calinski_harabasz": 187.640297,
+    "ari_external": 0.903569,
+    "nmi_external": 0.899339
+   },
+   "notes": [
+    "ARI/NMI use held-out reference labels for evaluation only (never for fitting)"
+   ],
+   "rank": 4,
+   "pareto_optimal": false
+  },
+  {
+   "algorithm": "dbscan",
+   "name": "DBSCAN",
+   "framework": "scikit-learn",
+   "family": "density",
+   "cost": "medium",
+   "interpretability": "medium",
+   "status": "ok",
+   "train_time_s": 0.0026,
+   "latency_us_per_sample": null,
+   "model_size_kb": 7.13,
+   "n_parameters": null,
+   "metrics": {
+    "n_clusters": 2,
+    "noise_fraction": 0.026846,
+    "silhouette": 0.597253,
+    "davies_bouldin": 0.570228,
+    "calinski_harabasz": 275.377835,
+    "ari_external": 0.554672,
+    "nmi_external": 0.691122
+   },
+   "notes": [
+    "4 noise points (label -1) excluded from internal indices",
+    "ARI/NMI use held-out reference labels for evaluation only (never for fitting)",
+    "no out-of-sample predict(): latency not applicable"
+   ],
+   "rank": 1
+  }
+ ],
+ "split": {
+  "strategy": "transductive (all rows clustered; labels held out)",
+  "n_rows": 149,
+  "duplicates_dropped": 1,
+  "subsampled_from": null
+ },
+ "clustering_setup": {
+  "n_clusters": 3,
+  "dbscan_eps": 0.8779,
+  "dbscan_min_samples": 5,
+  "external_labels_available": true,
+  "preprocessing": [
+   "median imputation of 4 numeric column(s)",
+   "standard scaling"
+  ]
+ },
+ "primary_metric": {
+  "name": "silhouette",
+  "goal": "maximise"
+ },
+ "summary": {
+  "best_by_metric": "dbscan",
+  "best_value": 0.597253,
+  "fastest_inference": "kmeans",
+  "fastest_training": "agglomerative",
+  "smallest_model": "kmeans",
+  "pareto_front": [
+   "kmeans"
+  ],
+  "latency_note": "latency = batch prediction time / n_test, including the preprocessing pipeline",
+  "note": "Rankings use one test split on one dataset. Weigh accuracy against latency, size, interpretability and CV variance; differences inside the CV std are not meaningful."
+ },
+ "status": "completed",
+ "duration_s": 0.148
+}

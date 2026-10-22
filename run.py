@@ -14,6 +14,10 @@ Usage:
     python run.py --test          # Run full pytest test suite
     python run.py --serve         # Launch web dashboard on http://localhost:3000
     python run.py --status        # Show project health and status
+    python run.py --benchmark iris --cv 5      # Fair benchmark on a registered dataset
+    python run.py --chat                       # Plain-English experiment chatbot (terminal)
+    python run.py --verify-datasets            # Download + schema-check every dataset
+    python run.py --export-catalog             # Refresh web/catalog/*.json (static hosting)
 """
 
 import sys
@@ -46,7 +50,7 @@ def print_status():
     print_banner()
     print("\n[PROJECT STATUS]")
     print("  • Completed Stages:       14 / 14 (Stages 0 through 13)")
-    print("  • Unit Tests Passing:     281 / 281 (100% pass rate)")
+    print("  • Unit Tests Passing:     502 / 502 (100% pass rate)")
     print("  • Numerical Gradient Err: 1.42e-09 (Passed)")
     print("  • Autoencoder Recon MSE:  0.03076 (Standard-AE)")
     print("  • Diffusion Latency:      15.25 ms (DDIM-10) vs 145.91 ms (DDPM)")
@@ -93,31 +97,102 @@ def run_all_stages():
 
 def run_tests():
     print_banner()
-    print("\n>>> Running pytest test suite (260 tests) <<<\n")
+    print("\n>>> Running pytest test suite (502 tests) <<<\n")
     python_exe = sys.executable
     cmd = [python_exe, "-m", "pytest", "tests/", "-v", "--tb=short"]
     subprocess.run(cmd, cwd=str(ROOT_DIR))
 
-def serve_dashboard(port: int = 3000):
+def serve_dashboard(port: int = 3000, host: str = "127.0.0.1"):
+    """Serve web/ plus the API.
+
+    /api/* is answered by the training-capable local API (src/webapi/local_api.py)
+    and falls back to the read-only artifact API in api/index.py, so every earlier
+    endpoint keeps working. Requests are handled on threads, and training runs in
+    a background worker, so the dashboard stays responsive.
+    """
     sync_plots()
-    from http.server import SimpleHTTPRequestHandler, HTTPServer
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
     import functools
+    import json as _json
 
     # The static frontend lives in web/ (keeps the Vercel "app" service root free
     # of Python markers). Serve that directory locally so paths match production.
     web_dir = ROOT_DIR / "web"
+    sys.path.insert(0, str(ROOT_DIR))
+    sys.path.insert(0, str(ROOT_DIR / "api"))
+    try:
+        from src.webapi import local_api
+    except Exception as exc:  # missing ML deps -> still serve the static dashboard
+        local_api = None
+        print(f"[SERVER] Local experiment API disabled ({type(exc).__name__}: {exc}).")
+    try:
+        import index as artifact_api  # api/index.py (stdlib only)
+    except Exception:
+        artifact_api = None
 
     class EPMHTTPHandler(SimpleHTTPRequestHandler):
         def end_headers(self):
-            self.send_header("Access-Control-Allow-Origin", "*")
+            if not self.path.startswith("/api"):
+                self.send_header("Access-Control-Allow-Origin", "*")
             self.send_header("Cache-Control", "no-cache")
             super().end_headers()
 
+        def log_message(self, fmt, *args):  # keep the console quiet for polling
+            if "/api/jobs/" not in str(args[0] if args else ""):
+                super().log_message(fmt, *args)
+
+        def _json(self, status, payload):
+            data = _json.dumps(payload, default=str).encode("utf-8")
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(data)))
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.end_headers()
+            self.wfile.write(data)
+
+        def _api(self, method):
+            path, _, qs = self.path.partition("?")
+            query = {}
+            for part in qs.split("&"):
+                if "=" in part:
+                    k, v = part.split("=", 1)
+                    from urllib.parse import unquote_plus
+                    query[unquote_plus(k)] = unquote_plus(v)
+            body = {}
+            if method == "POST":
+                try:
+                    length = int(self.headers.get("Content-Length", 0) or 0)
+                    if local_api is not None and length > local_api.MAX_BODY_BYTES:
+                        return self._json(413, {"error": "request body too large"})
+                    raw = self.rfile.read(length) if length > 0 else b""
+                    body = local_api.parse_body(raw, self.headers.get("Content-Type", "")) if local_api else (
+                        _json.loads(raw or b"{}"))
+                except ValueError as exc:
+                    return self._json(400, {"error": str(exc)})
+            if local_api is not None:
+                res = local_api.route(method, path, query, body)
+                if res is not None:
+                    return self._json(*res)
+            if artifact_api is not None:
+                status, payload = artifact_api.route_request(method, path, query, body)
+                return self._json(status, payload)
+            return self._json(404, {"error": "API unavailable"})
+
+        def do_GET(self):
+            if self.path.startswith("/api"):
+                return self._api("GET")
+            return super().do_GET()
+
+        def do_POST(self):
+            if self.path.startswith("/api"):
+                return self._api("POST")
+            self.send_error(405)
+
     handler_cls = functools.partial(EPMHTTPHandler, directory=str(web_dir))
-    server_address = ("", port)
+    server_address = (host, port)
     print_banner()
-    print(f"\n[SERVER] Serving EPM Vercel Dashboard at:")
-    print(f"         http://localhost:{port}")
+    print(f"\n[SERVER] Serving EPM Dashboard + local experiment API at:")
+    print(f"         http://localhost:{port}   (bound to {host})")
     print("Press Ctrl+C to stop the server.\n")
     
     # Try opening browser
@@ -127,10 +202,78 @@ def serve_dashboard(port: int = 3000):
         pass
 
     try:
-        httpd = HTTPServer(server_address, handler_cls)
+        httpd = ThreadingHTTPServer(server_address, handler_cls)
+        httpd.daemon_threads = True
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("\n[SERVER] Stopped.")
+
+
+def verify_datasets(allow_large: bool = False):
+    sys.path.insert(0, str(ROOT_DIR))
+    from src.data.verify import verify_all
+
+    print_banner()
+    print("\n>>> Downloading and schema-checking every registered dataset <<<\n")
+    rep = verify_all(allow_large=allow_large)
+    ok = sum(1 for d in rep["datasets"] if d["status"] == "verified")
+    print(f"\n  {ok}/{len(rep['datasets'])} verified. Report: {rep['report_path']}")
+
+
+def export_catalog():
+    sys.path.insert(0, str(ROOT_DIR))
+    from src.webapi.export import export_static_catalog
+
+    info = export_static_catalog()
+    print(f"[EXPORT] {info['datasets']} datasets, {info['algorithms']} algorithms, {info['runs']} runs -> {info['out_dir']}")
+
+
+def run_benchmark_cli(dataset: str, task, algorithms, allow_large: bool, cv: int, tune: bool, max_train_rows):
+    sys.path.insert(0, str(ROOT_DIR))
+    from src.benchmarking import BenchmarkConfig, run_benchmark
+
+    cfg = BenchmarkConfig(dataset_id=dataset, task=task, algorithms=algorithms or None, allow_large=allow_large,
+                          cv_folds=cv, tune=tune, max_train_rows=max_train_rows)
+    res = run_benchmark(cfg, progress=lambda f, m: print(f"  [{f*100:5.1f}%] {m}"))
+    key = res["primary_metric"]["name"]
+    print(f"\n  {res['dataset_name']} / {res['task']}  (primary metric: {key}, {res['primary_metric']['goal']})")
+    for r in sorted(res["models"], key=lambda r: r.get("rank", 99)):
+        if r["status"] != "ok":
+            print(f"   FAILED {r['name']}: {r['error']}")
+            continue
+        print(f"   #{r.get('rank', '-'):<2} {r['name']:<44} {key}={r['metrics'].get(key)}  "
+              f"latency={r.get('latency_us_per_sample')}us  train={r.get('train_time_s')}s")
+    for aid, why in res["skipped_algorithms"].items():
+        print(f"   skipped {aid}: {'; '.join(why)}")
+    print(f"\n  Saved: {res.get('saved_to')}")
+
+
+def chat_terminal():
+    """Terminal version of the EPM chatbot (same engine as the dashboard panel)."""
+    sys.path.insert(0, str(ROOT_DIR))
+    from src.chatbot import ChatEngine
+
+    def progress(frac, msg):
+        print(f"\r  [{'█' * int(frac * 20):<20}] {frac * 100:5.1f}%  {msg[:60]:<60}", end="", flush=True)
+        if frac >= 1.0:
+            print()
+
+    engine = ChatEngine(progress_printer=progress)
+    print_banner()
+    print("\nEPM CHAT — describe an experiment in plain English. Type 'help' for examples, 'quit' to exit.\n")
+    while True:
+        try:
+            msg = input("you › ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            break
+        if msg.lower() in ("quit", "exit", "q", ":q"):
+            break
+        if not msg:
+            continue
+        resp = engine.handle("terminal", msg)
+        print("\nepm › " + resp.to_text().replace("\n", "\n      ") + "\n")
+
 
 def interactive_menu():
     sync_plots()
@@ -152,12 +295,14 @@ def interactive_menu():
         print("  [12] Run Stage 12 — Model Compression (Distillation, Quantization, Pruning)")
         print("  [13] Run Stage 13 — Research Experiment (H1 reduced-step generative forecasting)")
         print("  [A] Run ALL Stages (0 through 13)")
-        print("  [T] Run PyTest Suite (260 Tests)")
+        print("  [T] Run PyTest Suite (502 Tests)")
+        print("  [B] Benchmark a dataset (Experiment Lab, terminal)")
+        print("  [C] Chat — run experiments in plain English (terminal chatbot)")
         print("  [W] Launch Interactive Web Dashboard (Port 3000)")
         print("  [S] Display Project Health & Status")
         print("  [Q] Exit")
         
-        choice = input("\nEnter choice [0-13, A, T, W, S, Q]: ").strip().upper()
+        choice = input("\nEnter choice [0-13, A, T, B, C, W, S, Q]: ").strip().upper()
         if choice in [str(i) for i in range(14)]:
             run_stage(int(choice))
             input("\nPress Enter to return to menu...")
@@ -166,6 +311,16 @@ def interactive_menu():
             input("\nPress Enter to return to menu...")
         elif choice == "T":
             run_tests()
+            input("\nPress Enter to return to menu...")
+        elif choice == "C":
+            chat_terminal()
+        elif choice == "B":
+            ds = input("Dataset id (e.g. iris, diabetes, epm_sensor_telemetry): ").strip()
+            if ds:
+                try:
+                    run_benchmark_cli(ds, None, None, False, 0, False, None)
+                except Exception as exc:
+                    print(f"[ERROR] {exc}")
             input("\nPress Enter to return to menu...")
         elif choice == "W":
             serve_dashboard(3000)
@@ -187,6 +342,17 @@ def main():
     parser.add_argument("--serve", action="store_true", help="Start local web server for dashboard")
     parser.add_argument("--port", type=int, default=3000, help="Port for web server (default: 3000)")
     parser.add_argument("--status", action="store_true", help="Show project status and metrics")
+    parser.add_argument("--host", default="127.0.0.1", help="Bind address for --serve (default: 127.0.0.1)")
+    parser.add_argument("--verify-datasets", action="store_true", help="Download + schema-check all registered datasets")
+    parser.add_argument("--allow-large", action="store_true", help="Include large datasets (verify/benchmark)")
+    parser.add_argument("--export-catalog", action="store_true", help="Write web/catalog/*.json for static hosting")
+    parser.add_argument("--benchmark", metavar="DATASET", help="Run a fair benchmark on a registered dataset")
+    parser.add_argument("--chat", action="store_true", help="Chat with EPM in the terminal (plain-English experiments)")
+    parser.add_argument("--task", help="Task for --benchmark (default: dataset's first task)")
+    parser.add_argument("--algorithms", nargs="*", help="Algorithm ids for --benchmark (default: recommended)")
+    parser.add_argument("--cv", type=int, default=0, help="Cross-validation folds for --benchmark")
+    parser.add_argument("--tune", action="store_true", help="Small grid search on the training split")
+    parser.add_argument("--max-train-rows", type=int, help="Cap on training rows for --benchmark")
     
     args = parser.parse_args()
 
@@ -197,7 +363,20 @@ def main():
     elif args.test:
         run_tests()
     elif args.serve:
-        serve_dashboard(args.port)
+        serve_dashboard(args.port, args.host)
+    elif args.chat:
+        chat_terminal()
+    elif args.verify_datasets:
+        verify_datasets(args.allow_large)
+    elif args.export_catalog:
+        export_catalog()
+    elif args.benchmark:
+        try:
+            run_benchmark_cli(args.benchmark, args.task, args.algorithms, args.allow_large, args.cv, args.tune,
+                              args.max_train_rows)
+        except (KeyError, ValueError, RuntimeError) as exc:  # DatasetLoadError / BenchmarkError included
+            print(f"\n[ERROR] {str(exc).strip(chr(39) + chr(34))}")
+            sys.exit(1)
     elif args.status:
         print_status()
     else:

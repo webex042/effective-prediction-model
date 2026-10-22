@@ -1,0 +1,252 @@
+{
+ "run_id": "20261021_070651_epm_sensor_telemetry_forecasting_94b03178",
+ "created_at": "2026-10-21T07:06:51+00:00",
+ "dataset_id": "epm_sensor_telemetry",
+ "dataset_name": "EPM Synthetic Sensor Telemetry",
+ "task": "forecasting",
+ "dataset": {
+  "source": "Synthetic (src/timeseries/dataset.py)",
+  "source_url": "src/timeseries/dataset.py",
+  "license": "Project-generated (MIT, same as EPM)",
+  "n_samples": 2000,
+  "n_features": 5,
+  "numeric_features": 5,
+  "categorical_features": 0,
+  "caveats": [
+   "The test segment falls inside the synthetic degradation phase (distribution shift by design)."
+  ],
+  "start": "0",
+  "end": "1999",
+  "load_seconds": 0.006,
+  "memory_mb": 0.092
+ },
+ "config": {
+  "dataset_id": "epm_sensor_telemetry",
+  "task": null,
+  "algorithms": [
+   "naive",
+   "seasonal_naive",
+   "linear_ar",
+   "xgb_forecast"
+  ],
+  "seed": 42,
+  "test_size": 0.2,
+  "val_size": 0.1,
+  "cv_folds": 0,
+  "tune": false,
+  "max_train_rows": null,
+  "allow_large": false,
+  "allow_download": true,
+  "preprocessing": {
+   "impute_numeric": "median",
+   "impute_categorical": "most_frequent",
+   "scale": "auto",
+   "encode_categorical": "onehot",
+   "max_categories": 50,
+   "clip_outliers": false,
+   "clip_quantiles": [
+    0.005,
+    0.995
+   ],
+   "log1p_columns": [],
+   "drop_duplicates": true,
+   "class_weight": "none"
+  },
+  "window": 144,
+  "horizon": 6,
+  "n_clusters": null,
+  "contamination": null,
+  "epochs": null,
+  "max_algorithms": 16,
+  "save": true,
+  "save_dir": null
+ },
+ "config_hash": "94b03178",
+ "skipped_algorithms": {},
+ "warnings": [],
+ "models": [
+  {
+   "algorithm": "naive",
+   "name": "Naive (persistence)",
+   "framework": "baseline",
+   "family": "baseline",
+   "cost": "low",
+   "interpretability": "high",
+   "status": "ok",
+   "train_time_s": 0.0,
+   "latency_us_per_sample": 0.029,
+   "model_size_kb": 0.1,
+   "n_parameters": null,
+   "metrics": {
+    "mae": 1.183116,
+    "rmse": 1.48769,
+    "smape": 2.11204,
+    "mase": 1.031034,
+    "rmse_per_horizon": [
+     0.439377,
+     0.808023,
+     1.174591,
+     1.536239,
+     1.898209,
+     2.25621
+    ],
+    "horizon": 6,
+    "skill_vs_naive": 0.0
+   },
+   "notes": [],
+   "rank": 1,
+   "pareto_optimal": true,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "seasonal_naive",
+   "name": "Seasonal Naive",
+   "framework": "baseline",
+   "family": "baseline",
+   "cost": "low",
+   "interpretability": "high",
+   "status": "ok",
+   "train_time_s": 0.0,
+   "latency_us_per_sample": 0.031,
+   "model_size_kb": 0.12,
+   "n_parameters": null,
+   "metrics": {
+    "mae": 5.706336,
+    "rmse": 6.361217,
+    "smape": 10.473096,
+    "mase": 4.972821,
+    "rmse_per_horizon": [
+     6.287229,
+     6.315898,
+     6.345168,
+     6.376402,
+     6.405539,
+     6.435841
+    ],
+    "horizon": 6,
+    "skill_vs_naive": -3.275902
+   },
+   "notes": [],
+   "rank": 3,
+   "pareto_optimal": false,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "linear_ar",
+   "name": "Linear AR (Ridge on lag window)",
+   "framework": "scikit-learn",
+   "family": "linear",
+   "cost": "low",
+   "interpretability": "high",
+   "status": "ok",
+   "train_time_s": 0.024,
+   "latency_us_per_sample": 7.09,
+   "model_size_kb": 17.47,
+   "n_parameters": 4326,
+   "metrics": {
+    "mae": 1.839401,
+    "rmse": 2.496673,
+    "smape": 3.008498,
+    "mase": 1.602957,
+    "rmse_per_horizon": [
+     1.003372,
+     1.55653,
+     2.007683,
+     2.540454,
+     3.119016,
+     3.709147
+    ],
+    "horizon": 6,
+    "skill_vs_naive": -0.678222
+   },
+   "notes": [],
+   "rank": 2,
+   "pareto_optimal": false,
+   "beats_baseline": false
+  },
+  {
+   "algorithm": "xgb_forecast",
+   "name": "XGBoost (lag window)",
+   "framework": "xgboost",
+   "family": "boosting",
+   "cost": "medium",
+   "interpretability": "low",
+   "status": "ok",
+   "train_time_s": 59.7562,
+   "latency_us_per_sample": 33.29,
+   "model_size_kb": 1913.03,
+   "n_parameters": null,
+   "metrics": {
+    "mae": 5.954866,
+    "rmse": 8.469179,
+    "smape": 10.370601,
+    "mase": 5.189403,
+    "rmse_per_horizon": [
+     4.705503,
+     5.052356,
+     8.389107,
+     9.510389,
+     10.506008,
+     10.55903
+    ],
+    "horizon": 6,
+    "skill_vs_naive": -4.692839
+   },
+   "notes": [],
+   "rank": 4,
+   "pareto_optimal": false,
+   "beats_baseline": false
+  }
+ ],
+ "split": {
+  "strategy": "chronological",
+  "n": 2000,
+  "train_end": 1400,
+  "val_end": 1600,
+  "n_train_windows": 1251,
+  "n_val_windows": 195,
+  "n_test_windows": 395,
+  "window": 144,
+  "horizon": 6,
+  "seasonal_period": 144,
+  "train_period": "0 -> 1399",
+  "test_period": "1600 -> 1999"
+ },
+ "forecast_setup": {
+  "naive_test_rmse": 1.48769,
+  "mase_scale": 1.1475049407969813,
+  "preprocessing": [
+   "chronological split",
+   "causal forward-fill",
+   "per-channel z-score fit on training segment",
+   "windows W=144 -> H=6"
+  ],
+  "channels": [
+   "temperature",
+   "vibration",
+   "pressure",
+   "rpm",
+   "load"
+  ],
+  "target": "temperature"
+ },
+ "primary_metric": {
+  "name": "rmse",
+  "goal": "minimise"
+ },
+ "summary": {
+  "best_by_metric": "naive",
+  "best_value": 1.48769,
+  "fastest_inference": "naive",
+  "fastest_training": "linear_ar",
+  "smallest_model": "naive",
+  "pareto_front": [
+   "naive"
+  ],
+  "latency_note": "latency = batch prediction time / n_test, including the preprocessing pipeline",
+  "note": "Rankings use one test split on one dataset. Weigh accuracy against latency, size, interpretability and CV variance; differences inside the CV std are not meaningful.",
+  "baseline": "naive"
+ },
+ "status": "completed",
+ "duration_s": 59.828
+}

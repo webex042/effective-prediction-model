@@ -1,0 +1,215 @@
+{
+  "run_id": "20261021_070838_wine_clustering_28d842d3",
+  "created_at": "2026-10-21T07:08:38+00:00",
+  "dataset_id": "wine",
+  "dataset_name": "Wine Recognition",
+  "task": "clustering",
+  "dataset": {
+    "source": "scikit-learn (bundled; originally UCI id 109)",
+    "source_url": "https://archive.ics.uci.edu/dataset/109/wine",
+    "license": "CC BY 4.0 (UCI); bundled with scikit-learn under BSD-3-Clause",
+    "n_samples": 178,
+    "n_features": 13,
+    "numeric_features": 13,
+    "categorical_features": 0,
+    "caveats": [],
+    "load_seconds": 0.007,
+    "memory_mb": 0.027
+  },
+  "config": {
+    "dataset_id": "wine",
+    "task": "clustering",
+    "algorithms": null,
+    "seed": 42,
+    "test_size": 0.2,
+    "val_size": 0.1,
+    "cv_folds": 0,
+    "tune": false,
+    "max_train_rows": null,
+    "allow_large": false,
+    "allow_download": true,
+    "preprocessing": {
+      "impute_numeric": "median",
+      "impute_categorical": "most_frequent",
+      "scale": "auto",
+      "encode_categorical": "onehot",
+      "max_categories": 50,
+      "clip_outliers": false,
+      "clip_quantiles": [
+        0.005,
+        0.995
+      ],
+      "log1p_columns": [],
+      "drop_duplicates": true,
+      "class_weight": "none"
+    },
+    "window": null,
+    "horizon": null,
+    "n_clusters": null,
+    "contamination": null,
+    "epochs": null,
+    "max_algorithms": 16,
+    "save": true,
+    "save_dir": null
+  },
+  "config_hash": "28d842d3",
+  "skipped_algorithms": {},
+  "warnings": [
+    "DBSCAN's internal indices are computed without its noise points, which can flatter it; compare noise_fraction and the external ARI/NMI before preferring it."
+  ],
+  "models": [
+    {
+      "algorithm": "kmeans",
+      "name": "K-Means",
+      "framework": "scikit-learn",
+      "family": "centroid",
+      "cost": "low",
+      "interpretability": "high",
+      "status": "ok",
+      "train_time_s": 0.0588,
+      "latency_us_per_sample": 1.984,
+      "model_size_kb": 1.59,
+      "n_parameters": 39,
+      "metrics": {
+        "n_clusters": 3,
+        "noise_fraction": 0.0,
+        "silhouette": 0.284859,
+        "davies_bouldin": 1.389188,
+        "calinski_harabasz": 70.940008,
+        "ari_external": 0.897495,
+        "nmi_external": 0.875894
+      },
+      "notes": [
+        "ARI/NMI use held-out reference labels for evaluation only (never for fitting)"
+      ],
+      "rank": 1,
+      "pareto_optimal": true
+    },
+    {
+      "algorithm": "agglomerative",
+      "name": "Agglomerative (Ward)",
+      "framework": "scikit-learn",
+      "family": "hierarchical",
+      "cost": "medium",
+      "interpretability": "medium",
+      "status": "ok",
+      "train_time_s": 0.002,
+      "latency_us_per_sample": null,
+      "model_size_kb": 4.67,
+      "n_parameters": null,
+      "metrics": {
+        "n_clusters": 3,
+        "noise_fraction": 0.0,
+        "silhouette": 0.277444,
+        "davies_bouldin": 1.418592,
+        "calinski_harabasz": 67.647468,
+        "ari_external": 0.789933,
+        "nmi_external": 0.786465
+      },
+      "notes": [
+        "ARI/NMI use held-out reference labels for evaluation only (never for fitting)",
+        "no out-of-sample predict(): latency not applicable"
+      ],
+      "rank": 3
+    },
+    {
+      "algorithm": "gmm",
+      "name": "Gaussian Mixture Model",
+      "framework": "scikit-learn",
+      "family": "probabilistic",
+      "cost": "medium",
+      "interpretability": "medium",
+      "status": "ok",
+      "train_time_s": 0.0255,
+      "latency_us_per_sample": 3.243,
+      "model_size_kb": 13.02,
+      "n_parameters": null,
+      "metrics": {
+        "n_clusters": 3,
+        "noise_fraction": 0.0,
+        "silhouette": 0.284421,
+        "davies_bouldin": 1.393801,
+        "calinski_harabasz": 70.687777,
+        "ari_external": 0.8804,
+        "nmi_external": 0.860946
+      },
+      "notes": [
+        "ARI/NMI use held-out reference labels for evaluation only (never for fitting)"
+      ],
+      "rank": 2,
+      "pareto_optimal": false
+    },
+    {
+      "algorithm": "dbscan",
+      "name": "DBSCAN",
+      "framework": "scikit-learn",
+      "family": "density",
+      "cost": "medium",
+      "interpretability": "medium",
+      "status": "ok",
+      "train_time_s": 0.0038,
+      "latency_us_per_sample": null,
+      "model_size_kb": 19.82,
+      "n_parameters": null,
+      "metrics": {
+        "n_clusters": 1,
+        "noise_fraction": 0.044944,
+        "silhouette": null,
+        "davies_bouldin": null,
+        "calinski_harabasz": null,
+        "ari_external": -0.008883,
+        "nmi_external": 0.067616
+      },
+      "notes": [
+        "8 noise points (label -1) excluded from internal indices",
+        "internal indices undefined for 1 cluster(s) on 170 points",
+        "ARI/NMI use held-out reference labels for evaluation only (never for fitting)",
+        "no out-of-sample predict(): latency not applicable"
+      ]
+    }
+  ],
+  "environment": {
+    "python": "3.13.16",
+    "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "numpy": "2.5.3",
+    "torch": "2.14.1+cu130",
+    "sklearn": "1.9.1",
+    "cuda_available": false,
+    "device_name": "cpu"
+  },
+  "split": {
+    "strategy": "transductive (all rows clustered; labels held out)",
+    "n_rows": 178,
+    "duplicates_dropped": 0,
+    "subsampled_from": null
+  },
+  "clustering_setup": {
+    "n_clusters": 3,
+    "dbscan_eps": 3.2554,
+    "dbscan_min_samples": 5,
+    "external_labels_available": true,
+    "preprocessing": [
+      "median imputation of 13 numeric column(s)",
+      "standard scaling"
+    ]
+  },
+  "primary_metric": {
+    "name": "silhouette",
+    "goal": "maximise"
+  },
+  "summary": {
+    "best_by_metric": "kmeans",
+    "best_value": 0.284859,
+    "fastest_inference": "kmeans",
+    "fastest_training": "agglomerative",
+    "smallest_model": "kmeans",
+    "pareto_front": [
+      "kmeans"
+    ],
+    "latency_note": "latency = batch prediction time / n_test, including the preprocessing pipeline",
+    "note": "Rankings use one test split on one dataset. Weigh accuracy against latency, size, interpretability and CV variance; differences inside the CV std are not meaningful."
+  },
+  "status": "completed",
+  "duration_s": 0.156
+}

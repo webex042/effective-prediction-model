@@ -75,6 +75,23 @@ def load_test_status():
         default={"available": False, "note": "Run pytest locally to generate benchmarks/test_status.json"},
     )
 
+def load_static_catalog(name):
+    """Dataset/algorithm catalogue exported by `python run.py --export-catalog` (web/catalog/*.json)."""
+    for rel in (os.path.join("web", "catalog", name), os.path.join("catalog", name)):
+        data = _read_json(rel)
+        if data is not None:
+            return data
+    return None
+
+
+LOCAL_ONLY = {
+    "started": False,
+    "reason": "Dataset downloads, uploads and model training need the local experiment API.",
+    "how_to_run": "Run locally: `python run.py --serve` and open http://localhost:3000/#datalab, "
+                  "or `python run.py --benchmark <dataset_id>` from the terminal.",
+}
+
+
 RESEARCH_QUESTION = (
     "Can efficient generative and multimodal models achieve comparable or better "
     "predictive performance than conventional ML/DL models while reducing inference "
@@ -238,6 +255,20 @@ def route_request(method, path, query, body):
             return (200, rec) if rec is not None else (404, {"error": f"experiment not found: {exp_id}"})
         if raw == "/api/test-status":
             return 200, load_test_status()
+        if raw == "/api/capabilities":
+            return 200, {"mode": "static", "training": False, "uploads": False, **LOCAL_ONLY}
+        if raw in ("/api/datasets", "/api/algorithms"):
+            name = "datasets.json" if raw.endswith("datasets") else "algorithms.json"
+            data = load_static_catalog(name)
+            key = name.split(".")[0]
+            return 200, data if data is not None else {key: [], "available": False,
+                                                       "note": "Run `python run.py --export-catalog` to publish the catalogue."}
+        if raw == "/api/benchmarks/history":
+            idx = _read_json(os.path.join("experiments", "benchmarks", "index.json"))
+            if isinstance(idx, list):
+                return 200, {"runs": list(reversed(idx))}
+            data = load_static_catalog("history.json")
+            return 200, data if data is not None else {"runs": []}
         return 404, {"error": f"Endpoint not found: {raw}"}
 
     if method == "POST":
@@ -248,6 +279,13 @@ def route_request(method, path, query, body):
                 body.get("y_true", [1, 0, 1, 1, 0, 1, 0, 0, 1, 1]),
                 body.get("y_pred", [1, 0, 0, 1, 0, 1, 1, 0, 1, 0]),
             )
+        if raw == "/api/chat":
+            return 501, dict(LOCAL_ONLY, reply="The EPM chatbot trains real models, so it only runs with the local "
+                                                "server: `python run.py --serve`, or `python run.py --chat` in a terminal.")
+        if raw in ("/api/benchmarks/run", "/api/datasets/upload") or (
+            raw.startswith("/api/datasets/") and raw.endswith("/download")
+        ):
+            return 501, dict(LOCAL_ONLY)
         if raw in ("/api/run-experiment", "/api/run"):
             return 501, {
                 "started": False,
@@ -320,7 +358,7 @@ def app(environ, start_response):
     data = json.dumps(payload, indent=2, default=str).encode("utf-8")
     status_line = {
         200: "200 OK", 404: "404 Not Found",
-        405: "405 Method Not Allowed", 501: "501 Not Implemented",
+        405: "405 Method Not Allowed", 501: "501 Not Implemented", 400: "400 Bad Request",
     }.get(status, f"{status} OK")
     headers = [
         ("Content-Type", "application/json"),

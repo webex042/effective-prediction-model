@@ -85,6 +85,45 @@ pytest tests/test_research.py -v  # 21 Stage 13 unit tests
 
 ---
 
+## Datasets & Fair Benchmarking (Experiment Lab)
+
+EPM now has a **dataset registry** with 20 datasets. They come from scikit-learn, UCI, OpenML, Numenta NAB, and EPM's own synthetic generators.
+- **Source and licence:** every entry documents both.
+- **Algorithm compatibility:** 44 benchmarkable algorithms are covered, including the Stage 2 scratch models and the Stage 3/5/7 PyTorch models.
+- **Leakage-free preprocessing:** imputers, scalers and encoders are fitted on training rows only, and time series are split chronologically.
+- **Fair benchmark runner:** all models share one split and seed. It adds CV / rolling-origin validation, latency, size, task-specific metrics and a Pareto summary.
+
+```bash
+python run.py --serve                    # dashboard + local experiment API → http://localhost:3000/#datalab
+python run.py --benchmark breast_cancer --cv 5
+python run.py --verify-datasets          # download + schema-check every registered dataset
+```
+
+See [docs/15_datasets_and_benchmarking.md](docs/15_datasets_and_benchmarking.md) for the dataset list, the
+compatibility matrix, preprocessing, metrics and limitations.
+
+---
+
+## EPM Chat — experiments in plain English
+
+Describe what you want and EPM picks the task, dataset and algorithms. It runs them through the same fair
+benchmark pipeline and reports measured results, with no LLM and no network calls.
+
+```text
+you › classify iris with random forest and svm with 5-fold cv
+you › forecast air quality 12 steps ahead with lstm
+you › compare diffusion vs flow matching on sensor data
+you › explain flow matching
+```
+
+```bash
+python run.py --chat      # terminal
+python run.py --serve     # dashboard → "EPM>_ CHAT" (bottom-right)
+```
+
+See [docs/16_chatbot.md](docs/16_chatbot.md) for the intent list, state machine, guardrails, API and the findings
+made while building it.
+
 ---
 
 ## Project Structure
@@ -107,8 +146,11 @@ EPM/
 │   ├── logger.py             # Structured logging
 │   ├── reproducibility.py    # Seed management & environment
 │   ├── experiment.py         # Experiment tracking
-│   ├── data/                 # Data loading utilities
-│   ├── preprocessing/        # Data preprocessing
+│   ├── data/                 # Dataset registry, verified loaders, cache, validation, uploads
+│   ├── preprocessing/        # Leakage-free, algorithm-aware preprocessing pipelines
+│   ├── benchmarking/         # Algorithm catalogue, compatibility, fair benchmark runner
+│   ├── webapi/               # Local training-capable API (run.py --serve) + static catalogue export
+│   ├── chatbot/              # Plain-English experiment assistant (intents, slots, engine, workflows)
 │   ├── classical_ml/         # Stage 2: Classical ML models
 │   ├── neural_networks/      # Stage 3: Neural networks
 │   ├── nlp/                  # Stage 4: NLP pipeline
@@ -122,7 +164,7 @@ EPM/
 │   ├── research/             # Stage 13: Research experiment pipeline (config, registry, metrics, report)
 │   └── evaluation/           # Metrics & benchmarking
 ├── models/                   # Saved model checkpoints
-├── experiments/              # Experiment logs & results (registry/ holds Stage 12/13 records)
+├── experiments/              # Experiment logs & results (registry/ = Stage 12/13, benchmarks/ = benchmark runner)
 ├── benchmarks/               # Benchmark results (incl. test_status.json, stage13_research.json)
 ├── tests/                    # Unit tests
 ├── docs/                     # Educational documentation + stage13_research_report.md
@@ -157,7 +199,7 @@ python -m venv venv
 # Install dependencies
 pip install -r requirements.txt
 
-# Run tests (281 tests)
+# Run tests (502 tests)
 pytest tests/ -v
 
 # Interactive Runner (menu for all stages & demos)

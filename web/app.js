@@ -132,7 +132,7 @@ const GALLERY_ITEMS = [
   { stage: "stage12", title: "Model Compression Pareto Frontier", tag: "STAGE 12", file: "plots/stage12/model_compression_pareto_frontier.png", desc: "Storage footprint (KB) vs accuracy and inference latency vs accuracy Pareto scatter plots." }
 ];
 
-// Test Suites (281 tests across 17 modules) — counts mirror benchmarks/test_status.json
+// Test Suites (502 tests across 23 modules) — counts mirror benchmarks/test_status.json
 const TEST_MODULES = [
   { name: "test_math_foundations.py", tests: 74, desc: "Linear algebra, derivatives, Bayes, KL divergence, optimizers" },
   { name: "test_classical_ml.py", tests: 18, desc: "Linear/logistic regression, KNN, trees, baseline leaderboards" },
@@ -150,7 +150,13 @@ const TEST_MODULES = [
   { name: "test_metrics.py", tests: 25, desc: "Accuracy, precision, recall, F1, AUROC, MAE, RMSE, Timer" },
   { name: "test_reproducibility.py", tests: 7, desc: "RNG determinism, seed state capture, environment audit" },
   { name: "test_config.py", tests: 18, desc: "YAML config loading, validation, immutable defaults" },
-  { name: "test_experiment.py", tests: 12, desc: "Experiment lifecycle, artifact persistence, metadata" }
+  { name: "test_experiment.py", tests: 12, desc: "Experiment lifecycle, artifact persistence, metadata" },
+  { name: "test_datasets.py", tests: 49, desc: "Dataset registry, safe downloads, caching, archive safety, source parsers, upload validation" },
+  { name: "test_preprocessing_pipelines.py", tests: 21, desc: "Train-only fitting, unseen categories, splits, chronological windows, causal fill" },
+  { name: "test_task_metrics.py", tests: 17, desc: "Regression, multiclass, clustering, forecasting (MASE/sMAPE), anomaly delay, fairness" },
+  { name: "test_benchmarking.py", tests: 24, desc: "Compatibility, recommendations, shared splits, reproducibility, label isolation, failures" },
+  { name: "test_local_api.py", tests: 15, desc: "Local experiment API, background jobs, uploads, read-only Vercel API routes" },
+  { name: "test_chatbot.py", tests: 95, desc: "Chatbot intents, slots, conversation state machine, Phase 1-3 workflows, chat API" }
 ];
 
 function initApp() {
@@ -3349,7 +3355,7 @@ function renderTestModules() {
       runBtn.textContent = 'RUNNING AUDIT (17 MODULES)...';
       runBtn.disabled = true;
       setTimeout(() => {
-        runBtn.textContent = '✓ ALL 281 TESTS VERIFIED';
+        runBtn.textContent = '✓ ALL 502 TESTS VERIFIED';
         runBtn.disabled = false;
       }, 1000);
     });

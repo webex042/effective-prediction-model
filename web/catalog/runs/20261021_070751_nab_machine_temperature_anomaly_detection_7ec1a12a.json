@@ -1,0 +1,249 @@
+{
+ "run_id": "20261021_070751_nab_machine_temperature_anomaly_detection_7ec1a12a",
+ "created_at": "2026-10-21T07:07:51+00:00",
+ "dataset_id": "nab_machine_temperature",
+ "dataset_name": "NAB Machine Temperature System Failure",
+ "task": "anomaly_detection",
+ "dataset": {
+  "source": "Numenta Anomaly Benchmark (GitHub numenta/NAB)",
+  "source_url": "https://github.com/numenta/NAB",
+  "license": "NAB repository licence (MIT-style, Copyright Numenta Inc.)",
+  "n_samples": 22695,
+  "n_features": 1,
+  "numeric_features": 1,
+  "categorical_features": 0,
+  "caveats": [
+   "NAB labels whole windows around each anomaly, so point-wise precision is pessimistic; detection delay is the more faithful metric."
+  ],
+  "start": "2013-12-02 21:15:00",
+  "end": "2014-02-19 15:25:00",
+  "load_seconds": 0.021,
+  "memory_mb": 0.347
+ },
+ "config": {
+  "dataset_id": "nab_machine_temperature",
+  "task": null,
+  "algorithms": [
+   "iforest",
+   "lof",
+   "ocsvm",
+   "autoencoder"
+  ],
+  "seed": 42,
+  "test_size": 0.2,
+  "val_size": 0.1,
+  "cv_folds": 0,
+  "tune": false,
+  "max_train_rows": 10000,
+  "allow_large": false,
+  "allow_download": true,
+  "preprocessing": {
+   "impute_numeric": "median",
+   "impute_categorical": "most_frequent",
+   "scale": "auto",
+   "encode_categorical": "onehot",
+   "max_categories": 50,
+   "clip_outliers": false,
+   "clip_quantiles": [
+    0.005,
+    0.995
+   ],
+   "log1p_columns": [],
+   "drop_duplicates": true,
+   "class_weight": "none"
+  },
+  "window": null,
+  "horizon": null,
+  "n_clusters": null,
+  "contamination": null,
+  "epochs": null,
+  "max_algorithms": 16,
+  "save": true,
+  "save_dir": null
+ },
+ "config_hash": "7ec1a12a",
+ "skipped_algorithms": {},
+ "warnings": [],
+ "models": [
+  {
+   "algorithm": "iforest",
+   "name": "Isolation Forest",
+   "framework": "scikit-learn",
+   "family": "ensemble",
+   "cost": "medium",
+   "interpretability": "low",
+   "status": "ok",
+   "train_time_s": 0.2556,
+   "latency_us_per_sample": 7.971,
+   "model_size_kb": 2271.54,
+   "n_parameters": 25422,
+   "metrics": {
+    "flagged_fraction": 0.169545,
+    "precision": 0.533264,
+    "recall": 0.904762,
+    "f1": 0.671027,
+    "true_anomaly_fraction": 0.09993,
+    "pr_auc": 0.781098,
+    "roc_auc": 0.966051,
+    "pr_auc_random_baseline": 0.09993,
+    "detection": {
+     "windows": 2,
+     "detected": 2,
+     "missed": 0,
+     "mean_delay_steps": 0.0,
+     "delays_steps": [
+      0,
+      0
+     ]
+    }
+   },
+   "notes": [],
+   "threshold": 0.547831,
+   "rank": 1,
+   "pareto_optimal": true
+  },
+  {
+   "algorithm": "lof",
+   "name": "Local Outlier Factor",
+   "framework": "scikit-learn",
+   "family": "neighbors",
+   "cost": "medium",
+   "interpretability": "medium",
+   "status": "ok",
+   "train_time_s": 0.2921,
+   "latency_us_per_sample": 26.198,
+   "model_size_kb": 2847.42,
+   "n_parameters": null,
+   "metrics": {
+    "flagged_fraction": 0.208671,
+    "precision": 0.297297,
+    "recall": 0.620811,
+    "f1": 0.402056,
+    "true_anomaly_fraction": 0.09993,
+    "pr_auc": 0.428033,
+    "roc_auc": 0.769127,
+    "pr_auc_random_baseline": 0.09993,
+    "detection": {
+     "windows": 2,
+     "detected": 2,
+     "missed": 0,
+     "mean_delay_steps": 58.0,
+     "delays_steps": [
+      4,
+      112
+     ]
+    }
+   },
+   "notes": [],
+   "threshold": 1.111892,
+   "rank": 3,
+   "pareto_optimal": false
+  },
+  {
+   "algorithm": "ocsvm",
+   "name": "One-Class SVM",
+   "framework": "scikit-learn",
+   "family": "kernel",
+   "cost": "high",
+   "interpretability": "low",
+   "status": "ok",
+   "train_time_s": 0.5378,
+   "latency_us_per_sample": 34.289,
+   "model_size_kb": 106.96,
+   "n_parameters": null,
+   "metrics": {
+    "flagged_fraction": 0.153683,
+    "precision": 0.454128,
+    "recall": 0.698413,
+    "f1": 0.550382,
+    "true_anomaly_fraction": 0.09993,
+    "pr_auc": 0.655268,
+    "roc_auc": 0.897442,
+    "pr_auc_random_baseline": 0.09993,
+    "detection": {
+     "windows": 2,
+     "detected": 2,
+     "missed": 0,
+     "mean_delay_steps": 24.5,
+     "delays_steps": [
+      0,
+      49
+     ]
+    }
+   },
+   "notes": [],
+   "threshold": -260.827083,
+   "rank": 2,
+   "pareto_optimal": false
+  },
+  {
+   "algorithm": "autoencoder",
+   "name": "Autoencoder (Stage 7)",
+   "framework": "pytorch",
+   "family": "neural",
+   "cost": "medium",
+   "interpretability": "low",
+   "status": "ok",
+   "train_time_s": 21.4833,
+   "latency_us_per_sample": 0.711,
+   "model_size_kb": 11.98,
+   "n_parameters": 1480,
+   "metrics": {
+    "flagged_fraction": 0.160821,
+    "precision": 0.364932,
+    "recall": 0.587302,
+    "f1": 0.450152,
+    "true_anomaly_fraction": 0.09993,
+    "pr_auc": 0.366615,
+    "roc_auc": 0.787079,
+    "pr_auc_random_baseline": 0.09993,
+    "detection": {
+     "windows": 2,
+     "detected": 2,
+     "missed": 0,
+     "mean_delay_steps": 47.0,
+     "delays_steps": [
+      41,
+      53
+     ]
+    }
+   },
+   "notes": [],
+   "threshold": 0.019476,
+   "rank": 4,
+   "pareto_optimal": true
+  }
+ ],
+ "split": {
+  "strategy": "chronological",
+  "n_train": 10000,
+  "n_test": 11348,
+  "window": 12,
+  "test_start": "2014-01-11 05:50:00"
+ },
+ "anomaly_setup": {
+  "contamination_prior": 0.1,
+  "threshold_rule": "flag test points whose score exceeds the (1 - contamination) quantile of TRAINING scores",
+  "labels_used_for_training": false,
+  "train_anomaly_fraction": 0.1134
+ },
+ "primary_metric": {
+  "name": "pr_auc",
+  "goal": "maximise"
+ },
+ "summary": {
+  "best_by_metric": "iforest",
+  "best_value": 0.781098,
+  "fastest_inference": "autoencoder",
+  "fastest_training": "iforest",
+  "smallest_model": "autoencoder",
+  "pareto_front": [
+   "iforest",
+   "autoencoder"
+  ],
+  "latency_note": "latency = batch prediction time / n_test, including the preprocessing pipeline",
+  "note": "Rankings use one test split on one dataset. Weigh accuracy against latency, size, interpretability and CV variance; differences inside the CV std are not meaningful."
+ },
+ "status": "completed",
+ "duration_s": 24.359
+}

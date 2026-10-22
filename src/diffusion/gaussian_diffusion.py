@@ -127,10 +127,19 @@ class GaussianDiffusion:
         x: torch.Tensor,
         t: torch.Tensor,
         c: Optional[torch.Tensor] = None,
+        clip_x0: Optional[float] = None,
     ) -> torch.Tensor:
-        """Sample x_{t-1} from p_theta(x_{t-1} | x_t) via standard DDPM step."""
+        """Sample x_{t-1} from p_theta(x_{t-1} | x_t) via standard DDPM step.
+
+        ``clip_x0`` (optional) clamps the predicted x_0 to [-clip_x0, clip_x0], as in the
+        reference DDPM sampler ("clip_denoised"). With the cosine schedule the last
+        alpha_bar is ~2e-7, so unclipped x_0 estimates amplify noise-prediction error by
+        ~2000x; clipping keeps samples in the data range. Default None = previous behaviour.
+        """
         eps_pred = model(x, t, c)
         x_recon = self.predict_start_from_noise(x, t, eps_pred)
+        if clip_x0 is not None:
+            x_recon = x_recon.clamp(-clip_x0, clip_x0)
         model_mean, _, posterior_log_variance = self.q_posterior_mean_variance(
             x_start=x_recon, x_t=x, t=t
         )
@@ -148,9 +157,11 @@ class GaussianDiffusion:
         c: Optional[torch.Tensor] = None,
         device: str = "cpu",
         return_trajectory: bool = False,
+        clip_x0: Optional[float] = None,
     ) -> torch.Tensor | Tuple[torch.Tensor, List[torch.Tensor]]:
         """
         Sample full trajectory from pure noise using DDPM (all T steps).
+        ``clip_x0``: optional clamp of the predicted x_0 (see ``p_sample_ddpm``).
         """
         model.eval()
         x = torch.randn(shape, device=device)
@@ -158,7 +169,7 @@ class GaussianDiffusion:
 
         for i in reversed(range(self.timesteps)):
             t = torch.full((shape[0],), i, device=device, dtype=torch.long)
-            x = self.p_sample_ddpm(model, x, t, c=c)
+            x = self.p_sample_ddpm(model, x, t, c=c, clip_x0=clip_x0)
             if return_trajectory and (i % max(1, self.timesteps // 10) == 0 or i == 0):
                 trajectory.append(x.clone())
 
@@ -176,6 +187,7 @@ class GaussianDiffusion:
         eta: float = 0.0,
         device: str = "cpu",
         return_trajectory: bool = False,
+        clip_x0: Optional[float] = None,
     ) -> torch.Tensor | Tuple[torch.Tensor, List[torch.Tensor]]:
         """
         Accelerated generation via Denoising Diffusion Implicit Models (DDIM).
@@ -206,6 +218,9 @@ class GaussianDiffusion:
 
             # Predict x_0
             x_0_pred = (x - torch.sqrt(1.0 - alpha_cumprod_cur) * eps_pred) / torch.sqrt(alpha_cumprod_cur)
+            if clip_x0 is not None:  # optional clamp; keep eps consistent with the clamped x_0
+                x_0_pred = x_0_pred.clamp(-clip_x0, clip_x0)
+                eps_pred = (x - torch.sqrt(alpha_cumprod_cur) * x_0_pred) / torch.sqrt(1.0 - alpha_cumprod_cur)
 
             # DDIM sigma variance parameter
             sigma = (

@@ -1,0 +1,212 @@
+{
+ "runs": [
+  {
+   "run_id": "20261021_070838_wine_clustering_28d842d3",
+   "created_at": "2026-10-21T07:08:38+00:00",
+   "dataset_id": "wine",
+   "dataset_name": "Wine Recognition",
+   "task": "clustering",
+   "primary_metric": {
+    "name": "silhouette",
+    "goal": "maximise"
+   },
+   "status": "completed",
+   "duration_s": 0.156,
+   "best": "kmeans",
+   "best_value": 0.284859,
+   "n_models": 4
+  },
+  {
+   "run_id": "20261021_070838_iris_clustering_5d6782c0",
+   "created_at": "2026-10-21T07:08:38+00:00",
+   "dataset_id": "iris",
+   "dataset_name": "Iris",
+   "task": "clustering",
+   "primary_metric": {
+    "name": "silhouette",
+    "goal": "maximise"
+   },
+   "status": "completed",
+   "duration_s": 0.148,
+   "best": "dbscan",
+   "best_value": 0.597253,
+   "n_models": 4
+  },
+  {
+   "run_id": "20261021_070838_synthetic_blobs_clustering_21245730",
+   "created_at": "2026-10-21T07:08:38+00:00",
+   "dataset_id": "synthetic_blobs",
+   "dataset_name": "Synthetic Gaussian Blobs",
+   "task": "clustering",
+   "primary_metric": {
+    "name": "silhouette",
+    "goal": "maximise"
+   },
+   "status": "completed",
+   "duration_s": 1.966,
+   "best": "dbscan",
+   "best_value": 0.689843,
+   "n_models": 4
+  },
+  {
+   "run_id": "20261021_070815_synthetic_anomalies_anomaly_detection_a95c6f84",
+   "created_at": "2026-10-21T07:08:15+00:00",
+   "dataset_id": "synthetic_anomalies",
+   "dataset_name": "Synthetic Gaussian Anomalies",
+   "task": "anomaly_detection",
+   "primary_metric": {
+    "name": "pr_auc",
+    "goal": "maximise"
+   },
+   "status": "completed",
+   "duration_s": 3.918,
+   "best": "iforest",
+   "best_value": 1.0,
+   "n_models": 4
+  },
+  {
+   "run_id": "20261021_070751_nab_machine_temperature_anomaly_detection_7ec1a12a",
+   "created_at": "2026-10-21T07:07:51+00:00",
+   "dataset_id": "nab_machine_temperature",
+   "dataset_name": "NAB Machine Temperature System Failure",
+   "task": "anomaly_detection",
+   "primary_metric": {
+    "name": "pr_auc",
+    "goal": "maximise"
+   },
+   "status": "completed",
+   "duration_s": 24.359,
+   "best": "iforest",
+   "best_value": 0.781098,
+   "n_models": 4
+  },
+  {
+   "run_id": "20261021_070651_epm_sensor_telemetry_forecasting_94b03178",
+   "created_at": "2026-10-21T07:06:51+00:00",
+   "dataset_id": "epm_sensor_telemetry",
+   "dataset_name": "EPM Synthetic Sensor Telemetry",
+   "task": "forecasting",
+   "primary_metric": {
+    "name": "rmse",
+    "goal": "minimise"
+   },
+   "status": "completed",
+   "duration_s": 59.828,
+   "best": "naive",
+   "best_value": 1.48769,
+   "n_models": 4
+  },
+  {
+   "run_id": "20261021_070555_epm_sensor_telemetry_forecasting_16bedc7a",
+   "created_at": "2026-10-21T07:05:55+00:00",
+   "dataset_id": "epm_sensor_telemetry",
+   "dataset_name": "EPM Synthetic Sensor Telemetry",
+   "task": "forecasting",
+   "primary_metric": {
+    "name": "rmse",
+    "goal": "minimise"
+   },
+   "status": "completed",
+   "duration_s": 55.706,
+   "best": "naive",
+   "best_value": 0.437389,
+   "n_models": 7
+  },
+  {
+   "run_id": "20261021_070548_epm_sensor_regression_regression_c7b81271",
+   "created_at": "2026-10-21T07:05:48+00:00",
+   "dataset_id": "epm_sensor_regression",
+   "dataset_name": "EPM Synthetic Sensor Regression",
+   "task": "regression",
+   "primary_metric": {
+    "name": "rmse",
+    "goal": "minimise"
+   },
+   "status": "completed",
+   "duration_s": 6.565,
+   "best": "lasso",
+   "best_value": 0.549472,
+   "n_models": 11
+  },
+  {
+   "run_id": "20261021_070535_diabetes_regression_24a2dba4",
+   "created_at": "2026-10-21T07:05:35+00:00",
+   "dataset_id": "diabetes",
+   "dataset_name": "Diabetes (Efron et al.)",
+   "task": "regression",
+   "primary_metric": {
+    "name": "rmse",
+    "goal": "minimise"
+   },
+   "status": "completed",
+   "duration_s": 12.478,
+   "best": "gbr",
+   "best_value": 52.795313,
+   "n_models": 11
+  },
+  {
+   "run_id": "20261021_070530_digits_classification_4ea2632e",
+   "created_at": "2026-10-21T07:05:30+00:00",
+   "dataset_id": "digits",
+   "dataset_name": "Optical Handwritten Digits (8x8)",
+   "task": "classification",
+   "primary_metric": {
+    "name": "f1",
+    "goal": "maximise"
+   },
+   "status": "completed",
+   "duration_s": 4.82,
+   "best": "mlp_torch",
+   "best_value": 0.977531,
+   "n_models": 8
+  },
+  {
+   "run_id": "20261021_070524_wine_classification_7b2fc52f",
+   "created_at": "2026-10-21T07:05:24+00:00",
+   "dataset_id": "wine",
+   "dataset_name": "Wine Recognition",
+   "task": "classification",
+   "primary_metric": {
+    "name": "f1",
+    "goal": "maximise"
+   },
+   "status": "completed",
+   "duration_s": 6.77,
+   "best": "rf_clf",
+   "best_value": 1.0,
+   "n_models": 10
+  },
+  {
+   "run_id": "20261021_070518_iris_classification_e682e225",
+   "created_at": "2026-10-21T07:05:18+00:00",
+   "dataset_id": "iris",
+   "dataset_name": "Iris",
+   "task": "classification",
+   "primary_metric": {
+    "name": "f1",
+    "goal": "maximise"
+   },
+   "status": "completed",
+   "duration_s": 5.926,
+   "best": "knn_clf",
+   "best_value": 0.966583,
+   "n_models": 10
+  },
+  {
+   "run_id": "20261021_070510_breast_cancer_classification_a9e9bff9",
+   "created_at": "2026-10-21T07:05:10+00:00",
+   "dataset_id": "breast_cancer",
+   "dataset_name": "Breast Cancer Wisconsin (Diagnostic)",
+   "task": "classification",
+   "primary_metric": {
+    "name": "f1",
+    "goal": "maximise"
+   },
+   "status": "completed",
+   "duration_s": 9.24,
+   "best": "logreg_scratch",
+   "best_value": 0.963855,
+   "n_models": 10
+  }
+ ]
+}
