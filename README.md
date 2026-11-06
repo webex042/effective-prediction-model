@@ -124,6 +124,21 @@ python run.py --serve     # dashboard → "EPM>_ CHAT" (bottom-right)
 See [docs/16_chatbot.md](docs/16_chatbot.md) for the intent list, state machine, guardrails, API and the findings
 made while building it.
 
+### Standalone, embeddable prediction chatbot (`epm_chatbot/`)
+
+A separate service for **predictions** with saved EPM models: it validates the inputs, returns probabilities or
+intervals, and explains the result. It can also analyse a CSV, compare models, and train only when you ask.
+It runs independently of this dashboard and can be placed on a website you choose, as a standalone page, an
+iframe or an opt-in widget, limited to an allowlist of origins.
+
+```bash
+python -m epm_chatbot.bootstrap   # one-off: train the starter models
+python -m epm_chatbot             # http://127.0.0.1:8765
+```
+
+See [epm_chatbot/README.md](epm_chatbot/README.md) for configuration, the API, embed snippets, security and
+deployment.
+
 ---
 
 ## Project Structure
@@ -220,8 +235,8 @@ The project is fully configured for deployment on [Vercel](https://vercel.com):
 vercel
 ```
 
-- **Configuration:** [vercel.json](file:///c:/Users/prans/OneDrive/Desktop/Project-1/vercel.json)
-- **Zero-Dependency Serverless Functions:** [api/index.py](file:///c:/Users/prans/OneDrive/Desktop/Project-1/api/index.py)
+- **Configuration:** [vercel.json](vercel.json)
+- **Zero-Dependency Serverless Functions:** [api/index.py](api/index.py)
 - **Interactive Web Dashboard:** [web/index.html](web/index.html) with Vanilla JS client engines and publication figure gallery.
 
 
@@ -250,12 +265,28 @@ Training time, inference time, peak RAM, GPU memory, parameter count, FLOPs, sam
 
 ---
 
+## Contributing
+
+Contributions are welcome — a docs correction, a new benchmark dataset, or a
+replication of the Stage 13 experiment on your own hardware. Start with
+[CONTRIBUTING.md](CONTRIBUTING.md); participation is governed by the
+[Code of Conduct](CODE_OF_CONDUCT.md). Security issues go to
+[SECURITY.md](SECURITY.md), not the public issue tracker.
+
+Release history is in [CHANGELOG.md](CHANGELOG.md).
+
+---
+
 ## License
 
-This project is for educational and research purposes.
+Released under the [MIT License](LICENSE). The code is free to use, modify and
+redistribute; it is provided for research and educational use and is not
+hardened for production deployment (see Scope & Limitations above).
 
 ---
 
 ## Author
 
-Research project developed as a progressive ML/DL learning journey.
+Maintained by [Pranshu](https://github.com/webex042) (`webex042`), B.Tech
+student at BIT Mesra. EPM began as a progressive ML/DL learning journey and
+became a reproducible research project.

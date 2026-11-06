@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EPM Chat</title>
+  <meta name="description" content="Ask EPM's trained machine-learning models for predictions and explanations.">
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="bar">
+      <div class="brand">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7"/><path d="M9 21.5h14M9 16h9M9 10.5h14"/><circle cx="22" cy="16" r="2.2"/></svg>
+        <div class="brand-text">
+          <h1>EPM Chat</h1>
+          <p id="subtitle">Predictions from trained EPM models</p>
+        </div>
+      </div>
+      <div class="bar-actions">
+        <button type="button" class="icon-btn" id="theme-btn" aria-label="Switch to dark theme" title="Theme">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-moon" d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/><g class="i-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></svg>
+        </button>
+        <button type="button" class="text-btn" id="clear-btn" aria-label="Start a new chat (clears this conversation and your uploads)">New chat</button>
+        <button type="button" class="icon-btn embed-only" id="close-btn" aria-label="Close chat" title="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="thread" id="thread" aria-label="Conversation">
+      <div class="log" id="log" role="log" aria-live="polite" aria-relevant="additions"></div>
+    </main>
+
+    <div class="gate" id="gate" hidden>
+      <form class="gate-card" id="gate-form">
+        <h2>Access code</h2>
+        <p>This EPM Chat server requires an access code.</p>
+        <label for="gate-code">Code</label>
+        <input id="gate-code" type="password" autocomplete="off" required maxlength="200">
+        <p class="gate-error" id="gate-error" role="alert"></p>
+        <button type="submit" class="primary">Continue</button>
+      </form>
+    </div>
+
+    <footer class="composer-wrap">
+      <form class="composer" id="composer" autocomplete="off">
+        <input type="file" id="file" accept=".csv,text/csv" hidden>
+        <button type="button" class="icon-btn attach" id="attach-btn" aria-label="Upload a CSV file" title="Upload CSV">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.5 12 20a5.5 5.5 0 0 1-7.8-7.8l8.9-8.9a3.7 3.7 0 0 1 5.2 5.2l-8.9 8.9a1.8 1.8 0 0 1-2.6-2.6l8.2-8.2"/></svg>
+        </button>
+        <label for="input" class="sr-only">Message EPM Chat</label>
+        <textarea id="input" rows="1" maxlength="1000" placeholder="Ask for a prediction or explanation…" aria-describedby="composer-hint"></textarea>
+        <button type="submit" class="send" id="send-btn" aria-label="Send message" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+      <p class="hint" id="composer-hint"><span>Enter sends, Shift+Enter adds a line.</span> <span id="counter"></span></p>
+    </footer>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

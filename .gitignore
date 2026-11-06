@@ -86,3 +86,7 @@ htmlcov/
 # --- Distribution ---
 *.tar.gz
 *.whl
+
+# --- EPM Chat (standalone chatbot) runtime data: trained models, uploads, secrets ---
+epm_chatbot/var/
+epm_chatbot/.env
